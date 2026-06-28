@@ -4,6 +4,7 @@
 #pragma once
 
 #include "chart1_conformance.hpp"
+#include "chart_source.hpp"
 #include "nautical_render_model.hpp"
 #include "render_backend.hpp"
 
@@ -69,6 +70,7 @@ struct LayerInspection {
 struct DebugReport {
   std::string report_id = "chart-1-debug-report";
   ConformanceScene conformance;
+  ChartSourceProduct source_product;
   NauticalRenderModel model;
   RenderResult backend_result;
   std::vector<ObjectInspection> objects;
@@ -78,6 +80,8 @@ struct DebugReport {
 };
 
 RenderTarget Chart1DebugTarget(PixelSize pixel_size);
+
+ChartSourceProduct BuildDebugSourceProduct();
 
 DebugReport BuildDebugReport(RenderView view, DisplayState display);
 

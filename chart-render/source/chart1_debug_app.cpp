@@ -3,6 +3,7 @@
 
 #include "chart1_debug_app.hpp"
 
+#include "s52_presentation_compiler.hpp"
 #include "vsg/vsg_backend.hpp"
 
 #include <algorithm>
@@ -56,24 +57,20 @@ std::map<std::string, ProvenanceRecord> ProvenanceById(
   return by_id;
 }
 
-std::map<std::string, const AcceptanceCase*> AcceptanceByCommandId(
+std::map<std::string, const AcceptanceCase*> AcceptanceByObjectClass(
     const AcceptanceCatalog& catalog) {
-  std::map<std::string, const AcceptanceCase*> by_command;
+  std::map<std::string, const AcceptanceCase*> by_object_class;
   for (const AcceptanceCase& acceptance_case : catalog.cases) {
-    for (const std::string& command_id : acceptance_case.fixture_command_ids) {
-      by_command[command_id] = &acceptance_case;
-    }
+    by_object_class[acceptance_case.source_object_class] = &acceptance_case;
   }
-  return by_command;
+  return by_object_class;
 }
 
-std::map<std::string, const RenderCommand*> CommandById(
-    const RenderScene& scene) {
-  std::map<std::string, const RenderCommand*> by_id;
-  for (const CommandGroup& group : scene.command_groups) {
-    for (const RenderCommand& command : group.commands) {
-      by_id[command.command_id] = &command;
-    }
+std::map<std::string, const NormalizedChartObject*> ObjectById(
+    const ChartSourceProduct& product) {
+  std::map<std::string, const NormalizedChartObject*> by_id;
+  for (const NormalizedChartObject& object : product.objects) {
+    by_id[object.object_id] = &object;
   }
   return by_id;
 }
@@ -88,27 +85,12 @@ const ProvenanceRecord* FirstProvenance(
   return found == provenance_by_id.end() ? nullptr : &found->second;
 }
 
-Geometry SyntheticPositionGeometry(const RenderCommand& command) {
-  Geometry geometry;
-  geometry.geometry_id = "position:" + command.command_id;
-  geometry.coordinate_space = command.coordinate_space;
-  geometry.points.push_back(command.position);
-  return geometry;
-}
-
-Geometry FirstGeometry(const RenderCommand& command) {
-  if (!command.geometries.empty()) {
-    return command.geometries.front();
-  }
-  return SyntheticPositionGeometry(command);
-}
-
 Geometry FirstGeometry(const NauticalPrimitive& primitive,
-                       const RenderCommand& command) {
+                       const NormalizedChartObject& object) {
   if (!primitive.geometries.empty()) {
     return primitive.geometries.front();
   }
-  return SyntheticPositionGeometry(command);
+  return object.geometry;
 }
 
 GeometryInspection InspectGeometry(const Geometry& geometry,
@@ -174,30 +156,31 @@ void AddLayerInspections(const NauticalRenderModel& model,
 }
 
 void AddObjectInspections(
-    const AcceptanceCatalog& catalog, const RenderScene& scene,
+    const AcceptanceCatalog& catalog, const ChartSourceProduct& product,
     const NauticalRenderModel& model, const RenderTarget& target,
     const char* backend_name, DebugReport* report) {
-  const std::map<std::string, const AcceptanceCase*> acceptance_by_command =
-      AcceptanceByCommandId(catalog);
-  const std::map<std::string, const RenderCommand*> command_by_id =
-      CommandById(scene);
+  const std::map<std::string, const AcceptanceCase*> acceptance_by_object =
+      AcceptanceByObjectClass(catalog);
+  const std::map<std::string, const NormalizedChartObject*> object_by_id =
+      ObjectById(product);
   const std::map<std::string, ProvenanceRecord> provenance_by_id =
       ProvenanceById(model.provenance_table);
 
   for (const NauticalLayer& layer : model.layers) {
     for (const NauticalPrimitive& primitive : layer.primitives) {
-      const auto command_found = command_by_id.find(primitive.primitive_id);
-      if (command_found == command_by_id.end()) {
+      const auto object_found =
+          object_by_id.find(primitive.trace.source_object_id);
+      if (object_found == object_by_id.end()) {
         report->diagnostics.push_back(Error(
-            "chart1_debug_missing_command",
-            "Debug app could not map primitive back to a render command.",
+            "chart1_debug_missing_source_object",
+            "Debug app could not map primitive back to a source object.",
             primitive.trace.provenance_refs));
         continue;
       }
 
-      const RenderCommand& command = *command_found->second;
-      const auto case_found = acceptance_by_command.find(command.command_id);
-      if (case_found == acceptance_by_command.end()) {
+      const NormalizedChartObject& object = *object_found->second;
+      const auto case_found = acceptance_by_object.find(object.object_class);
+      if (case_found == acceptance_by_object.end()) {
         continue;
       }
 
@@ -206,7 +189,9 @@ void AddObjectInspections(
 
       ObjectInspection inspection;
       inspection.case_id = case_found->second->case_id;
-      inspection.command_id = command.command_id;
+      inspection.command_id = case_found->second->fixture_command_ids.empty()
+                                  ? std::string{}
+                                  : case_found->second->fixture_command_ids[0];
       inspection.layer_id = layer.layer_id;
       inspection.presentation_layer = layer.presentation_layer;
       inspection.source_chart_id = primitive.trace.source_chart_id;
@@ -218,9 +203,9 @@ void AddObjectInspections(
       inspection.projection_transform =
           provenance ? provenance->transform_chain : std::vector<std::string>{};
       inspection.original_geometry =
-          InspectGeometry(FirstGeometry(command), provenance);
+          InspectGeometry(object.geometry, provenance);
       inspection.normalized_geometry =
-          InspectGeometry(FirstGeometry(primitive, command), provenance);
+          InspectGeometry(FirstGeometry(primitive, object), provenance);
       inspection.scale.min_scale_denom = primitive.lod.min_scale_denom;
       inspection.scale.max_scale_denom = primitive.lod.max_scale_denom;
       inspection.scale.view_scale_denom = model.render_view.scale_denom;
@@ -265,6 +250,75 @@ void AddObjectInspections(
   }
 }
 
+Geometry PointGeometry(std::string id, double x, double y) {
+  Geometry geometry;
+  geometry.geometry_id = std::move(id);
+  geometry.coordinate_space = CoordinateSpace::kTarget;
+  geometry.points.push_back({x, y});
+  return geometry;
+}
+
+Geometry LineGeometry(std::string id) {
+  Geometry geometry;
+  geometry.geometry_id = std::move(id);
+  geometry.coordinate_space = CoordinateSpace::kTarget;
+  geometry.points = {{24.0, 160.0}, {72.0, 142.0}, {128.0, 130.0},
+                     {224.0, 96.0}};
+  return geometry;
+}
+
+Geometry AreaGeometry(std::string id) {
+  Geometry geometry;
+  geometry.geometry_id = std::move(id);
+  geometry.coordinate_space = CoordinateSpace::kTarget;
+  geometry.rings.push_back(
+      {{16.0, 16.0}, {240.0, 16.0}, {240.0, 220.0}, {16.0, 220.0}});
+  return geometry;
+}
+
+ChartAttribute Attr(std::string acronym, std::string value) {
+  ChartAttribute attr;
+  attr.acronym = std::move(acronym);
+  attr.value = std::move(value);
+  attr.display_value = attr.value;
+  return attr;
+}
+
+ProvenanceRecord SourceProvenance(std::string id, std::string object_id,
+                                  std::string object_class,
+                                  std::string geometry_id) {
+  ProvenanceRecord provenance;
+  provenance.provenance_id = std::move(id);
+  provenance.source_chart_id = "chart-1-fixture";
+  provenance.source_chart_edition = "poc";
+  provenance.source_object_id = std::move(object_id);
+  provenance.source_object_class = std::move(object_class);
+  provenance.source_geometry_hash = "source:" + geometry_id;
+  provenance.generated_geometry_hash = "normalized:" + geometry_id;
+  provenance.target_geometry_hash = "target:" + geometry_id;
+  provenance.conversion_stage = "chart1_debug_source_fixture";
+  provenance.transform_chain = {"source:wgs84", "normalization",
+                                "projection:web_mercator_tile", "target:px"};
+  provenance.quilt_decision_id = "single-chart";
+  return provenance;
+}
+
+NormalizedChartObject Object(
+    std::string object_id, std::string object_class,
+    NormalizedGeometryKind kind, Geometry geometry,
+    std::vector<ChartAttribute> attributes = {}) {
+  NormalizedChartObject object;
+  object.object_id = std::move(object_id);
+  object.object_class = std::move(object_class);
+  object.geometry_kind = kind;
+  object.geometry = std::move(geometry);
+  object.attributes = std::move(attributes);
+  object.min_scale_denom = 50000.0;
+  object.provenance_refs.push_back("prov-" + object.object_id);
+  object.metadata["display_category"] = "standard";
+  return object;
+}
+
 }  // namespace
 
 RenderTarget Chart1DebugTarget(PixelSize pixel_size) {
@@ -273,6 +327,41 @@ RenderTarget Chart1DebugTarget(PixelSize pixel_size) {
   target.pixel_size = pixel_size;
   target.target_id = "chart-1-debug";
   return target;
+}
+
+ChartSourceProduct BuildDebugSourceProduct() {
+  ChartSourceProduct product;
+  product.product_id = "chart-1-debug-source";
+
+  ChartSourceRef source;
+  source.source_id = "chart-1-fixture";
+  source.kind = ChartSourceKind::kDebugFixture;
+  source.role = ChartSourceRole::kDebug;
+  source.native_name = "Chart 1 debug fixture";
+  source.edition = "poc";
+  source.content_hash = "chart-1-debug-fixture";
+  source.native_projection = "target-pixel-fixture";
+  source.native_scale_denom = 50000.0;
+  source.geographic_bbox = {-81.82, 24.45, -81.78, 24.49};
+  product.sources.push_back(std::move(source));
+
+  auto add = [&](NormalizedChartObject object) {
+    const std::string geometry_id = object.geometry.geometry_id;
+    product.provenance_table.push_back(SourceProvenance(
+        "prov-" + object.object_id, object.object_id, object.object_class,
+        geometry_id));
+    product.objects.push_back(std::move(object));
+  };
+
+  add(Object("DEPARE.1", "DEPARE", NormalizedGeometryKind::kArea,
+             AreaGeometry("geom-depth-area"),
+             {Attr("DRVAL1", "0"), Attr("DRVAL2", "4")}));
+  add(Object("DEPCNT.1", "DEPCNT", NormalizedGeometryKind::kLine,
+             LineGeometry("geom-depth-contour"), {Attr("VALDCO", "10")}));
+  add(Object("BOYLAT.1", "BOYLAT", NormalizedGeometryKind::kPoint,
+             PointGeometry("geom-buoy", 128.0, 92.0)));
+
+  return product;
 }
 
 DebugReport BuildDebugReport(RenderView view, DisplayState display) {
@@ -284,11 +373,22 @@ DebugReport BuildDebugReport(RenderView view, DisplayState display,
   DebugReport report;
   report.conformance =
       BuildConformanceScene(std::move(view), std::move(display));
-  report.model = BuildNauticalRenderModel(report.conformance.scene);
+  report.source_product = BuildDebugSourceProduct();
+
+  std::vector<Diagnostic> source_diagnostics;
+  const bool source_ok =
+      ValidateChartSourceProduct(report.source_product, &source_diagnostics);
+  report.diagnostics = report.conformance.diagnostics;
+  report.diagnostics.insert(report.diagnostics.end(),
+                            source_diagnostics.begin(),
+                            source_diagnostics.end());
+
+  report.model = s52::CompileS52Presentation(
+      report.source_product, report.conformance.scene.render_view,
+      report.conformance.scene.display_state);
 
   vsg::VsgBackend backend;
   report.backend_result = backend.RenderModel(report.model, target);
-  report.diagnostics = report.conformance.diagnostics;
 
   std::vector<Diagnostic> model_diagnostics;
   ValidateNauticalRenderModel(report.model, &model_diagnostics);
@@ -300,10 +400,10 @@ DebugReport BuildDebugReport(RenderView view, DisplayState display,
 
   const AcceptanceCatalog catalog = BuildAcceptanceCatalog();
   AddLayerInspections(report.model, &report);
-  AddObjectInspections(catalog, report.conformance.scene, report.model, target,
+  AddObjectInspections(catalog, report.source_product, report.model, target,
                        backend.Name(), &report);
 
-  report.ok = report.conformance.ok && !report.layers.empty() &&
+  report.ok = report.conformance.ok && source_ok && !report.layers.empty() &&
               report.objects.size() == catalog.cases.size() &&
               !HasError(report.diagnostics);
   return report;

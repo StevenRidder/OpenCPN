@@ -24,6 +24,16 @@ void PrintDiagnostics(
   }
 }
 
+void PrintObjects(
+    const std::vector<ocpn::render::chart1::ObjectInspection>& objects) {
+  for (const ocpn::render::chart1::ObjectInspection& object : objects) {
+    std::cerr << object.case_id << " source=" << object.source_feature_id
+              << " primitive=" << object.backend_primitive_id
+              << " rule=" << object.s52_rule_id
+              << " layer=" << object.layer_id << "\n";
+  }
+}
+
 }  // namespace
 
 int main() {
@@ -54,19 +64,22 @@ int main() {
       ocpn::render::chart1::FindObjectBySourceFeatureId(report, "DEPARE.1");
   const ocpn::render::chart1::ObjectInspection* contour =
       ocpn::render::chart1::FindObjectByBackendPrimitiveId(
-          report, "cmd-depth-contour");
+          report, "prim-DEPCNT.1-safety_contour");
   const ocpn::render::chart1::ObjectInspection* buoy =
       ocpn::render::chart1::FindObjectBySourceFeatureId(report, "BOYLAT.1");
 
   if (!area || !contour || !buoy) {
     std::cerr << "Missing point, line, or area inspection row\n";
+    PrintObjects(report.objects);
     return 1;
   }
 
   if (area->source_chart_id != "chart-1-fixture" ||
       area->source_object_class != "DEPARE" ||
-      area->s52_rule_id != "fixture:depth_area" ||
+      area->s52_rule_id != "s52:DEPARE:depth_area" ||
       area->normalized_geometry.geometry_id != "geom-depth-area" ||
+      area->original_geometry.source_geometry_hash !=
+          "source:geom-depth-area" ||
       area->cache.tile_cache_key.empty() ||
       !HasTransform(*area, "projection:web_mercator_tile")) {
     std::cerr << "Area source-to-render trace is incomplete\n";
@@ -74,16 +87,18 @@ int main() {
   }
 
   if (contour->source_object_class != "DEPCNT" ||
-      contour->backend_primitive_id != "cmd-depth-contour" ||
-      contour->presentation_layer != "area" ||
+      contour->backend_primitive_id != "prim-DEPCNT.1-safety_contour" ||
+      contour->s52_rule_id != "s52:DEPCNT:safety_contour" ||
+      contour->presentation_layer != "line" ||
       contour->normalized_geometry.geometry_id != "geom-depth-contour") {
     std::cerr << "Contour layer or primitive trace is incomplete\n";
     return 1;
   }
 
   if (buoy->source_object_class != "BOYLAT" ||
-      buoy->backend_primitive_id != "cmd-buoy" ||
-      buoy->normalized_geometry.geometry_id != "position:cmd-buoy" ||
+      buoy->backend_primitive_id != "prim-BOYLAT.1-navaid_symbol" ||
+      buoy->s52_rule_id != "s52:BOYLAT:navaid_symbol" ||
+      buoy->normalized_geometry.geometry_id != "geom-buoy" ||
       buoy->display_category != "standard" ||
       buoy->final_gpu_asset_id.find("gpu:vulkan-scenegraph-placeholder") !=
           0 ||
@@ -93,9 +108,13 @@ int main() {
     return 1;
   }
 
-  if (ocpn::render::chart1::FindObjectsInLayer(report, "s52-base").size() !=
-      2) {
-    std::cerr << "Layer inspection did not expose the Chart 1 base commands\n";
+  if (ocpn::render::chart1::FindObjectsInLayer(report, "s52-areas").size() !=
+          1 ||
+      ocpn::render::chart1::FindObjectsInLayer(report, "s52-lines").size() !=
+          1 ||
+      ocpn::render::chart1::FindObjectsInLayer(report, "s52-symbols").size() !=
+          1) {
+    std::cerr << "Layer inspection did not expose the compiled Chart 1 layers\n";
     return 1;
   }
 
