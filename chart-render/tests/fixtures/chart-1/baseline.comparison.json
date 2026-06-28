@@ -1,0 +1,47 @@
+{
+  "schema_version": 1,
+  "manifest_id": "chart-1-baseline-comparison",
+  "acceptance_catalog": "acceptance.catalog.json",
+  "status": "pending_capture",
+  "cases": [
+    {
+      "case_id": "chart1-area-depth",
+      "opencpn_baseline_path": "baselines/opencpn/chart1-area-depth.png",
+      "shared_renderer_path": "outputs/shared/chart1-area-depth.png",
+      "diff_artifact_path": "diffs/chart1-area-depth.png",
+      "tolerance": {
+        "max_changed_pixels": 128,
+        "max_channel_delta": 4,
+        "max_rms_delta": 0.75
+      },
+      "documented_difference_policy": "Minor antialiasing differences at polygon edges are acceptable; fill category, coverage, and target bounds must match.",
+      "baseline_capture_required": true
+    },
+    {
+      "case_id": "chart1-line-depth-contour",
+      "opencpn_baseline_path": "baselines/opencpn/chart1-line-depth-contour.png",
+      "shared_renderer_path": "outputs/shared/chart1-line-depth-contour.png",
+      "diff_artifact_path": "diffs/chart1-line-depth-contour.png",
+      "tolerance": {
+        "max_changed_pixels": 96,
+        "max_channel_delta": 6,
+        "max_rms_delta": 0.9
+      },
+      "documented_difference_policy": "Line joins and caps may differ by antialiasing tolerance; contour placement and line style identity must match.",
+      "baseline_capture_required": true
+    },
+    {
+      "case_id": "chart1-point-buoy",
+      "opencpn_baseline_path": "baselines/opencpn/chart1-point-buoy.png",
+      "shared_renderer_path": "outputs/shared/chart1-point-buoy.png",
+      "diff_artifact_path": "diffs/chart1-point-buoy.png",
+      "tolerance": {
+        "max_changed_pixels": 160,
+        "max_channel_delta": 8,
+        "max_rms_delta": 1.2
+      },
+      "documented_difference_policy": "Symbol antialiasing may differ; symbol identity, anchor, priority, and source provenance must match.",
+      "baseline_capture_required": true
+    }
+  ]
+}

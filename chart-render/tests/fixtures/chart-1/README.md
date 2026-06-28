@@ -18,3 +18,7 @@ for CHART-1 acceptance.
 `chart1_conformance.hpp` builds a conformance scene by filtering this fixture
 to the accepted point, line, and area commands and validating command type,
 resource type, S-52 rule metadata, provenance, and conversion trace refs.
+
+`baseline.comparison.json` names the OpenCPN baseline image slots, shared
+renderer output slots, diff artifacts, and tolerances for those same cases. The
+PNG files are intentionally pending capture until the golden-image runner lands.

@@ -4,6 +4,7 @@ cmake_minimum_required(VERSION 3.16)
 project(opencpn_chart_render_skeleton LANGUAGES CXX)
 
 add_library(opencpn-chart-render-skeleton STATIC
+  source/chart1_baseline.cpp
   source/chart1_conformance.cpp
   source/chart1_acceptance.cpp
   source/conversion_trace.cpp
@@ -24,5 +25,12 @@ add_executable(opencpn-chart1-conformance-smoke
   tests/chart1_conformance_smoke.cpp
 )
 target_link_libraries(opencpn-chart1-conformance-smoke
+  PRIVATE opencpn-chart-render-skeleton
+)
+
+add_executable(opencpn-chart1-baseline-smoke
+  tests/chart1_baseline_smoke.cpp
+)
+target_link_libraries(opencpn-chart1-baseline-smoke
   PRIVATE opencpn-chart-render-skeleton
 )
