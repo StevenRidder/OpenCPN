@@ -20,12 +20,14 @@ The current shape mirrors the Vulkan board seam work:
   raster, MBTiles/PMTiles interchange, debug fixtures, and future S-101 input.
 - `include/chart_interchange.hpp` classifies MBTiles/PMTiles as optional
   interchange/debug artifacts rather than the renderer hot-path contract.
+- `include/chart1_acceptance.hpp` defines the first Chart 1 point, line, and
+  area acceptance catalog.
 - `s52/` is the placeholder for S-57/SENC plus S-52 rules to command-stream
   conversion.
 - `vsg/` is the placeholder for the VulkanSceneGraph backend. It currently
   returns a structured diagnostic instead of drawing.
-- `tests/fixtures/chart-1/scene.commands.json` is the initial text fixture for
-  command-stream and golden-image work.
+- `tests/fixtures/chart-1/` contains the initial command-stream fixture and
+  Chart 1 acceptance catalog for golden-image work.
 
 The POC rule is branch-first, not repo-first. Do not extract this into a
 standalone renderer repository until OpenCPN and Helm both consume the same
