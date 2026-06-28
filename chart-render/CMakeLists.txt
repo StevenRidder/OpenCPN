@@ -4,6 +4,7 @@ cmake_minimum_required(VERSION 3.16)
 project(opencpn_chart_render_skeleton LANGUAGES CXX)
 
 add_library(opencpn-chart-render-skeleton STATIC
+  source/depth_safety.cpp
   source/depth_tessellation.cpp
   source/chart1_baseline.cpp
   source/chart1_conformance.cpp
@@ -40,5 +41,12 @@ add_executable(opencpn-depth-tessellation-smoke
   tests/depth_tessellation_smoke.cpp
 )
 target_link_libraries(opencpn-depth-tessellation-smoke
+  PRIVATE opencpn-chart-render-skeleton
+)
+
+add_executable(opencpn-depth-safety-smoke
+  tests/depth_safety_smoke.cpp
+)
+target_link_libraries(opencpn-depth-safety-smoke
   PRIVATE opencpn-chart-render-skeleton
 )

@@ -28,6 +28,8 @@ The current shape mirrors the Vulkan board seam work:
   manifest and tolerance contract.
 - `include/depth_tessellation.hpp` prototypes shoreline, land, depth area, and
   area-pattern tessellation into render commands.
+- `include/depth_safety.hpp` applies safety-depth classification, palette
+  buckets, and zoom-aware contour visibility to depth commands.
 - `POC-ACCEPTANCE.md` defines the POC acceptance rubric, non-goals, and
   stakeholder evidence.
 - `s52/` is the placeholder for S-57/SENC plus S-52 rules to command-stream

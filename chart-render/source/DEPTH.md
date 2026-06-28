@@ -19,3 +19,8 @@ Non-goals for this slice:
 - Complete S-57 object coverage.
 - Safety-contour rendering.
 - Tile-scale performance claims.
+
+`depth_safety.hpp` layers the first safety-depth behavior on this prototype:
+depth areas are classified against `DisplayState` thresholds, palette buckets
+are attached to commands, and the safety contour is emitted only when the
+viewport scale says it should be visible.
