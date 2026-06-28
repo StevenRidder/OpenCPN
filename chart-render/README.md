@@ -48,6 +48,8 @@ The current shape mirrors the Vulkan board seam work:
   stakeholder evidence.
 - `docs/STAKEHOLDER_DEMO.md` defines the QA-3 dual-adapter stakeholder demo
   runbook and talk track.
+- `docs/PUBLIC_RELEASE_HYGIENE.md` records the PUB-1 publication hygiene audit,
+  public branch/PR matrix, and sanitization gates before public sharing.
 - `scripts/stakeholder_demo.sh` runs the branch-local QA-3 evidence path and
   writes a stakeholder summary from the built smoke binaries.
 - `s52/` is the placeholder for S-57/SENC plus S-52/S-101 presentation
