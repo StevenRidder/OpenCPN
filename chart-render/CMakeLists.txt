@@ -5,6 +5,7 @@ project(opencpn_chart_render_skeleton LANGUAGES CXX)
 
 add_library(opencpn-chart-render-skeleton STATIC
   source/opencpn_feature_flag_adapter.cpp
+  source/viewport_tile_scheduler.cpp
   source/nautical_render_model.cpp
   source/golden_regression.cpp
   source/depth_performance.cpp
@@ -112,5 +113,12 @@ add_executable(opencpn-feature-flag-adapter-smoke
   tests/opencpn_feature_flag_adapter_smoke.cpp
 )
 target_link_libraries(opencpn-feature-flag-adapter-smoke
+  PRIVATE opencpn-chart-render-skeleton
+)
+
+add_executable(opencpn-viewport-tile-scheduler-smoke
+  tests/viewport_tile_scheduler_smoke.cpp
+)
+target_link_libraries(opencpn-viewport-tile-scheduler-smoke
   PRIVATE opencpn-chart-render-skeleton
 )
