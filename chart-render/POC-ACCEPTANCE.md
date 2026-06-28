@@ -73,6 +73,8 @@ QA-facing evidence:
 - `DEPTH-4`: tile-scale contour performance smoke.
 - `ADAPT-1`: OpenCPN feature-flag adapter sketch.
 - `ADAPT-2`: Helm headless tile adapter sketch.
+- `ADAPT-4`: overscan, prefetch, cache-invalidation, and zoom-blend scheduler
+  policy.
 - `QA-2`: repeatable golden-image regression runner.
 - `SEAM-5`: backend-neutral nautical render model and draw-only backend handoff.
 - `REPO-4`: Helm feature flag wired to the shared offscreen renderer.
@@ -90,3 +92,9 @@ The initial local command for ADAPT-1 is the CMake-built
 feature-flag decision consumes a neutral nautical render model, preserves the
 legacy canvas fallback, and refuses shared-renderer routing when OpenCPN
 wx/swapchain ownership or model validation is missing.
+
+The initial local command for ADAPT-4 is the CMake-built
+`opencpn-viewport-tile-scheduler-smoke` target. It validates visible tile
+coverage, overscan rings, prefetch budget truncation, display/presentation
+cache invalidation epochs, and adjacent zoom-level blend requests as adapter
+scheduler policy rather than VSG backend semantics.

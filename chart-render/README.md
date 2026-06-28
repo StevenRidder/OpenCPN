@@ -21,6 +21,9 @@ The current shape mirrors the Vulkan board seam work:
 - `include/opencpn_feature_flag_adapter.hpp` sketches the ADAPT-1 OpenCPN
   feature-flag decision point for choosing the legacy canvas or shared renderer
   from a validated neutral model while OpenCPN keeps wx/swapchain ownership.
+- `include/viewport_tile_scheduler.hpp` defines the ADAPT-4 adapter scheduler
+  policy for visible tiles, overscan margins, prefetch rings, adjacent
+  zoom-level blending, and cache invalidation epochs before backend handoff.
 - `source/` documents and implements the chart-source boundary for S-57/SENC,
   raster, MBTiles/PMTiles interchange, debug fixtures, and future S-101 input.
 - `include/chart_interchange.hpp` classifies MBTiles/PMTiles as optional
@@ -66,3 +69,8 @@ target. It proves the OpenCPN adapter can route a validated neutral model to the
 shared renderer under a feature flag, preserve legacy fallback, and reject
 missing lifecycle/model contracts without giving VSG ownership of chart
 semantics.
+
+ADAPT-4 evidence is the CMake-built `opencpn-viewport-tile-scheduler-smoke`
+target. It proves the adapter scheduler owns visible/overscan/prefetch tile
+selection, cache epoch invalidation, and fractional zoom blending without
+moving scheduler policy into VSG or any other renderer backend.
