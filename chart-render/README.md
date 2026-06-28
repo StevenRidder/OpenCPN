@@ -22,6 +22,8 @@ The current shape mirrors the Vulkan board seam work:
   interchange/debug artifacts rather than the renderer hot-path contract.
 - `include/chart1_acceptance.hpp` defines the first Chart 1 point, line, and
   area acceptance catalog.
+- `POC-ACCEPTANCE.md` defines the POC acceptance rubric, non-goals, and
+  stakeholder evidence.
 - `s52/` is the placeholder for S-57/SENC plus S-52 rules to command-stream
   conversion.
 - `vsg/` is the placeholder for the VulkanSceneGraph backend. It currently
