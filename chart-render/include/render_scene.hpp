@@ -82,6 +82,10 @@ struct ProvenanceRecord {
   std::string source_object_id;
   std::string source_object_class;
   std::string source_geometry_hash;
+  std::string generated_geometry_hash;
+  std::string target_geometry_hash;
+  std::string s52_rule_id;
+  std::string render_command_id;
   std::string conversion_stage;
   std::vector<std::string> transform_chain;
   std::string quilt_decision_id;
@@ -120,6 +124,7 @@ struct RenderCommand {
   std::string anchor;
   std::string priority;
   std::vector<std::string> provenance_refs;
+  std::vector<std::string> conversion_trace_refs;
   std::map<std::string, std::string> metadata;
 };
 

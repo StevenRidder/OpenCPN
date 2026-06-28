@@ -12,6 +12,8 @@ The current shape mirrors the Vulkan board seam work:
 - `include/chart_source.hpp` defines the pluggable chart-source boundary before
   S-52 conversion.
 - `include/render_scene.hpp` defines the backend-neutral render command stream.
+- `include/conversion_trace.hpp` defines source-to-command traceability for
+  wrong-location debugging.
 - `include/render_backend.hpp` defines the renderer backend interface and
   onscreen/offscreen target boundary.
 - `source/` documents and implements the chart-source boundary for S-57/SENC,
