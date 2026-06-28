@@ -1,0 +1,202 @@
+{
+  "schema_version": 1,
+  "scene_id": "chart-1-fixture",
+  "source_epoch": "fixture:v1",
+  "render_view": {
+    "projection": "web_mercator_tile",
+    "geographic_bbox": [-81.82, 24.45, -81.78, 24.49],
+    "center": [-81.80, 24.47],
+    "scale_denom": 12000,
+    "rotation_deg": 0,
+    "pixel_size": [256, 256],
+    "device_pixel_ratio": 1,
+    "overzoom": 1,
+    "overscan_px": 16
+  },
+  "display_state": {
+    "palette": "day",
+    "display_category": "standard",
+    "safety_depth_m": 5,
+    "shallow_contour_m": 2,
+    "safety_contour_m": 10,
+    "deep_contour_m": 20,
+    "show_text": true,
+    "show_soundings": true,
+    "show_lights": true,
+    "simplified_symbols": false,
+    "two_shade_depth": false,
+    "language": "en",
+    "units": "metric"
+  },
+  "resource_table": [
+    {
+      "resource_id": "depth-area-fill",
+      "type": "palette",
+      "content_hash": "fixture",
+      "provenance_id": "prov-depth-area"
+    },
+    {
+      "resource_id": "depth-contour-line",
+      "type": "line_style",
+      "content_hash": "fixture",
+      "provenance_id": "prov-depth-contour"
+    },
+    {
+      "resource_id": "buoy-symbol",
+      "type": "symbol",
+      "content_hash": "fixture",
+      "provenance_id": "prov-buoy"
+    },
+    {
+      "resource_id": "label-font",
+      "type": "font",
+      "content_hash": "fixture",
+      "provenance_id": "prov-label"
+    },
+    {
+      "resource_id": "coverage-mask",
+      "type": "raster_texture",
+      "content_hash": "fixture",
+      "provenance_id": "prov-coverage"
+    }
+  ],
+  "command_groups": [
+    {
+      "group_id": "s52-base",
+      "chart_priority": 0,
+      "s52_layer": "area",
+      "quilt_rank": 0,
+      "commands": [
+        {
+          "type": "fill_area",
+          "command_id": "cmd-depth-area",
+          "role": "depth_area",
+          "coordinate_space": "target",
+          "geometry_ref": "geom-depth-area",
+          "fill_ref": "depth-area-fill",
+          "pattern_ref": "none",
+          "provenance_refs": ["prov-depth-area"]
+        },
+        {
+          "type": "draw_raster_sheet",
+          "command_id": "cmd-coverage-mask",
+          "role": "coverage_mask",
+          "coordinate_space": "target",
+          "texture_ref": "coverage-mask",
+          "target_quad": [[0, 0], [256, 0], [256, 256], [0, 256]],
+          "opacity": 1,
+          "metadata": {
+            "collar_policy": "not_applicable",
+            "coverage_policy": "no_data_transparent"
+          },
+          "provenance_refs": ["prov-coverage"]
+        },
+        {
+          "type": "stroke_line",
+          "command_id": "cmd-depth-contour",
+          "role": "depth_contour",
+          "coordinate_space": "target",
+          "geometry_ref": "geom-depth-contour",
+          "line_style_ref": "depth-contour-line",
+          "width_px": 1.5,
+          "metadata": {
+            "contour_m": 10
+          },
+          "provenance_refs": ["prov-depth-contour"]
+        }
+      ]
+    },
+    {
+      "group_id": "s52-symbols",
+      "chart_priority": 0,
+      "s52_layer": "symbols",
+      "quilt_rank": 0,
+      "commands": [
+        {
+          "type": "place_symbol",
+          "command_id": "cmd-buoy",
+          "role": "buoy",
+          "coordinate_space": "target",
+          "symbol_ref": "buoy-symbol",
+          "position": [128, 92],
+          "anchor": "center",
+          "priority": "navigation",
+          "provenance_refs": ["prov-buoy"]
+        },
+        {
+          "type": "draw_text",
+          "command_id": "cmd-label",
+          "role": "object_label",
+          "coordinate_space": "target",
+          "text": "Fixture Harbor",
+          "font_ref": "label-font",
+          "position": [138, 82],
+          "anchor": "left",
+          "priority": "label",
+          "provenance_refs": ["prov-label"]
+        },
+        {
+          "type": "draw_sounding",
+          "command_id": "cmd-sounding",
+          "role": "sounding",
+          "coordinate_space": "target",
+          "depth_m": 7.4,
+          "formatted_text": "7.4",
+          "font_ref": "label-font",
+          "position": [94, 176],
+          "priority": "sounding",
+          "metadata": {
+            "safety_class": "safe"
+          },
+          "provenance_refs": ["prov-sounding"]
+        }
+      ]
+    }
+  ],
+  "provenance_table": [
+    {
+      "provenance_id": "prov-depth-area",
+      "source_chart_id": "chart-1-fixture",
+      "source_object_id": "DEPARE.1",
+      "source_object_class": "DEPARE",
+      "conversion_stage": "s52_command_builder_fixture"
+    },
+    {
+      "provenance_id": "prov-depth-contour",
+      "source_chart_id": "chart-1-fixture",
+      "source_object_id": "DEPCNT.1",
+      "source_object_class": "DEPCNT",
+      "conversion_stage": "s52_command_builder_fixture"
+    },
+    {
+      "provenance_id": "prov-buoy",
+      "source_chart_id": "chart-1-fixture",
+      "source_object_id": "BOYLAT.1",
+      "source_object_class": "BOYLAT",
+      "conversion_stage": "s52_command_builder_fixture"
+    },
+    {
+      "provenance_id": "prov-label",
+      "source_chart_id": "chart-1-fixture",
+      "source_object_id": "LNDARE.1",
+      "source_object_class": "LNDARE",
+      "conversion_stage": "s52_command_builder_fixture"
+    },
+    {
+      "provenance_id": "prov-sounding",
+      "source_chart_id": "chart-1-fixture",
+      "source_object_id": "SOUNDG.1",
+      "source_object_class": "SOUNDG",
+      "conversion_stage": "s52_command_builder_fixture"
+    },
+    {
+      "provenance_id": "prov-coverage",
+      "source_chart_id": "chart-1-fixture",
+      "source_object_id": "M_COVR.1",
+      "source_object_class": "M_COVR",
+      "conversion_stage": "s52_command_builder_fixture",
+      "warnings": ["coverage gap is intentionally transparent in this fixture"]
+    }
+  ],
+  "diagnostics": []
+}
