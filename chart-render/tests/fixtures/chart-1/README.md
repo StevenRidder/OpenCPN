@@ -14,3 +14,7 @@ Current acceptance cases:
 The fixture intentionally also contains text, sounding, and coverage commands
 so traceability and raster policies remain visible, but those are not required
 for CHART-1 acceptance.
+
+`chart1_conformance.hpp` builds a conformance scene by filtering this fixture
+to the accepted point, line, and area commands and validating command type,
+resource type, S-52 rule metadata, provenance, and conversion trace refs.
