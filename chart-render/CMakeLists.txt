@@ -4,6 +4,7 @@ cmake_minimum_required(VERSION 3.16)
 project(opencpn_chart_render_skeleton LANGUAGES CXX)
 
 add_library(opencpn-chart-render-skeleton STATIC
+  source/conversion_trace.cpp
   source/chart_interchange.cpp
   source/chart_source.cpp
   s52/s52_command_builder.cpp

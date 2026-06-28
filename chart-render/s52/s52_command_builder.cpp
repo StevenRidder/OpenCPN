@@ -3,6 +3,8 @@
 
 #include "s52/s52_command_builder.hpp"
 
+#include "conversion_trace.hpp"
+
 #include <utility>
 
 namespace ocpn::render::s52 {
@@ -47,7 +49,10 @@ RenderCommand Command(CommandType type, std::string id, std::string role,
   command.command_id = std::move(id);
   command.role = std::move(role);
   command.coordinate_space = CoordinateSpace::kTarget;
-  command.provenance_refs.push_back(std::move(provenance_id));
+  const std::string provenance_ref = std::move(provenance_id);
+  command.metadata["s52_rule"] = "fixture:" + command.role;
+  command.provenance_refs.push_back(provenance_ref);
+  command.conversion_trace_refs.push_back("trace:" + provenance_ref);
   return command;
 }
 
@@ -196,6 +201,10 @@ RenderScene S52CommandBuilder::BuildFixtureScene(RenderView view,
 
   scene.command_groups.push_back(std::move(base));
   scene.command_groups.push_back(std::move(symbols));
+  std::vector<Diagnostic> trace_diagnostics;
+  ValidateRenderSceneTraceability(scene, &trace_diagnostics);
+  scene.diagnostics.insert(scene.diagnostics.end(), trace_diagnostics.begin(),
+                           trace_diagnostics.end());
   return scene;
 }
 
