@@ -112,12 +112,19 @@ struct RasterSheet {
   RasterSheetKind kind = RasterSheetKind::kChartImage;
   std::string source_id;
   GeoBounds geographic_bbox;
+  GeoBounds chart_bounds;
+  GeoBounds visible_bounds;
+  GeoBounds collar_bounds;
   PixelSize pixel_size;
   CoordinateSpace coordinate_space = CoordinateSpace::kRaster;
   std::string content_hash;
   std::string color_model = "rgba8";
   std::string no_data_policy;
   std::string collar_policy;
+  std::string boundary_policy;
+  std::string quilt_policy;
+  int quilt_rank = 0;
+  bool allow_visible_outside_chart_bounds = false;
   std::vector<std::string> provenance_refs;
   std::map<std::string, std::string> metadata;
 };
@@ -155,6 +162,7 @@ class IChartSource {
 };
 
 const char* ToString(ChartSourceKind kind);
+const char* ToString(RasterSheetKind kind);
 const char* ToString(DebugArtifactKind kind);
 
 bool ValidateChartSourceProduct(const ChartSourceProduct& product,

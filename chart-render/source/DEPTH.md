@@ -30,3 +30,9 @@ backend interface repeatedly and records elapsed time, command count,
 diagnostic count, and RGBA pixel bytes. The initial VSG backend may still report
 placeholder diagnostics; those diagnostics are counted so later VSG work can
 prove the bottleneck signal improved.
+
+`depth_quilting.hpp` captures the raster-chart edge cases that must be modeled
+before tile clipping hardens: useful pixels outside the formal chart boundary in
+single-chart mode, multi-chart base/detail quilt ranks, collar masks, no-data
+policy, and the cache-layer metadata that needs to follow raster sheets into
+`kDrawRasterSheet` commands.
