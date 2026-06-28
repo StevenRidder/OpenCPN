@@ -1,0 +1,48 @@
+{
+  "schema_version": 1,
+  "product_id": "s52-presentation-fixture",
+  "objects": [
+    {
+      "object_id": "DEPARE.1",
+      "object_class": "DEPARE",
+      "geometry_kind": "area",
+      "attributes": {"DRVAL1": "0", "DRVAL2": "4"}
+    },
+    {
+      "object_id": "DEPCNT.1",
+      "object_class": "DEPCNT",
+      "geometry_kind": "line",
+      "attributes": {"VALDCO": "10"}
+    },
+    {
+      "object_id": "BOYLAT.1",
+      "object_class": "BOYLAT",
+      "geometry_kind": "point",
+      "attributes": {}
+    },
+    {
+      "object_id": "SOUNDG.1",
+      "object_class": "SOUNDG",
+      "geometry_kind": "point",
+      "attributes": {"VALSOU": "7.4"}
+    },
+    {
+      "object_id": "LNDARE.1",
+      "object_class": "LNDARE",
+      "geometry_kind": "point",
+      "attributes": {"OBJNAM": "Fixture Harbor"}
+    },
+    {
+      "object_id": "OBSTRN.1",
+      "object_class": "OBSTRN",
+      "geometry_kind": "point",
+      "metadata": {"display_category": "all"}
+    },
+    {
+      "object_id": "WRECKS.1",
+      "object_class": "WRECKS",
+      "geometry_kind": "point",
+      "min_scale_denom": 10000
+    }
+  ]
+}

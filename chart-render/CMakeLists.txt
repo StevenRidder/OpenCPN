@@ -16,6 +16,7 @@ add_library(opencpn-chart-render-skeleton STATIC
   source/conversion_trace.cpp
   source/chart_interchange.cpp
   source/chart_source.cpp
+  source/s52_presentation_compiler.cpp
   s52/s52_command_builder.cpp
   vsg/vsg_backend.cpp
   vsg/vsg_gpu_cache.cpp
@@ -88,5 +89,12 @@ add_executable(opencpn-vsg-gpu-cache-smoke
   tests/vsg_gpu_cache_smoke.cpp
 )
 target_link_libraries(opencpn-vsg-gpu-cache-smoke
+  PRIVATE opencpn-chart-render-skeleton
+)
+
+add_executable(opencpn-s52-presentation-compiler-smoke
+  tests/s52_presentation_compiler_smoke.cpp
+)
+target_link_libraries(opencpn-s52-presentation-compiler-smoke
   PRIVATE opencpn-chart-render-skeleton
 )

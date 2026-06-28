@@ -1,0 +1,10 @@
+{
+  "palette": "day",
+  "display_category": "standard",
+  "scale_denom": 20000,
+  "safety_depth_m": 5,
+  "safety_contour_m": 10,
+  "show_text": true,
+  "show_soundings": true,
+  "show_lights": true
+}
