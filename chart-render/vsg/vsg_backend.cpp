@@ -3,8 +3,11 @@
 
 #include "vsg/vsg_backend.hpp"
 
+#include "vsg/vsg_gpu_cache.hpp"
+
 #include <algorithm>
 #include <cstddef>
+#include <string>
 #include <utility>
 
 namespace ocpn::render::vsg {
@@ -33,6 +36,25 @@ RenderResult VsgBackend::RenderModel(const NauticalRenderModel& model,
   result.diagnostics.insert(result.diagnostics.end(),
                             validation_diagnostics.begin(),
                             validation_diagnostics.end());
+
+  const VsgGpuCacheManifest cache_manifest = BuildVsgGpuCacheManifest(model);
+  std::vector<Diagnostic> cache_diagnostics;
+  ValidateVsgGpuCacheManifest(cache_manifest, &cache_diagnostics);
+  result.diagnostics.insert(result.diagnostics.end(), cache_diagnostics.begin(),
+                            cache_diagnostics.end());
+
+  Diagnostic cache_diagnostic;
+  cache_diagnostic.severity = DiagnosticSeverity::kInfo;
+  cache_diagnostic.code = "backend.vsg_gpu_cache";
+  cache_diagnostic.message =
+      "VulkanSceneGraph backend prepared " +
+      std::to_string(cache_manifest.assets.size()) +
+      " GPU cache asset records from the neutral nautical render model.";
+  cache_diagnostic.suggested_action =
+      "Replace the manifest records with live VSG/Vulkan objects without "
+      "moving chart-source, S-52, quilting, or scheduler semantics into the "
+      "backend.";
+  result.diagnostics.push_back(std::move(cache_diagnostic));
 
   Diagnostic diagnostic;
   diagnostic.severity = DiagnosticSeverity::kWarning;

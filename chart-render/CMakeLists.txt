@@ -18,6 +18,7 @@ add_library(opencpn-chart-render-skeleton STATIC
   source/chart_source.cpp
   s52/s52_command_builder.cpp
   vsg/vsg_backend.cpp
+  vsg/vsg_gpu_cache.cpp
 )
 
 target_compile_features(opencpn-chart-render-skeleton PUBLIC cxx_std_17)
@@ -80,5 +81,12 @@ add_executable(opencpn-neutral-model-smoke
   tests/neutral_model_smoke.cpp
 )
 target_link_libraries(opencpn-neutral-model-smoke
+  PRIVATE opencpn-chart-render-skeleton
+)
+
+add_executable(opencpn-vsg-gpu-cache-smoke
+  tests/vsg_gpu_cache_smoke.cpp
+)
+target_link_libraries(opencpn-vsg-gpu-cache-smoke
   PRIVATE opencpn-chart-render-skeleton
 )

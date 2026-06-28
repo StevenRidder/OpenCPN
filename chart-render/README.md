@@ -41,8 +41,12 @@ The current shape mirrors the Vulkan board seam work:
 - `s52/` is the placeholder for S-57/SENC plus S-52/S-101 presentation
   compilation to the command stream and neutral model.
 - `vsg/` is the placeholder for the VulkanSceneGraph backend. It accepts the
-  neutral nautical render model and currently returns a structured diagnostic
-  instead of drawing.
+  neutral nautical render model, prepares a VSG-only GPU asset cache manifest,
+  and currently returns a structured diagnostic instead of drawing.
+- `vsg/GPU_CACHE.md` documents the machine-local VSG GPU cache boundary:
+  descriptor-ready textures/atlases, scene/frame buffers, stable keys, and
+  provenance handles derived from the neutral model without backend-owned chart
+  semantics.
 - `tests/fixtures/chart-1/` contains the initial command-stream fixture and
   Chart 1 acceptance catalog for golden-image work.
 
