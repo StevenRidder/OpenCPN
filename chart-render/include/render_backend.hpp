@@ -3,6 +3,7 @@
 
 #pragma once
 
+#include "nautical_render_model.hpp"
 #include "render_scene.hpp"
 
 #include <cstdint>
@@ -41,6 +42,8 @@ class IRenderBackend {
   virtual const char* Name() const = 0;
   virtual RenderResult Render(const RenderScene& scene,
                               const RenderTarget& target) = 0;
+  virtual RenderResult RenderModel(const NauticalRenderModel& model,
+                                   const RenderTarget& target) = 0;
 };
 
 }  // namespace ocpn::render

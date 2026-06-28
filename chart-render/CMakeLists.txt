@@ -4,6 +4,7 @@ cmake_minimum_required(VERSION 3.16)
 project(opencpn_chart_render_skeleton LANGUAGES CXX)
 
 add_library(opencpn-chart-render-skeleton STATIC
+  source/nautical_render_model.cpp
   source/golden_regression.cpp
   source/depth_performance.cpp
   source/depth_quilting.cpp
@@ -72,5 +73,12 @@ add_executable(opencpn-depth-quilting-smoke
   tests/depth_quilting_smoke.cpp
 )
 target_link_libraries(opencpn-depth-quilting-smoke
+  PRIVATE opencpn-chart-render-skeleton
+)
+
+add_executable(opencpn-neutral-model-smoke
+  tests/neutral_model_smoke.cpp
+)
+target_link_libraries(opencpn-neutral-model-smoke
   PRIVATE opencpn-chart-render-skeleton
 )

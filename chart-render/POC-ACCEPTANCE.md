@@ -6,9 +6,10 @@ or a separate sidecar renderer?
 
 ## Must Prove
 
-- A C++ command stream can represent source chart objects, S-52 display rules,
-  raster sheet policy, provenance, and target viewport state without depending
-  on Helm HTTP routes, MapLibre, or OpenCPN wx canvas globals.
+- A C++ command stream and neutral nautical render model can represent source
+  chart objects, S-52/S-101 presentation output, raster sheet policy,
+  provenance, and target viewport state without depending on Helm HTTP routes,
+  MapLibre, VSG, or OpenCPN wx canvas globals.
 - Chart-source inputs can be normalized before rendering, including S-57/SENC,
   raster charts, MBTiles/PMTiles interchange packages, debug fixtures, and a
   path for future S-101 support.
@@ -19,6 +20,9 @@ or a separate sidecar renderer?
   rule evidence.
 - The same renderer core can support an OpenCPN interactive adapter and a Helm
   headless/offscreen tile adapter behind feature flags.
+- VSG is proven as one output backend only; S-52/S-101 rules, chart-source
+  parsing, chart quilting, source semantics, cache keys, and scheduling policy
+  are owned before the backend handoff.
 - Regression evidence can be reproduced from a local command with documented
   golden-image tolerances and fixture inputs.
 
@@ -70,6 +74,7 @@ QA-facing evidence:
 - `ADAPT-1`: OpenCPN feature-flag adapter sketch.
 - `ADAPT-2`: Helm headless tile adapter sketch.
 - `QA-2`: repeatable golden-image regression runner.
+- `SEAM-5`: backend-neutral nautical render model and draw-only backend handoff.
 - `REPO-4`: Helm feature flag wired to the shared offscreen renderer.
 
 The POC is credible only when the evidence above is present in code, fixtures,

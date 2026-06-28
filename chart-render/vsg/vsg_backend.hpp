@@ -12,6 +12,8 @@ class VsgBackend final : public IRenderBackend {
   const char* Name() const override;
   RenderResult Render(const RenderScene& scene,
                       const RenderTarget& target) override;
+  RenderResult RenderModel(const NauticalRenderModel& model,
+                           const RenderTarget& target) override;
 };
 
 }  // namespace ocpn::render::vsg
