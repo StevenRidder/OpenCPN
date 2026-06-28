@@ -30,6 +30,8 @@ The current shape mirrors the Vulkan board seam work:
   area-pattern tessellation into render commands.
 - `include/depth_safety.hpp` applies safety-depth classification, palette
   buckets, and zoom-aware contour visibility to depth commands.
+- `include/depth_performance.hpp` measures the contour-heavy fixture through
+  the offscreen backend interface for early timing and memory smoke checks.
 - `POC-ACCEPTANCE.md` defines the POC acceptance rubric, non-goals, and
   stakeholder evidence.
 - `s52/` is the placeholder for S-57/SENC plus S-52 rules to command-stream
