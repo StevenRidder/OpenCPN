@@ -26,6 +26,8 @@ The current shape mirrors the Vulkan board seam work:
   area acceptance catalog.
 - `include/chart1_conformance.hpp` builds and validates the catalog-backed
   Chart 1 command-stream scene.
+- `include/chart1_debug_app.hpp` exposes source-to-render object and layer
+  inspection for the Chart 1 debug app.
 - `include/chart1_baseline.hpp` defines the Chart 1 baseline-comparison
   manifest and tolerance contract.
 - `include/depth_tessellation.hpp` prototypes shoreline, land, depth area, and
