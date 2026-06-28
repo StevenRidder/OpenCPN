@@ -76,6 +76,10 @@ QA-facing evidence:
 - `ADAPT-4`: overscan, prefetch, cache-invalidation, and zoom-blend scheduler
   policy.
 - `QA-2`: repeatable golden-image regression runner.
+- `QA-3`: repeatable stakeholder demo script and evidence packet showing the
+  shared renderer spine, OpenCPN interactive adapter, Helm headless/offscreen
+  policy, feature inspection, regression evidence, and VSG draw/cache-only
+  boundary.
 - `SEAM-5`: backend-neutral nautical render model and draw-only backend handoff.
 - `REPO-4`: Helm feature flag wired to the shared offscreen renderer.
 
@@ -98,3 +102,10 @@ The initial local command for ADAPT-4 is the CMake-built
 coverage, overscan rings, prefetch budget truncation, display/presentation
 cache invalidation epochs, and adjacent zoom-level blend requests as adapter
 scheduler policy rather than VSG backend semantics.
+
+The local command for QA-3 is the CMake `opencpn-stakeholder-demo` target. It
+builds the final stakeholder evidence packet from the local smoke binaries and
+writes `stakeholder-demo/qa3-stakeholder-demo-summary.md` under the build
+directory. Helm HTTP route evidence remains a separate private-port follow-up
+because this OpenCPN branch must not start Helm or touch the live `:8080`
+screen.

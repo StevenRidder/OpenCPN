@@ -122,3 +122,20 @@ add_executable(opencpn-viewport-tile-scheduler-smoke
 target_link_libraries(opencpn-viewport-tile-scheduler-smoke
   PRIVATE opencpn-chart-render-skeleton
 )
+
+add_custom_target(opencpn-stakeholder-demo
+  COMMAND
+    ${CMAKE_CURRENT_SOURCE_DIR}/scripts/stakeholder_demo.sh
+    ${CMAKE_CURRENT_BINARY_DIR}
+    ${CMAKE_CURRENT_BINARY_DIR}/stakeholder-demo
+  DEPENDS
+    opencpn-s52-presentation-compiler-smoke
+    opencpn-neutral-model-smoke
+    opencpn-feature-flag-adapter-smoke
+    opencpn-viewport-tile-scheduler-smoke
+    opencpn-chart1-debug-app-smoke
+    opencpn-golden-regression-smoke
+    opencpn-vsg-gpu-cache-smoke
+  WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+  COMMENT "Run the QA-3 dual-adapter stakeholder demo evidence script"
+)

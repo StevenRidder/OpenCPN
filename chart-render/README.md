@@ -46,6 +46,10 @@ The current shape mirrors the Vulkan board seam work:
   repeatable golden-regression smoke command.
 - `POC-ACCEPTANCE.md` defines the POC acceptance rubric, non-goals, and
   stakeholder evidence.
+- `docs/STAKEHOLDER_DEMO.md` defines the QA-3 dual-adapter stakeholder demo
+  runbook and talk track.
+- `scripts/stakeholder_demo.sh` runs the branch-local QA-3 evidence path and
+  writes a stakeholder summary from the built smoke binaries.
 - `s52/` is the placeholder for S-57/SENC plus S-52/S-101 presentation
   compilation to the command stream and neutral model.
 - `vsg/` is the placeholder for the VulkanSceneGraph backend. It accepts the
@@ -74,3 +78,11 @@ ADAPT-4 evidence is the CMake-built `opencpn-viewport-tile-scheduler-smoke`
 target. It proves the adapter scheduler owns visible/overscan/prefetch tile
 selection, cache epoch invalidation, and fractional zoom blending without
 moving scheduler policy into VSG or any other renderer backend.
+
+QA-3 evidence is the CMake `opencpn-stakeholder-demo` target. It runs the
+branch-local demo script over the existing smoke binaries in stakeholder order:
+presentation compiler, neutral model, OpenCPN feature-flag adapter, Helm/offscreen
+scheduler policy, Chart 1 debug inspection, golden regression, and VSG GPU cache.
+The generated summary is suitable as the demo evidence packet; live Helm route
+evidence must still be captured separately on a private port, never on Helm
+`:8080`.
