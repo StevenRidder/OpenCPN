@@ -25,7 +25,7 @@ Runtime rules for this POC:
 - Preserve source ids, object classes, geometry hashes, and transform decisions
   through `provenance_table`.
 - Treat MBTiles and PMTiles as optional interchange or debug inputs, not the
-  final renderer hot-path contract.
+  final renderer hot-path contract. See `INTERCHANGE.md`.
 - Emit raster sheets with explicit no-data, collar, and coverage policies so
   quilting and tile composition decisions remain inspectable.
 - Keep Helm-specific HTTP, cache, ETag, and MapLibre policy outside this module.
