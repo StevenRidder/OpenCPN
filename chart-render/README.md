@@ -16,6 +16,8 @@ The current shape mirrors the Vulkan board seam work:
   onscreen/offscreen target boundary.
 - `source/` documents and implements the chart-source boundary for S-57/SENC,
   raster, MBTiles/PMTiles interchange, debug fixtures, and future S-101 input.
+- `include/chart_interchange.hpp` classifies MBTiles/PMTiles as optional
+  interchange/debug artifacts rather than the renderer hot-path contract.
 - `s52/` is the placeholder for S-57/SENC plus S-52 rules to command-stream
   conversion.
 - `vsg/` is the placeholder for the VulkanSceneGraph backend. It currently
