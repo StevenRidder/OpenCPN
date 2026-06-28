@@ -24,3 +24,9 @@ Non-goals for this slice:
 depth areas are classified against `DisplayState` thresholds, palette buckets
 are attached to commands, and the safety contour is emitted only when the
 viewport scale says it should be visible.
+
+`depth_performance.hpp` runs the safety-depth fixture through the offscreen
+backend interface repeatedly and records elapsed time, command count,
+diagnostic count, and RGBA pixel bytes. The initial VSG backend may still report
+placeholder diagnostics; those diagnostics are counted so later VSG work can
+prove the bottleneck signal improved.
