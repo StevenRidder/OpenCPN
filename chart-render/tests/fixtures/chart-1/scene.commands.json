@@ -75,6 +75,10 @@
           "geometry_ref": "geom-depth-area",
           "fill_ref": "depth-area-fill",
           "pattern_ref": "none",
+          "conversion_trace_refs": ["trace:prov-depth-area"],
+          "metadata": {
+            "s52_rule": "fixture:depth_area"
+          },
           "provenance_refs": ["prov-depth-area"]
         },
         {
@@ -87,8 +91,10 @@
           "opacity": 1,
           "metadata": {
             "collar_policy": "not_applicable",
-            "coverage_policy": "no_data_transparent"
+            "coverage_policy": "no_data_transparent",
+            "s52_rule": "fixture:coverage_mask"
           },
+          "conversion_trace_refs": ["trace:prov-coverage"],
           "provenance_refs": ["prov-coverage"]
         },
         {
@@ -100,8 +106,10 @@
           "line_style_ref": "depth-contour-line",
           "width_px": 1.5,
           "metadata": {
-            "contour_m": 10
+            "contour_m": 10,
+            "s52_rule": "fixture:depth_contour"
           },
+          "conversion_trace_refs": ["trace:prov-depth-contour"],
           "provenance_refs": ["prov-depth-contour"]
         }
       ]
@@ -121,6 +129,10 @@
           "position": [128, 92],
           "anchor": "center",
           "priority": "navigation",
+          "metadata": {
+            "s52_rule": "fixture:buoy"
+          },
+          "conversion_trace_refs": ["trace:prov-buoy"],
           "provenance_refs": ["prov-buoy"]
         },
         {
@@ -133,6 +145,10 @@
           "position": [138, 82],
           "anchor": "left",
           "priority": "label",
+          "metadata": {
+            "s52_rule": "fixture:object_label"
+          },
+          "conversion_trace_refs": ["trace:prov-label"],
           "provenance_refs": ["prov-label"]
         },
         {
@@ -146,8 +162,10 @@
           "position": [94, 176],
           "priority": "sounding",
           "metadata": {
-            "safety_class": "safe"
+            "safety_class": "safe",
+            "s52_rule": "fixture:sounding"
           },
+          "conversion_trace_refs": ["trace:prov-sounding"],
           "provenance_refs": ["prov-sounding"]
         }
       ]
