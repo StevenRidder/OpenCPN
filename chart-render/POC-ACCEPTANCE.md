@@ -75,6 +75,7 @@ QA-facing evidence:
 - `ADAPT-2`: Helm headless tile adapter sketch.
 - `ADAPT-4`: overscan, prefetch, cache-invalidation, and zoom-blend scheduler
   policy.
+- `ADAPT-5`: deferred Metal backend compatibility checkpoint and gap list.
 - `QA-2`: repeatable golden-image regression runner.
 - `QA-3`: repeatable stakeholder demo script and evidence packet showing the
   shared renderer spine, OpenCPN interactive adapter, Helm headless/offscreen
@@ -109,3 +110,10 @@ writes `stakeholder-demo/qa3-stakeholder-demo-summary.md` under the build
 directory. Helm HTTP route evidence remains a separate private-port follow-up
 because this OpenCPN branch must not start Helm or touch the live `:8080`
 screen.
+
+ADAPT-5 evidence is the committed
+`docs/METAL_BACKEND_COMPATIBILITY.md` checkpoint. It records that the neutral
+model remains compatible with a future Metal backend only if platform surface
+binding, pipeline/material profiles, GPU cache keys, label/glyph ownership,
+frame synchronization, and provenance/debug parity are handled before
+implementation.

@@ -81,6 +81,9 @@ The current shape mirrors the Vulkan board seam work:
   descriptor-ready textures/atlases, scene/frame buffers, stable keys, and
   provenance handles derived from the neutral model without backend-owned chart
   semantics.
+- `docs/METAL_BACKEND_COMPATIBILITY.md` records the ADAPT-5 deferred native
+  Metal compatibility checkpoint and gap list without implementing a Metal
+  renderer.
 - `tests/fixtures/chart-1/` contains the initial command-stream fixture and
   Chart 1 acceptance catalog for golden-image work.
 
@@ -108,3 +111,8 @@ scheduler policy, Chart 1 debug inspection, golden regression, and VSG GPU cache
 The generated summary is suitable as the demo evidence packet; live Helm route
 evidence must still be captured separately on a private port, never on Helm
 `:8080`.
+
+ADAPT-5 evidence is `docs/METAL_BACKEND_COMPATIBILITY.md`. It confirms the
+neutral model and adapter seam leave room for a future native Apple backend,
+then names the platform surface, pipeline, GPU-cache, text, synchronization,
+and debug gaps that must close before any Metal renderer work starts.
