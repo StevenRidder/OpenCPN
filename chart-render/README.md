@@ -24,6 +24,8 @@ The current shape mirrors the Vulkan board seam work:
   area acceptance catalog.
 - `include/chart1_conformance.hpp` builds and validates the catalog-backed
   Chart 1 command-stream scene.
+- `include/chart1_baseline.hpp` defines the Chart 1 baseline-comparison
+  manifest and tolerance contract.
 - `POC-ACCEPTANCE.md` defines the POC acceptance rubric, non-goals, and
   stakeholder evidence.
 - `s52/` is the placeholder for S-57/SENC plus S-52 rules to command-stream
