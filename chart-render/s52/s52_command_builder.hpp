@@ -3,6 +3,7 @@
 
 #pragma once
 
+#include "chart_source.hpp"
 #include "render_scene.hpp"
 
 namespace ocpn::render::s52 {
@@ -10,6 +11,9 @@ namespace ocpn::render::s52 {
 class S52CommandBuilder {
  public:
   RenderScene BuildEmptyScene(RenderView view, DisplayState display) const;
+  RenderScene BuildSceneFromChartSource(const ChartSourceProduct& product,
+                                        RenderView view,
+                                        DisplayState display) const;
   RenderScene BuildFixtureScene(RenderView view, DisplayState display) const;
 };
 

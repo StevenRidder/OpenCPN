@@ -63,6 +63,31 @@ RenderScene S52CommandBuilder::BuildEmptyScene(RenderView view,
   return scene;
 }
 
+RenderScene S52CommandBuilder::BuildSceneFromChartSource(
+    const ChartSourceProduct& product, RenderView view,
+    DisplayState display) const {
+  RenderScene scene = BuildEmptyScene(std::move(view), std::move(display));
+  scene.scene_id =
+      product.product_id.empty() ? "chart-source-product" : product.product_id;
+  scene.source_epoch = "chart-source:" + std::to_string(product.schema_version);
+  scene.provenance_table = product.provenance_table;
+  scene.diagnostics = product.diagnostics;
+
+  if (!product.objects.empty() || !product.raster_sheets.empty()) {
+    Diagnostic diagnostic;
+    diagnostic.severity = DiagnosticSeverity::kInfo;
+    diagnostic.code = "s52_command_builder_placeholder";
+    diagnostic.message =
+        "Chart-source product accepted; S-52 symbolization is not implemented "
+        "in this skeleton yet.";
+    diagnostic.suggested_action =
+        "Map normalized chart objects and raster sheets into render commands.";
+    scene.diagnostics.push_back(std::move(diagnostic));
+  }
+
+  return scene;
+}
+
 RenderScene S52CommandBuilder::BuildFixtureScene(RenderView view,
                                                  DisplayState display) const {
   RenderScene scene = BuildEmptyScene(std::move(view), std::move(display));
