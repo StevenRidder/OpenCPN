@@ -84,3 +84,9 @@ The initial local command for QA-2 is the CMake-built
 `opencpn-golden-regression-smoke` target. It validates the Chart 1 acceptance
 and baseline manifests, reports pending baseline captures, and includes the
 depth performance smoke counters.
+
+The initial local command for ADAPT-1 is the CMake-built
+`opencpn-feature-flag-adapter-smoke` target. It validates that the OpenCPN
+feature-flag decision consumes a neutral nautical render model, preserves the
+legacy canvas fallback, and refuses shared-renderer routing when OpenCPN
+wx/swapchain ownership or model validation is missing.

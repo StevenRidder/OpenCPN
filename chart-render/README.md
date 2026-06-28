@@ -18,6 +18,9 @@ The current shape mirrors the Vulkan board seam work:
   wrong-location debugging.
 - `include/render_backend.hpp` defines the renderer backend interface and
   onscreen/offscreen target boundary.
+- `include/opencpn_feature_flag_adapter.hpp` sketches the ADAPT-1 OpenCPN
+  feature-flag decision point for choosing the legacy canvas or shared renderer
+  from a validated neutral model while OpenCPN keeps wx/swapchain ownership.
 - `source/` documents and implements the chart-source boundary for S-57/SENC,
   raster, MBTiles/PMTiles interchange, debug fixtures, and future S-101 input.
 - `include/chart_interchange.hpp` classifies MBTiles/PMTiles as optional
@@ -57,3 +60,9 @@ nautical render model: chart-source parsing, S-52/S-101 presentation rules,
 quilting, and scheduling policy stay before the backend boundary. Do not extract
 this into a standalone renderer repository until OpenCPN and Helm both consume
 the same model and golden image tests prove the shared semantics.
+
+ADAPT-1 evidence is the CMake-built `opencpn-feature-flag-adapter-smoke`
+target. It proves the OpenCPN adapter can route a validated neutral model to the
+shared renderer under a feature flag, preserve legacy fallback, and reject
+missing lifecycle/model contracts without giving VSG ownership of chart
+semantics.

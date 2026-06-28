@@ -4,6 +4,7 @@ cmake_minimum_required(VERSION 3.16)
 project(opencpn_chart_render_skeleton LANGUAGES CXX)
 
 add_library(opencpn-chart-render-skeleton STATIC
+  source/opencpn_feature_flag_adapter.cpp
   source/nautical_render_model.cpp
   source/golden_regression.cpp
   source/depth_performance.cpp
@@ -104,5 +105,12 @@ add_executable(opencpn-s52-presentation-compiler-smoke
   tests/s52_presentation_compiler_smoke.cpp
 )
 target_link_libraries(opencpn-s52-presentation-compiler-smoke
+  PRIVATE opencpn-chart-render-skeleton
+)
+
+add_executable(opencpn-feature-flag-adapter-smoke
+  tests/opencpn_feature_flag_adapter_smoke.cpp
+)
+target_link_libraries(opencpn-feature-flag-adapter-smoke
   PRIVATE opencpn-chart-render-skeleton
 )
