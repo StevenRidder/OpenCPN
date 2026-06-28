@@ -22,6 +22,8 @@ The current shape mirrors the Vulkan board seam work:
   interchange/debug artifacts rather than the renderer hot-path contract.
 - `include/chart1_acceptance.hpp` defines the first Chart 1 point, line, and
   area acceptance catalog.
+- `include/chart1_conformance.hpp` builds and validates the catalog-backed
+  Chart 1 command-stream scene.
 - `POC-ACCEPTANCE.md` defines the POC acceptance rubric, non-goals, and
   stakeholder evidence.
 - `s52/` is the placeholder for S-57/SENC plus S-52 rules to command-stream
