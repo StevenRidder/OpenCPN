@@ -9,9 +9,13 @@ The current shape mirrors the Vulkan board seam work:
 
 - `include/render_view.hpp` defines target-independent viewport and display
   settings.
+- `include/chart_source.hpp` defines the pluggable chart-source boundary before
+  S-52 conversion.
 - `include/render_scene.hpp` defines the backend-neutral render command stream.
 - `include/render_backend.hpp` defines the renderer backend interface and
   onscreen/offscreen target boundary.
+- `source/` documents and implements the chart-source boundary for S-57/SENC,
+  raster, MBTiles/PMTiles interchange, debug fixtures, and future S-101 input.
 - `s52/` is the placeholder for S-57/SENC plus S-52 rules to command-stream
   conversion.
 - `vsg/` is the placeholder for the VulkanSceneGraph backend. It currently
