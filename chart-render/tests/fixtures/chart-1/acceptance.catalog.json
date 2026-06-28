@@ -1,0 +1,43 @@
+{
+  "schema_version": 1,
+  "catalog_id": "chart-1-acceptance",
+  "fixture_scene": "scene.commands.json",
+  "cases": [
+    {
+      "case_id": "chart1-area-depth",
+      "primitive": "area",
+      "title": "Depth area fill",
+      "source_object_class": "DEPARE",
+      "s52_rule_id": "fixture:depth_area",
+      "expected_command_type": "fill_area",
+      "expected_resource_type": "palette",
+      "expected_command_role": "depth_area",
+      "fixture_command_ids": ["cmd-depth-area"],
+      "acceptance_note": "Area case accepts a filled depth polygon with explicit provenance and target-space geometry."
+    },
+    {
+      "case_id": "chart1-line-depth-contour",
+      "primitive": "line",
+      "title": "Depth contour line",
+      "source_object_class": "DEPCNT",
+      "s52_rule_id": "fixture:depth_contour",
+      "expected_command_type": "stroke_line",
+      "expected_resource_type": "line_style",
+      "expected_command_role": "depth_contour",
+      "fixture_command_ids": ["cmd-depth-contour"],
+      "acceptance_note": "Line case accepts a styled contour polyline with preserved contour metadata."
+    },
+    {
+      "case_id": "chart1-point-buoy",
+      "primitive": "point",
+      "title": "Lateral buoy symbol",
+      "source_object_class": "BOYLAT",
+      "s52_rule_id": "fixture:buoy",
+      "expected_command_type": "place_symbol",
+      "expected_resource_type": "symbol",
+      "expected_command_role": "buoy",
+      "fixture_command_ids": ["cmd-buoy"],
+      "acceptance_note": "Point case accepts a symbol command with center anchoring and navigation priority."
+    }
+  ]
+}
