@@ -7,8 +7,9 @@ before S-52 symbolization and before any VSG backend work:
 source charts
   -> chart-source module
   -> normalized chart objects, raster sheets, debug artifacts
-  -> S-52 command builder
+  -> S-52/S-101 presentation compiler
   -> render command stream
+  -> neutral nautical render model
   -> backend
 ```
 
@@ -17,6 +18,10 @@ charts, MBTiles or PMTiles interchange packages, debug fixtures, and future
 S-101 datasets should all enter through `IChartSource` and produce the same
 `ChartSourceProduct` shape. Renderer backends should never need to know which
 chart engine or interchange container produced a feature.
+
+Backends consume the neutral nautical render model or compiled assets derived
+from it. They do not own S-52/S-101 rules, chart-source parsing, chart quilting,
+source semantics, cache-key policy, or scheduler policy.
 
 Runtime rules for this POC:
 

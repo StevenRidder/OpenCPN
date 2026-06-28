@@ -12,6 +12,8 @@ The current shape mirrors the Vulkan board seam work:
 - `include/chart_source.hpp` defines the pluggable chart-source boundary before
   S-52 conversion.
 - `include/render_scene.hpp` defines the backend-neutral render command stream.
+- `include/nautical_render_model.hpp` defines the backend-neutral nautical
+  render model consumed by VSG/OpenGL/Metal/WebGPU/Helm backends.
 - `include/conversion_trace.hpp` defines source-to-command traceability for
   wrong-location debugging.
 - `include/render_backend.hpp` defines the renderer backend interface and
@@ -36,13 +38,16 @@ The current shape mirrors the Vulkan board seam work:
   repeatable golden-regression smoke command.
 - `POC-ACCEPTANCE.md` defines the POC acceptance rubric, non-goals, and
   stakeholder evidence.
-- `s52/` is the placeholder for S-57/SENC plus S-52 rules to command-stream
-  conversion.
-- `vsg/` is the placeholder for the VulkanSceneGraph backend. It currently
-  returns a structured diagnostic instead of drawing.
+- `s52/` is the placeholder for S-57/SENC plus S-52/S-101 presentation
+  compilation to the command stream and neutral model.
+- `vsg/` is the placeholder for the VulkanSceneGraph backend. It accepts the
+  neutral nautical render model and currently returns a structured diagnostic
+  instead of drawing.
 - `tests/fixtures/chart-1/` contains the initial command-stream fixture and
   Chart 1 acceptance catalog for golden-image work.
 
-The POC rule is branch-first, not repo-first. Do not extract this into a
-standalone renderer repository until OpenCPN and Helm both consume the same
-command stream and golden image tests prove the shared semantics.
+The POC rule is branch-first, not repo-first. The semantic center is the neutral
+nautical render model: chart-source parsing, S-52/S-101 presentation rules,
+quilting, and scheduling policy stay before the backend boundary. Do not extract
+this into a standalone renderer repository until OpenCPN and Helm both consume
+the same model and golden image tests prove the shared semantics.
