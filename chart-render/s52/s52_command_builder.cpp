@@ -5,6 +5,7 @@
 
 #include "conversion_trace.hpp"
 
+#include <sstream>
 #include <utility>
 
 namespace ocpn::render::s52 {
@@ -56,6 +57,98 @@ RenderCommand Command(CommandType type, std::string id, std::string role,
   return command;
 }
 
+ResourceRecord Resource(std::string id, ResourceType type,
+                        std::string content_hash,
+                        std::string provenance_id) {
+  ResourceRecord resource;
+  resource.resource_id = std::move(id);
+  resource.type = type;
+  resource.content_hash = std::move(content_hash);
+  resource.provenance_id = std::move(provenance_id);
+  return resource;
+}
+
+std::string BoundsString(const GeoBounds& bounds) {
+  std::ostringstream out;
+  out << bounds.west << "," << bounds.south << "," << bounds.east << ","
+      << bounds.north;
+  return out.str();
+}
+
+std::string PixelSizeString(const PixelSize& size) {
+  std::ostringstream out;
+  out << size.width << "x" << size.height;
+  return out.str();
+}
+
+std::string RasterProvenanceRef(const RasterSheet& sheet) {
+  if (!sheet.provenance_refs.empty()) {
+    return sheet.provenance_refs.front();
+  }
+  return "prov:" + sheet.sheet_id;
+}
+
+Geometry GeographicBoundsRing(std::string id, const GeoBounds& bounds) {
+  Geometry geometry;
+  geometry.geometry_id = std::move(id);
+  geometry.coordinate_space = CoordinateSpace::kGeographic;
+  geometry.rings.push_back({{bounds.west, bounds.south},
+                            {bounds.east, bounds.south},
+                            {bounds.east, bounds.north},
+                            {bounds.west, bounds.north}});
+  return geometry;
+}
+
+RenderCommand RasterSheetCommand(const RasterSheet& sheet) {
+  const std::string provenance_ref = RasterProvenanceRef(sheet);
+  RenderCommand command =
+      Command(CommandType::kDrawRasterSheet, "cmd-" + sheet.sheet_id,
+              ToString(sheet.kind), provenance_ref);
+  command.coordinate_space = CoordinateSpace::kGeographic;
+  command.texture_ref = sheet.sheet_id;
+  command.opacity = 1.0;
+  command.geometries.push_back(
+      GeographicBoundsRing("geom-" + sheet.sheet_id, sheet.visible_bounds));
+  command.metadata.insert(sheet.metadata.begin(), sheet.metadata.end());
+  command.metadata["source_id"] = sheet.source_id;
+  command.metadata["kind"] = ToString(sheet.kind);
+  command.metadata["no_data_policy"] = sheet.no_data_policy;
+  command.metadata["collar_policy"] = sheet.collar_policy;
+  command.metadata["boundary_policy"] = sheet.boundary_policy;
+  command.metadata["quilt_policy"] = sheet.quilt_policy;
+  command.metadata["quilt_rank"] = std::to_string(sheet.quilt_rank);
+  command.metadata["allow_visible_outside_chart_bounds"] =
+      sheet.allow_visible_outside_chart_bounds ? "true" : "false";
+  command.metadata["image_bounds"] = BoundsString(sheet.geographic_bbox);
+  command.metadata["chart_bounds"] = BoundsString(sheet.chart_bounds);
+  command.metadata["visible_bounds"] = BoundsString(sheet.visible_bounds);
+  command.metadata["collar_bounds"] = BoundsString(sheet.collar_bounds);
+  command.metadata["pixel_size"] = PixelSizeString(sheet.pixel_size);
+  command.metadata["normalized_cache_key"] =
+      "raster:" + sheet.source_id + ":" + sheet.sheet_id + ":" +
+      sheet.content_hash + ":" + command.metadata["visible_bounds"] + ":" +
+      sheet.collar_policy + ":" + sheet.quilt_policy;
+  command.metadata["s52_rule"] = "chart_source:" + command.role;
+  return command;
+}
+
+ResourceRecord RasterResource(const RasterSheet& sheet) {
+  ResourceRecord resource;
+  resource.resource_id = sheet.sheet_id;
+  resource.type = ResourceType::kRasterTexture;
+  resource.content_hash = sheet.content_hash;
+  resource.provenance_id = RasterProvenanceRef(sheet);
+  resource.metrics["pixel_size"] = PixelSizeString(sheet.pixel_size);
+  resource.backend_hints["coordinate_space"] = "geographic";
+  resource.backend_hints["no_data_policy"] = sheet.no_data_policy;
+  resource.backend_hints["collar_policy"] = sheet.collar_policy;
+  resource.backend_hints["quilt_policy"] = sheet.quilt_policy;
+  resource.backend_hints["normalized_cache_key"] =
+      "raster:" + sheet.source_id + ":" + sheet.sheet_id + ":" +
+      sheet.content_hash;
+  return resource;
+}
+
 }  // namespace
 
 RenderScene S52CommandBuilder::BuildEmptyScene(RenderView view,
@@ -90,6 +183,18 @@ RenderScene S52CommandBuilder::BuildSceneFromChartSource(
     scene.diagnostics.push_back(std::move(diagnostic));
   }
 
+  for (const RasterSheet& sheet : product.raster_sheets) {
+    scene.resource_table.resources.push_back(RasterResource(sheet));
+
+    CommandGroup raster_group;
+    raster_group.group_id = "chart-source-raster-" + sheet.sheet_id;
+    raster_group.chart_priority = sheet.quilt_rank;
+    raster_group.s52_layer = "raster";
+    raster_group.quilt_rank = sheet.quilt_rank;
+    raster_group.commands.push_back(RasterSheetCommand(sheet));
+    scene.command_groups.push_back(std::move(raster_group));
+  }
+
   return scene;
 }
 
@@ -100,17 +205,18 @@ RenderScene S52CommandBuilder::BuildFixtureScene(RenderView view,
   scene.source_epoch = "fixture:v1";
 
   scene.resource_table.resources.push_back(
-      {"depth-area-fill", ResourceType::kPalette, "fixture", "prov-depth-area"});
+      Resource("depth-area-fill", ResourceType::kPalette, "fixture",
+               "prov-depth-area"));
   scene.resource_table.resources.push_back(
-      {"depth-contour-line", ResourceType::kLineStyle, "fixture",
-       "prov-depth-contour"});
+      Resource("depth-contour-line", ResourceType::kLineStyle, "fixture",
+               "prov-depth-contour"));
   scene.resource_table.resources.push_back(
-      {"buoy-symbol", ResourceType::kSymbol, "fixture", "prov-buoy"});
+      Resource("buoy-symbol", ResourceType::kSymbol, "fixture", "prov-buoy"));
   scene.resource_table.resources.push_back(
-      {"label-font", ResourceType::kFont, "fixture", "prov-label"});
+      Resource("label-font", ResourceType::kFont, "fixture", "prov-label"));
   scene.resource_table.resources.push_back(
-      {"coverage-mask", ResourceType::kRasterTexture, "fixture",
-       "prov-coverage"});
+      Resource("coverage-mask", ResourceType::kRasterTexture, "fixture",
+               "prov-coverage"));
 
   scene.provenance_table.push_back(
       FixtureProvenance("prov-depth-area", "DEPARE.1", "DEPARE"));
