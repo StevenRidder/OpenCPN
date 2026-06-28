@@ -74,3 +74,8 @@ QA-facing evidence:
 
 The POC is credible only when the evidence above is present in code, fixtures,
 or reproducible commands. Board comments alone are not acceptance evidence.
+
+The initial local command for QA-2 is the CMake-built
+`opencpn-golden-regression-smoke` target. It validates the Chart 1 acceptance
+and baseline manifests, reports pending baseline captures, and includes the
+depth performance smoke counters.
