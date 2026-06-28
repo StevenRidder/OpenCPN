@@ -4,6 +4,7 @@ cmake_minimum_required(VERSION 3.16)
 project(opencpn_chart_render_skeleton LANGUAGES CXX)
 
 add_library(opencpn-chart-render-skeleton STATIC
+  source/golden_regression.cpp
   source/depth_performance.cpp
   source/depth_safety.cpp
   source/depth_tessellation.cpp
@@ -56,5 +57,12 @@ add_executable(opencpn-depth-performance-smoke
   tests/depth_performance_smoke.cpp
 )
 target_link_libraries(opencpn-depth-performance-smoke
+  PRIVATE opencpn-chart-render-skeleton
+)
+
+add_executable(opencpn-golden-regression-smoke
+  tests/golden_regression_smoke.cpp
+)
+target_link_libraries(opencpn-golden-regression-smoke
   PRIVATE opencpn-chart-render-skeleton
 )
