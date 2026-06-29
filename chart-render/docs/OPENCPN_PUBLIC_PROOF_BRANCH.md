@@ -10,7 +10,7 @@ generated demo artifacts.
 ## Review Target
 
 - Branch under review: `vulkan/render-core-poc`.
-- Sanitized proof base: `6c450d27e129f90519f8bd18e28c3a93eed83e8d`.
+- Sanitized proof base: `ba22ab8770315a1e53d5fbab7516cb55e69d487a`.
 - Public posture: upstream-shaped C++/CMake renderer seam for architecture
   review.
 - Non-posture: not a replacement ultimatum, not a Helm-only fork, not a
@@ -23,6 +23,8 @@ model, adapter scheduler policy, and backend handoff stay visibly separated.
 ## Included Evidence
 
 - `README.md`: branch map and evidence summary.
+- `docs/RFC_RENDER_CORE_POC.md`: RFC package entry point for architecture
+  review.
 - `POC-ACCEPTANCE.md`: acceptance rubric, non-goals, and stakeholder evidence.
 - `docs/STAKEHOLDER_DEMO.md`: reproducible stakeholder demo command and talk
   track.
@@ -47,6 +49,7 @@ Representative public evidence PRs already merged into the review branch:
 - #24 `QA-3`: stakeholder demo target.
 - #25 `PUB-1`: public release hygiene audit.
 - #26 `PUB-2`: sanitized public OpenCPN proof branch guide.
+- #27 `PUB-7`: maintainer response matrix.
 
 ## Reproduce The Local Evidence
 
@@ -102,7 +105,8 @@ SENC caches, S-63 permits, oeSENC data, or private voyage/runtime data.
 
 ## RFC Handoff
 
-The RFC should build the OpenCPN side from this note, the acceptance rubric, the
-maintainer response matrix, the stakeholder demo, and the hygiene checklist.
-The community ask should be architecture review of the seam and evidence, not
-approval of a wholesale renderer replacement.
+The RFC package starts at `docs/RFC_RENDER_CORE_POC.md` and builds the OpenCPN
+side from this note, the acceptance rubric, the maintainer response matrix, the
+stakeholder demo, and the hygiene checklist. The community ask should be
+architecture review of the seam and evidence, not approval of a wholesale
+renderer replacement.
