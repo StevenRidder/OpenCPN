@@ -34,6 +34,9 @@ The current shape mirrors the Vulkan board seam work:
 - `include/viewport_tile_scheduler.hpp` defines the ADAPT-4 adapter scheduler
   policy for visible tiles, overscan margins, prefetch rings, adjacent
   zoom-level blending, and cache invalidation epochs before backend handoff.
+- `include/gpu_artifact_cache_contract.hpp` defines the CACHE-1
+  machine-local GPU artifact cache contract for rebuildable backend/device
+  records, memory budgets, invalidation domains, and tier/provenance handles.
 - `source/` documents and implements the chart-source boundary for S-57/SENC,
   raster, MBTiles/PMTiles interchange, debug fixtures, and future S-101 input.
 - `include/chart_interchange.hpp` classifies MBTiles/PMTiles as optional
@@ -58,6 +61,9 @@ The current shape mirrors the Vulkan board seam work:
   stakeholder evidence.
 - `docs/RFC_RENDER_CORE_POC.md` is the public RFC package entry point for
   architecture review of the shared OpenCPN/Helm render-core proof.
+- `docs/MACHINE_LOCAL_GPU_ARTIFACT_CACHE.md` records the production cache
+  contract above backend-specific VSG/WebGPU/WebGL/Metal-compatible artifact
+  implementations.
 - `docs/OPENCPN_COMMUNITY_RFC_POST_DRAFT.md` drafts the public community post
   asking for architecture review and maintainer seam feedback.
 - `docs/STAKEHOLDER_DEMO.md` defines the QA-3 dual-adapter stakeholder demo
@@ -116,3 +122,9 @@ ADAPT-5 evidence is `docs/METAL_BACKEND_COMPATIBILITY.md`. It confirms the
 neutral model and adapter seam leave room for a future native Apple backend,
 then names the platform surface, pipeline, GPU-cache, text, synchronization,
 and debug gaps that must close before any Metal renderer work starts.
+
+CACHE-1 evidence is the CMake-built
+`opencpn-gpu-artifact-cache-contract-smoke` target. It proves the generic
+machine-local cache contract can derive rebuildable artifact records from the
+neutral model, preserve Tier 1/provenance handles, report memory-budget
+pressure, and reject source/presentation policy leaks in backend artifact keys.

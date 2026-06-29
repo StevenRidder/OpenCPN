@@ -9,7 +9,10 @@ prefetch, or define Helm HTTP/cache artifacts. Those decisions happen before
 the backend boundary and arrive as neutral primitive fields, resource records,
 LOD hints, coverage metadata, cache keys, and provenance handles.
 
-The current C++17 prototype emits a deterministic `VsgGpuCacheManifest`:
+The generic CACHE-1 contract is documented in
+`docs/MACHINE_LOCAL_GPU_ARTIFACT_CACHE.md` and represented by
+`GpuArtifactCacheManifest`. The current VSG-specific C++17 prototype emits a
+deterministic `VsgGpuCacheManifest`:
 
 - machine-local descriptor-ready texture/atlas/uniform records for resources
   used by neutral primitives;

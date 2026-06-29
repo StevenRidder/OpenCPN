@@ -270,6 +270,10 @@ S-101 decisions. The package does not.
 
 ## GPU Artifact Cache Responsibilities
 
+The production cache contract is defined in
+`docs/MACHINE_LOCAL_GPU_ARTIFACT_CACHE.md` and represented in C++ by
+`include/gpu_artifact_cache_contract.hpp`.
+
 The machine-local GPU artifact cache consumes neutral render primitives or
 presentation assets and emits backend/device-specific artifacts:
 
