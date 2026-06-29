@@ -42,7 +42,10 @@ show the exact smoke binary output.
    pending-baseline reporting.
 7. Performance budget evidence defines the first timing, memory, disk-cache, and
    boat-class power gates before real PERF-2 device measurements.
-8. VSG remains draw/cache-only and consumes neutral primitives without owning
+8. The package-derived neutral model compiles into VSG-targeted GPU artifact
+   records with Tier 1 provenance, material/pipeline keys, invalidation
+   metadata, memory estimates, and no Helm Tier 2/3 overlay policy leakage.
+9. VSG remains draw/cache-only and consumes neutral primitives without owning
    chart-source, S-52, quilting, cache-key, or scheduler semantics.
 
 ## OpenCPN Interactive Evidence
@@ -55,6 +58,9 @@ The OpenCPN portion of the demo is local to this branch:
   decisions compile before backend handoff, including the CONVERT-2 S-57
   portable package fixture path.
 - `opencpn-neutral-model-smoke` proves the neutral model is the shared contract.
+- `opencpn-gpu-artifact-cache-contract-smoke` proves the package-derived
+  neutral model becomes VSG-targeted rebuildable GPU artifact records while
+  preserving Tier 1 provenance.
 - `opencpn-chart1-debug-app-smoke` proves the inspection path for
   wrong-location debugging.
 
@@ -97,7 +103,7 @@ fixture or BYO chart data used.
 The demo is ready when:
 
 - `opencpn-stakeholder-demo` completes successfully.
-- The generated summary lists PASS for all seven local evidence steps.
+- The generated summary lists PASS for all local evidence steps.
 - Helm route evidence is captured separately from a private Helm port when the
   live HTTP path is shown.
 - The presenter can explain why VSG is an output backend only and why scheduler,

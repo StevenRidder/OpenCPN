@@ -40,7 +40,8 @@ bool ContainsForbiddenPolicyWord(const std::string& value) {
   for (const char* token :
        {"s52", "s-52", "s101", "s-101", "chart_source", "chart-source",
         "mbtiles", "pmtiles", "quilting", "scheduler", "prefetch",
-        "display_category", "scamin"}) {
+        "display_category", "scamin", "helm", "tier2", "tier3", "overlay",
+        "ui_icon", "icon_registry"}) {
     if (lower.find(token) != std::string::npos) return true;
   }
   return false;
@@ -393,6 +394,7 @@ void AddResourceArtifact(const ResourceRecord& resource,
                          const std::string& model_key,
                          const std::vector<std::string>& primitive_ids,
                          const std::vector<std::string>& provenance_refs,
+                         const std::string& source_standard,
                          GpuArtifactCacheManifest* manifest) {
   const GpuArtifactKind kind = ResourceArtifactKind(resource.type);
   GpuArtifactRecord artifact;
@@ -407,7 +409,11 @@ void AddResourceArtifact(const ResourceRecord& resource,
           ? "tier1_official_chart"
           : MetadataValue(resource.backend_hints, "semantic_tier");
   artifact.tier.semantic_owner = "presentation_compiler";
-  artifact.tier.source_standard = MetadataValue(resource.backend_hints, "source_standard");
+  artifact.tier.source_standard =
+      MetadataValue(resource.backend_hints, "source_standard");
+  if (artifact.tier.source_standard.empty()) {
+    artifact.tier.source_standard = source_standard;
+  }
   artifact.tier.primitive_ids = primitive_ids;
   artifact.tier.provenance_refs = provenance_refs;
   if (!resource.provenance_id.empty() &&
@@ -545,6 +551,7 @@ GpuArtifactCacheManifest BuildGpuArtifactCacheManifest(
       ResourcesById(model.resource_table);
   std::map<std::string, std::vector<std::string>> primitive_ids_by_resource;
   std::map<std::string, std::vector<std::string>> provenance_refs_by_resource;
+  std::map<std::string, std::string> source_standard_by_resource;
   std::set<std::string> material_keys;
 
   for (const NauticalLayer& layer : model.layers) {
@@ -554,6 +561,12 @@ GpuArtifactCacheManifest BuildGpuArtifactCacheManifest(
         primitive_ids_by_resource[resource_id].push_back(primitive.primitive_id);
         AppendUnique(&provenance_refs_by_resource[resource_id],
                      primitive.trace.provenance_refs);
+        std::string& source_standard =
+            source_standard_by_resource[resource_id];
+        if (source_standard.empty()) {
+          source_standard = MetadataValue(primitive.metadata,
+                                          "source_standard");
+        }
       }
 
       if (IsGeometryPrimitive(primitive.type)) {
@@ -575,7 +588,8 @@ GpuArtifactCacheManifest BuildGpuArtifactCacheManifest(
     const auto resource_it = resource_by_id.find(entry.first);
     if (resource_it == resource_by_id.end()) continue;
     AddResourceArtifact(resource_it->second, options, model_key, entry.second,
-                        provenance_refs_by_resource[entry.first], &manifest);
+                        provenance_refs_by_resource[entry.first],
+                        source_standard_by_resource[entry.first], &manifest);
   }
 
   manifest.stats.over_budget =

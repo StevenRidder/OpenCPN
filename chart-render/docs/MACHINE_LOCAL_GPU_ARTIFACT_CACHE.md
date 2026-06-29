@@ -1,6 +1,6 @@
 # Machine-Local GPU Artifact Cache Contract
 
-Status: CACHE-1 production architecture and C++ contract
+Status: CACHE-1 production architecture and C++ contract, CACHE-2 VSG slice
 
 This document defines the rebuildable cache layer between the neutral nautical
 render model and any backend renderer:
@@ -134,6 +134,30 @@ identity, rebuildability, memory budgets, invalidation, and tier/provenance
 rules common across VSG and future WebGPU/WebGL/Metal-compatible/server-raster
 targets.
 
+## Initial CACHE-2 VSG Slice
+
+`CACHE-2` compiles the first package-derived neutral fixture into
+VSG/Vulkan-targeted generic artifact records. The fixture path is:
+
+```text
+CONVERT-2 S-57 portable package
+  -> PRESENT-2 S-52/S-101 package presentation model
+  -> BuildGpuArtifactCacheManifest(backend_target="vsg")
+```
+
+The resulting manifest includes vertex/index buffers, view uniforms, symbol
+atlas records, line-pattern records, material/pipeline keys, viewport entries,
+invalidation metadata, byte estimates, and deterministic cache ids. Resource
+artifacts inherit `source_standard` from the neutral primitives that reference
+them, so the S-57 package provenance reaches symbol/line/palette artifacts
+without asking the cache to reinterpret S-52/S-101 meaning.
+
+This slice is official chart portrayal only. The CACHE-2 smoke rejects Helm
+Tier 2/3 overlay or UI icon registry policy words in VSG package artifact
+usage/material/pipeline keys. A later combined overlay fixture can define how
+different tiers are drawn together downstream, but the chart-semantics cache
+must not collapse those meanings here.
+
 ## Smoke Test
 
 ```bash
@@ -152,3 +176,7 @@ The smoke test asserts that:
   rejected;
 - raster quilting fixtures produce raster texture artifacts without moving
   quilting policy into the cache.
+- the CONVERT-2/PRESENT-2 S-57 package fixture produces VSG-targeted artifact
+  records with Tier 1 S-57 provenance, package-keyed invalidation, material and
+  pipeline keys, resource artifacts, deterministic ids, memory evidence, and no
+  Helm Tier 2/3 policy leakage.

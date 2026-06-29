@@ -83,7 +83,7 @@ composition.
 | S-52/S-101 presentation compiler | Display category, SCAMIN, palette, symbol, text, sounding, and safety-depth decisions before backend handoff, including the first portable package fixture path. | `docs/PRESENTATION_COMPILER_BOUNDARY.md`, `docs/S52_PRESENTATION_COMPILER.md`, `include/s52_presentation_compiler.hpp`, `opencpn-s52-presentation-compiler-smoke` |
 | Neutral nautical render model | Backend-neutral layers, primitives, resource table, LOD hints, coverage metadata, cache keys, diagnostics, and source traces. | `include/nautical_render_model.hpp`, `opencpn-neutral-model-smoke` |
 | Adapter scheduler policy | Visible tiles, overscan, prefetch, adjacent zoom blending, and cache invalidation epochs before renderer backend handoff. | `include/viewport_tile_scheduler.hpp`, `opencpn-viewport-tile-scheduler-smoke` |
-| Machine-local GPU artifact cache | Rebuildable backend/device artifacts, memory budgets, invalidation domains, and tier/provenance handles derived from the neutral model. | `docs/MACHINE_LOCAL_GPU_ARTIFACT_CACHE.md`, `opencpn-gpu-artifact-cache-contract-smoke` |
+| Machine-local GPU artifact cache | Rebuildable backend/device artifacts, memory budgets, invalidation domains, and tier/provenance handles derived from the neutral model, including the first VSG-targeted S-57 package fixture. | `docs/MACHINE_LOCAL_GPU_ARTIFACT_CACHE.md`, `opencpn-gpu-artifact-cache-contract-smoke` |
 | Performance and power budget | First production slice timing, memory, disk-cache, and boat-class power gates for desktop and low-power profiles. | `docs/PERFORMANCE_POWER_BUDGET.md`, `opencpn-performance-budget-contract-smoke` |
 | VSG proof backend | Native draw/cache proof fed by neutral primitives; no chart-source or S-52 ownership. | `vsg/GPU_CACHE.md`, `opencpn-vsg-gpu-cache-smoke` |
 | OpenCPN adapter | Feature-flagged route from validated neutral model into the shared renderer while preserving legacy fallback and host ownership. | `include/opencpn_feature_flag_adapter.hpp`, `opencpn-feature-flag-adapter-smoke` |
@@ -172,6 +172,11 @@ The S-52 presentation smoke covers two fixture levels: a normalized Chart
 1-style fixture for text, sounding, display-category, SCAMIN, palette, and
 safety behavior, plus the CONVERT-2 S-57 portable package fixture for
 package-validation provenance and package-keyed neutral primitives.
+
+The GPU artifact cache smoke now compiles that package-derived neutral model
+into VSG-targeted artifact records and checks Tier 1 S-57 provenance,
+package-keyed invalidation, material/pipeline keys, memory estimates, and the
+absence of Helm Tier 2/3 overlay or UI icon policy in official-chart artifacts.
 
 ## Current Limitations
 
