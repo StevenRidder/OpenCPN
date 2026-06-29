@@ -37,6 +37,9 @@ The current shape mirrors the Vulkan board seam work:
 - `include/gpu_artifact_cache_contract.hpp` defines the CACHE-1
   machine-local GPU artifact cache contract for rebuildable backend/device
   records, memory budgets, invalidation domains, and tier/provenance handles.
+- `include/draw_backend_contract.hpp` defines the BACKEND-1 draw-only backend
+  contract for VSG/Vulkan, Helm WebGPU, WebGL/MapLibre fallback, and server
+  raster targets without letting backends own chart semantics or visual tiers.
 - `source/` documents and implements the chart-source boundary for S-57/SENC,
   raster, MBTiles/PMTiles interchange, debug fixtures, and future S-101 input.
 - `include/chart_interchange.hpp` classifies MBTiles/PMTiles as optional
@@ -64,6 +67,9 @@ The current shape mirrors the Vulkan board seam work:
 - `docs/MACHINE_LOCAL_GPU_ARTIFACT_CACHE.md` records the production cache
   contract above backend-specific VSG/WebGPU/WebGL/Metal-compatible artifact
   implementations.
+- `docs/DRAW_ONLY_BACKEND_CONTRACT.md` records the production backend handoff:
+  renderers consume neutral primitives or compiled GPU artifacts, preserve
+  Tier 1/Tier 2/Tier 3 provenance, and remain draw/cache-only.
 - `docs/OPENCPN_COMMUNITY_RFC_POST_DRAFT.md` drafts the public community post
   asking for architecture review and maintainer seam feedback.
 - `docs/STAKEHOLDER_DEMO.md` defines the QA-3 dual-adapter stakeholder demo
@@ -128,3 +134,9 @@ CACHE-1 evidence is the CMake-built
 machine-local cache contract can derive rebuildable artifact records from the
 neutral model, preserve Tier 1/provenance handles, report memory-budget
 pressure, and reject source/presentation policy leaks in backend artifact keys.
+
+BACKEND-1 evidence is the CMake-built `opencpn-draw-backend-contract-smoke`
+target. It proves VSG and WebGPU targets can consume the same draw-only
+model/artifact boundary, preserves official-chart versus overlay/UI tier
+handles, and rejects backend-owned chart semantics or Tier 2/3 masquerading as
+S-52/S-101 chart truth.
