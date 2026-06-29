@@ -29,8 +29,9 @@ show the exact smoke binary output.
 
 1. Chart-source normalization and S-52/S-101 presentation compile into the
    backend-neutral nautical render model.
-2. The neutral model stays the semantic center for OpenCPN, Helm, VSG, and
-   future Metal/WebGPU targets.
+2. The neutral model stays the semantic center for OpenCPN, Helm browser
+   artifacts, VSG as the native proof backend, and future backend compatibility
+   work.
 3. OpenCPN selects the shared renderer through a feature-flag adapter only after
    it has a validated neutral model and OpenCPN-owned canvas/swapchain context.
 4. Helm/offscreen tile behavior is represented as adapter scheduler policy:
@@ -81,8 +82,9 @@ fixture or BYO chart data used.
   renderer path behind a feature flag.
 - When asked about incorrect pixels, use the Chart 1 debug app evidence and walk
   from source feature id to final backend asset id.
-- When asked about future backends, say Metal and WebGPU are compatibility
-  targets fed by the same neutral model, not current implementations.
+- When asked about future backends, say WebGPU is Helm's preferred browser
+  target fed by server artifacts, Metal is deferred compatibility only, and
+  neither backend is implemented by this branch.
 - When asked about MBTiles or PMTiles, say they are import/export/debug fixture
   artifacts, not the renderer hot-path contract.
 

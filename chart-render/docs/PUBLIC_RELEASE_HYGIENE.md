@@ -10,6 +10,8 @@ should remain internal lineage, and what the next PUB tasks must clean up.
 
 - OpenCPN proof branch: `vulkan/render-core-poc` at
   `deb351bbf0aeebb32f930a72dbd73c90d14faa9f`.
+- PUB-2 sanitized proof base:
+  `85c4bebcfcd46a080d8ab2356b669f6b33fc9a79`.
 - Helm integration branch: `main` at
   `f852bded8a0963fbccc9df6d47ef9befd3a9e69a`.
 - OpenCPN `master` baseline at audit time:
@@ -27,7 +29,7 @@ OpenCPN public review target:
 - Branch: `vulkan/render-core-poc`.
 - Public posture: upstream-shaped C++/CMake proof branch for architecture
   review, not a replacement ultimatum and not a Helm-only fork.
-- Public evidence PRs: OpenCPN PRs #1-24 against `vulkan/render-core-poc`,
+- Public evidence PRs: OpenCPN PRs #1-25 against `vulkan/render-core-poc`,
   especially:
   - #16 `SEAM-5`: neutral nautical render model.
   - #18 `SYM-5`: S-52 presentation compiler into the neutral model.
@@ -35,6 +37,7 @@ OpenCPN public review target:
   - #21 `ADAPT-4`: viewport tile scheduler policy.
   - #23 `ADAPT-6`: Helm WebGPU-first render target contract.
   - #24 `QA-3`: stakeholder demo target.
+  - #25 `PUB-1`: public release hygiene audit.
 
 Helm public reference target:
 
@@ -108,10 +111,9 @@ Before PUB-2/PUB-3 publishable branches or docs are cut:
   build directories and generated demo summaries. This is acceptable for
   developer commands, but PUB-2/PUB-4 should keep them as examples rather than
   presenting them as required machine paths.
-- `chart-render/docs/STAKEHOLDER_DEMO.md` still says "future Metal/WebGPU
-  targets" in one generic neutral-model sentence. PUB-4 should harmonize the
-  public narrative with the later steering: WebGPU is Helm's client direction;
-  Metal is deferred compatibility only.
+- `chart-render/docs/STAKEHOLDER_DEMO.md` was harmonized in PUB-2: WebGPU is
+  Helm's client direction, Metal is deferred compatibility only, and neither is
+  claimed as implemented by the current OpenCPN proof branch.
 - `chart-render/docs/HELM_WEB_RENDER_TARGET.md` contains the corrected
   WebGPU-first Helm framing and should be the source for PUB-3.
 - Helm `main` has broad planning and business docs that mention AI, cloud,
