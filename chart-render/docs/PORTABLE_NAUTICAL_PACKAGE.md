@@ -186,6 +186,9 @@ Coverage records make quilting and chart selection inspectable:
 
 Coverage is package data, but runtime selection, overscan, prefetch, adjacent
 zoom blending, and cache epoch policy remain adapter/scheduler concerns.
+For S-100 catalog and service inventory rows, map discovery metadata into these
+source, coverage, checksum, and provenance records as described in
+`docs/S100_INVENTORY_METADATA.md`.
 
 ### Provenance
 
