@@ -40,6 +40,11 @@ The current shape mirrors the Vulkan board seam work:
 - `include/draw_backend_contract.hpp` defines the BACKEND-1 draw-only backend
   contract for VSG/Vulkan, Helm WebGPU, WebGL/MapLibre fallback, and server
   raster targets without letting backends own chart semantics or visual tiers.
+- `include/helm_webgpu_artifact_consumer.hpp` defines the HELMWEBGPU-1 browser
+  artifact consumer contract. Helm WebGPU consumes compiled primitive packets,
+  inspection packets, server-raster fallback records, and Helm overlay/UI
+  registry assets without importing VSG/OpenCPN internals or owning
+  S-52/S-101 semantics.
 - `source/` documents and implements the chart-source boundary for S-57/SENC,
   raster, MBTiles/PMTiles interchange, debug fixtures, and future S-101 input.
 - `include/chart_interchange.hpp` classifies MBTiles/PMTiles as optional
@@ -70,6 +75,9 @@ The current shape mirrors the Vulkan board seam work:
 - `docs/DRAW_ONLY_BACKEND_CONTRACT.md` records the production backend handoff:
   renderers consume neutral primitives or compiled GPU artifacts, preserve
   Tier 1/Tier 2/Tier 3 provenance, and remain draw/cache-only.
+- `docs/HELM_WEBGPU_ARTIFACT_CONSUMER.md` records the first Helm browser
+  consumer slice over the same package, presentation, cache, backend, and
+  inspection contracts.
 - `docs/OPENCPN_COMMUNITY_RFC_POST_DRAFT.md` drafts the public community post
   asking for architecture review and maintainer seam feedback.
 - `docs/STAKEHOLDER_DEMO.md` defines the QA-3 dual-adapter stakeholder demo
@@ -140,3 +148,9 @@ target. It proves VSG and WebGPU targets can consume the same draw-only
 model/artifact boundary, preserves official-chart versus overlay/UI tier
 handles, and rejects backend-owned chart semantics or Tier 2/3 masquerading as
 S-52/S-101 chart truth.
+
+HELMWEBGPU-1 evidence is the `helm_webgpu_artifact_consumer` C++ contract and
+smoke. It proves Helm's WebGPU-first client target consumes the shared neutral
+model, GPU artifact cache, draw-only backend, and source-to-render inspection
+contracts while preserving Tier 1 official chart truth separately from Helm
+Tier 2 overlays and Tier 3 UI registry assets.

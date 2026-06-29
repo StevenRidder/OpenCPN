@@ -5,6 +5,7 @@ project(opencpn_chart_render_skeleton LANGUAGES CXX)
 
 add_library(opencpn-chart-render-skeleton STATIC
   source/draw_backend_contract.cpp
+  source/helm_webgpu_artifact_consumer.cpp
   source/performance_budget_contract.cpp
   source/opencpn_feature_flag_adapter.cpp
   source/viewport_tile_scheduler.cpp
@@ -136,6 +137,13 @@ target_link_libraries(opencpn-draw-backend-contract-smoke
   PRIVATE opencpn-chart-render-skeleton
 )
 
+add_executable(opencpn-helm-webgpu-artifact-consumer-smoke
+  tests/helm_webgpu_artifact_consumer_smoke.cpp
+)
+target_link_libraries(opencpn-helm-webgpu-artifact-consumer-smoke
+  PRIVATE opencpn-chart-render-skeleton
+)
+
 add_executable(opencpn-s52-presentation-compiler-smoke
   tests/s52_presentation_compiler_smoke.cpp
 )
@@ -188,6 +196,7 @@ add_custom_target(opencpn-stakeholder-demo
     opencpn-s57-portable-package-converter-smoke
     opencpn-source-to-render-inspection-smoke
     opencpn-draw-backend-contract-smoke
+    opencpn-helm-webgpu-artifact-consumer-smoke
     opencpn-vsg-gpu-cache-smoke
   WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
   COMMENT "Run the QA-3 dual-adapter stakeholder demo evidence script"
