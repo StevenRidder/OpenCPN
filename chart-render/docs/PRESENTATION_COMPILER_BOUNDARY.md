@@ -1,6 +1,6 @@
 # Production Presentation Compiler Boundary
 
-Status: PRESENT-1 production architecture draft
+Status: PRESENT-1 production architecture draft, PRESENT-2 package slice
 
 This document defines the production boundary for S-52/S-101 presentation:
 
@@ -295,6 +295,23 @@ inspect rule decisions and provenance without reading VSG or WebGPU code.
 
 The slice should not implement full S-52/S-101 parity or any backend-specific
 GPU resource creation.
+
+The first package slice is implemented as
+`s52::CompileS52PackagePresentation()`. It validates the portable nautical
+package, compiles the package's normalized chart product through the existing
+S-52/S-101 compiler, and stamps the neutral model with package id, schema,
+content hash, source epoch, source standard, and Tier 1 official-chart
+ownership. Primitive scene cache keys include the package checksum so a changed
+package cannot silently reuse a stale semantic packet.
+
+The `opencpn-s52-presentation-compiler-smoke` executable covers both parts of
+this boundary:
+
+- the normalized Chart 1-style fixture proves text, sounding, display-category,
+  SCAMIN, palette, and safety decisions before backend handoff;
+- the CONVERT-2 S-57 portable package fixture proves package validation,
+  source-standard provenance, deterministic area/contour/symbol output,
+  package-cache identity, and unsupported-source diagnostics.
 
 ## Review Questions
 

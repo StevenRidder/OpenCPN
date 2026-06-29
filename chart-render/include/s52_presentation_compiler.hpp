@@ -5,6 +5,7 @@
 
 #include "chart_source.hpp"
 #include "nautical_render_model.hpp"
+#include "portable_nautical_package.hpp"
 
 #include <string>
 
@@ -32,10 +33,20 @@ class S52PresentationCompiler {
                               RenderView view, DisplayState display,
                               PresentationAssets assets = {},
                               PresentationOptions options = {}) const;
+
+  NauticalRenderModel Compile(const PortableNauticalPackage& package,
+                              RenderView view, DisplayState display,
+                              PresentationAssets assets = {},
+                              PresentationOptions options = {}) const;
 };
 
 NauticalRenderModel CompileS52Presentation(
     const ChartSourceProduct& normalized_features, RenderView view,
+    DisplayState display, PresentationAssets assets = {},
+    PresentationOptions options = {});
+
+NauticalRenderModel CompileS52PackagePresentation(
+    const PortableNauticalPackage& package, RenderView view,
     DisplayState display, PresentationAssets assets = {},
     PresentationOptions options = {});
 

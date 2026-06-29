@@ -80,7 +80,7 @@ composition.
 |---|---|---|
 | Chart-source/converter boundary | Source parsing/normalization into the portable nautical package, plus provenance, update metadata, diagnostics, and conversion trace handles. | `docs/CHART_CONVERTER_MODULE_API.md`, `source/README.md`, `source/INTERCHANGE.md`, `include/chart_source.hpp` |
 | Portable nautical package | Durable source-neutral chart truth between replaceable converters and presentation compilation; not a GPU cache or backend format. | `docs/PORTABLE_NAUTICAL_PACKAGE.md` |
-| S-52/S-101 presentation compiler | Display category, SCAMIN, palette, symbol, text, sounding, and safety-depth decisions before backend handoff. | `docs/PRESENTATION_COMPILER_BOUNDARY.md`, `docs/S52_PRESENTATION_COMPILER.md`, `include/s52_presentation_compiler.hpp` |
+| S-52/S-101 presentation compiler | Display category, SCAMIN, palette, symbol, text, sounding, and safety-depth decisions before backend handoff, including the first portable package fixture path. | `docs/PRESENTATION_COMPILER_BOUNDARY.md`, `docs/S52_PRESENTATION_COMPILER.md`, `include/s52_presentation_compiler.hpp`, `opencpn-s52-presentation-compiler-smoke` |
 | Neutral nautical render model | Backend-neutral layers, primitives, resource table, LOD hints, coverage metadata, cache keys, diagnostics, and source traces. | `include/nautical_render_model.hpp`, `opencpn-neutral-model-smoke` |
 | Adapter scheduler policy | Visible tiles, overscan, prefetch, adjacent zoom blending, and cache invalidation epochs before renderer backend handoff. | `include/viewport_tile_scheduler.hpp`, `opencpn-viewport-tile-scheduler-smoke` |
 | Machine-local GPU artifact cache | Rebuildable backend/device artifacts, memory budgets, invalidation domains, and tier/provenance handles derived from the neutral model. | `docs/MACHINE_LOCAL_GPU_ARTIFACT_CACHE.md`, `opencpn-gpu-artifact-cache-contract-smoke` |
@@ -168,10 +168,15 @@ The stakeholder demo target runs the current local evidence path:
 Generated summaries and logs are disposable build artifacts under `/tmp`; do not
 commit them.
 
+The S-52 presentation smoke covers two fixture levels: a normalized Chart
+1-style fixture for text, sounding, display-category, SCAMIN, palette, and
+safety behavior, plus the CONVERT-2 S-57 portable package fixture for
+package-validation provenance and package-keyed neutral primitives.
+
 ## Current Limitations
 
-- Chart 1 and depth fixtures are early acceptance evidence, not full chart
-  coverage.
+- Chart 1, S-57 package, and depth fixtures are early acceptance evidence, not
+  full chart coverage.
 - Golden image baselines still include pending slots; pending evidence is
   reported honestly rather than treated as parity.
 - Performance evidence is currently budget/fixture-level only. It is not a

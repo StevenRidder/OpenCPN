@@ -27,8 +27,8 @@ show the exact smoke binary output.
 
 ## Demo Spine
 
-1. Chart-source normalization and S-52/S-101 presentation compile into the
-   backend-neutral nautical render model.
+1. Chart-source normalization, portable S-57 package validation, and S-52/S-101
+   presentation compile into the backend-neutral nautical render model.
 2. The neutral model stays the semantic center for OpenCPN, Helm browser
    artifacts, VSG as the native proof backend, and future backend compatibility
    work.
@@ -52,7 +52,8 @@ The OpenCPN portion of the demo is local to this branch:
 - `opencpn-feature-flag-adapter-smoke` proves the feature flag routes only a
   validated neutral model to the shared renderer and keeps legacy fallback.
 - `opencpn-s52-presentation-compiler-smoke` proves S-52/S-101 presentation
-  decisions compile before backend handoff.
+  decisions compile before backend handoff, including the CONVERT-2 S-57
+  portable package fixture path.
 - `opencpn-neutral-model-smoke` proves the neutral model is the shared contract.
 - `opencpn-chart1-debug-app-smoke` proves the inspection path for
   wrong-location debugging.
@@ -74,8 +75,9 @@ fixture or BYO chart data used.
 
 ## Presenter Checklist
 
-- Start with the architecture boundary: chart normalization, presentation
-  compiler, neutral render model, GPU asset/cache/scheduler, VSG backend.
+- Start with the architecture boundary: chart normalization, portable package,
+  presentation compiler, neutral render model, GPU asset/cache/scheduler, VSG
+  backend.
 - Name the safety boundary: this is a POC, not ECDIS certification or full S-52
   parity.
 - Show OpenCPN first, because the branch is upstream-shaped and C++/CMake
