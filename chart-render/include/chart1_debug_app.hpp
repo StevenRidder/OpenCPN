@@ -7,6 +7,7 @@
 #include "chart_source.hpp"
 #include "nautical_render_model.hpp"
 #include "render_backend.hpp"
+#include "source_to_render_inspection.hpp"
 
 #include <cstddef>
 #include <string>
@@ -73,6 +74,7 @@ struct DebugReport {
   ChartSourceProduct source_product;
   NauticalRenderModel model;
   RenderResult backend_result;
+  SourceToRenderInspectionReport source_to_render;
   std::vector<ObjectInspection> objects;
   std::vector<LayerInspection> layers;
   std::vector<Diagnostic> diagnostics;

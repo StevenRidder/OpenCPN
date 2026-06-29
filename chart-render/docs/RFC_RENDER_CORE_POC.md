@@ -126,9 +126,11 @@ source chart id
   -> final asset or pixel output
 ```
 
-`docs/CHART1_DEBUG_APP.md` and the Chart 1 debug smoke cover this at fixture
-scale. Future real-chart bug reports should attach the same trace fields before
-renderer math changes are made.
+`docs/CHART1_DEBUG_APP.md`,
+`docs/SOURCE_TO_RENDER_INSPECTION.md`, and
+`opencpn-source-to-render-inspection-smoke` cover this at fixture scale. Future
+real-chart bug reports should attach the same trace fields before renderer math
+changes are made.
 
 ## Helm/WebGPU Contract
 
