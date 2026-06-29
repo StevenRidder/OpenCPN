@@ -76,6 +76,8 @@ QA-facing evidence:
 - `ADAPT-4`: overscan, prefetch, cache-invalidation, and zoom-blend scheduler
   policy.
 - `ADAPT-5`: deferred Metal backend compatibility checkpoint and gap list.
+- `CACHE-1`: machine-local GPU artifact cache contract with memory budget,
+  invalidation, material/pipeline, and tier/provenance handles.
 - `QA-2`: repeatable golden-image regression runner.
 - `QA-3`: repeatable stakeholder demo script and evidence packet showing the
   shared renderer spine, OpenCPN interactive adapter, Helm headless/offscreen
@@ -117,3 +119,9 @@ model remains compatible with a future Metal backend only if platform surface
 binding, pipeline/material profiles, GPU cache keys, label/glyph ownership,
 frame synchronization, and provenance/debug parity are handled before
 implementation.
+
+The local command for CACHE-1 is the CMake-built
+`opencpn-gpu-artifact-cache-contract-smoke` target. It validates that the
+machine-local cache emits rebuildable backend/device artifact records from the
+neutral model, preserves tier/provenance handles, records invalidation domains
+and memory budgets, and rejects backend-owned source or presentation semantics.

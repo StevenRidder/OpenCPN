@@ -6,6 +6,7 @@ project(opencpn_chart_render_skeleton LANGUAGES CXX)
 add_library(opencpn-chart-render-skeleton STATIC
   source/opencpn_feature_flag_adapter.cpp
   source/viewport_tile_scheduler.cpp
+  source/gpu_artifact_cache_contract.cpp
   source/nautical_render_model.cpp
   source/golden_regression.cpp
   source/depth_performance.cpp
@@ -102,6 +103,13 @@ target_link_libraries(opencpn-vsg-gpu-cache-smoke
   PRIVATE opencpn-chart-render-skeleton
 )
 
+add_executable(opencpn-gpu-artifact-cache-contract-smoke
+  tests/gpu_artifact_cache_contract_smoke.cpp
+)
+target_link_libraries(opencpn-gpu-artifact-cache-contract-smoke
+  PRIVATE opencpn-chart-render-skeleton
+)
+
 add_executable(opencpn-s52-presentation-compiler-smoke
   tests/s52_presentation_compiler_smoke.cpp
 )
@@ -135,6 +143,7 @@ add_custom_target(opencpn-stakeholder-demo
     opencpn-viewport-tile-scheduler-smoke
     opencpn-chart1-debug-app-smoke
     opencpn-golden-regression-smoke
+    opencpn-gpu-artifact-cache-contract-smoke
     opencpn-vsg-gpu-cache-smoke
   WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
   COMMENT "Run the QA-3 dual-adapter stakeholder demo evidence script"

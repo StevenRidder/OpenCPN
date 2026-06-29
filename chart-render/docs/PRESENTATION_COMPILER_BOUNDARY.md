@@ -244,7 +244,8 @@ The compiler output cache key should include:
 
 It should not include GPU vendor, device id, swapchain, texture compression
 format, shader layout, or backend memory decisions. Those belong to the
-machine-local GPU artifact cache.
+machine-local GPU artifact cache defined in
+`docs/MACHINE_LOCAL_GPU_ARTIFACT_CACHE.md`.
 
 ## Backend Handoff
 
