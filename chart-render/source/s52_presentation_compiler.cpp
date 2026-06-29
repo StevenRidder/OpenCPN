@@ -191,6 +191,29 @@ std::string SceneKey(const NauticalRenderModel& model) {
          model.render_view.view_id;
 }
 
+std::string SourceStandardName(const PortableNauticalPackage& package) {
+  if (package.product.sources.empty()) {
+    return "unknown";
+  }
+  switch (package.product.sources.front().kind) {
+    case ChartSourceKind::kS57Cell:
+      return "S-57";
+    case ChartSourceKind::kS101Dataset:
+      return "S-101";
+    case ChartSourceKind::kSencCell:
+      return "SENC";
+    case ChartSourceKind::kRasterChart:
+      return "raster";
+    case ChartSourceKind::kMbtilesPackage:
+      return "MBTiles";
+    case ChartSourceKind::kPmtilesPackage:
+      return "PMTiles";
+    case ChartSourceKind::kDebugFixture:
+      return "debug-fixture";
+  }
+  return "unknown";
+}
+
 NauticalLodHint LodFor(const NormalizedChartObject& object,
                        const RenderView& view,
                        S52DisplayClass display_class,
@@ -516,6 +539,52 @@ void SortModel(NauticalRenderModel* model) {
   }
 }
 
+void RewriteSceneKeys(NauticalRenderModel* model) {
+  const std::string scene_key = SceneKey(*model);
+  for (NauticalLayer& layer : model->layers) {
+    for (NauticalPrimitive& primitive : layer.primitives) {
+      primitive.cache_key.scene_key = scene_key;
+    }
+  }
+}
+
+void StampPackageMetadata(const PortableNauticalPackage& package,
+                          bool package_valid,
+                          NauticalRenderModel* model) {
+  model->model_id = package.manifest.package_id.empty()
+                        ? model->model_id
+                        : package.manifest.package_id + ":presentation";
+  model->source_epoch = package.manifest.source_epoch + "|package:" +
+                        package.checksums.package_hash + "|presentation:" +
+                        std::to_string(kNauticalRenderModelSchemaVersion);
+  model->metadata["source_contract"] =
+      "portable_nautical_package_to_s52_presentation";
+  model->metadata["package_id"] = package.manifest.package_id;
+  model->metadata["package_profile"] = package.manifest.profile;
+  model->metadata["package_schema_version"] =
+      std::to_string(package.manifest.schema_version);
+  model->metadata["package_content_hash"] = package.manifest.content_hash;
+  model->metadata["package_checksum"] = package.checksums.package_hash;
+  model->metadata["package_source_epoch"] = package.manifest.source_epoch;
+  model->metadata["package_fixture"] =
+      package.manifest.fixture_package ? "true" : "false";
+  model->metadata["source_standard"] = SourceStandardName(package);
+  model->metadata["semantic_tier"] = "tier1_official_chart";
+  model->metadata["excluded_tiers"] = "tier2_helm_overlay,tier3_ui_icons";
+  model->metadata["package_valid"] = package_valid ? "true" : "false";
+  model->metadata["presentation_catalog"] =
+      model->metadata["presentation_compiler"];
+
+  const std::string source_standard = SourceStandardName(package);
+  for (NauticalLayer& layer : model->layers) {
+    for (NauticalPrimitive& primitive : layer.primitives) {
+      primitive.metadata["source_standard"] = source_standard;
+      primitive.metadata["semantic_tier"] = "tier1_official_chart";
+    }
+  }
+  RewriteSceneKeys(model);
+}
+
 }  // namespace
 
 NauticalRenderModel S52PresentationCompiler::Compile(
@@ -595,11 +664,50 @@ NauticalRenderModel S52PresentationCompiler::Compile(
   return model;
 }
 
+NauticalRenderModel S52PresentationCompiler::Compile(
+    const PortableNauticalPackage& package, RenderView view,
+    DisplayState display, PresentationAssets assets,
+    PresentationOptions options) const {
+  std::vector<Diagnostic> package_diagnostics;
+  const bool package_valid =
+      ValidatePortableNauticalPackage(package, &package_diagnostics);
+
+  ChartSourceProduct product = package.product;
+  if (!package.manifest.package_id.empty()) {
+    product.product_id = package.manifest.package_id + ":presentation";
+  }
+  product.diagnostics.insert(product.diagnostics.end(),
+                             package_diagnostics.begin(),
+                             package_diagnostics.end());
+
+  NauticalRenderModel model =
+      Compile(product, std::move(view), std::move(display), std::move(assets),
+              std::move(options));
+  StampPackageMetadata(package, package_valid, &model);
+  if (!package_valid) {
+    model.diagnostics.push_back(MakeDiagnostic(
+        DiagnosticSeverity::kError, "s52.package_validation_failed",
+        "Portable nautical package failed validation before presentation "
+        "compilation."));
+  }
+  return model;
+}
+
 NauticalRenderModel CompileS52Presentation(
     const ChartSourceProduct& normalized_features, RenderView view,
     DisplayState display, PresentationAssets assets,
     PresentationOptions options) {
   return S52PresentationCompiler().Compile(normalized_features, std::move(view),
+                                           std::move(display),
+                                           std::move(assets),
+                                           std::move(options));
+}
+
+NauticalRenderModel CompileS52PackagePresentation(
+    const PortableNauticalPackage& package, RenderView view,
+    DisplayState display, PresentationAssets assets,
+    PresentationOptions options) {
+  return S52PresentationCompiler().Compile(package, std::move(view),
                                            std::move(display),
                                            std::move(assets),
                                            std::move(options));
