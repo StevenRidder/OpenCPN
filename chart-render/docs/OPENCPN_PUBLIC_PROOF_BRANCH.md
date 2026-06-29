@@ -54,6 +54,32 @@ Representative public evidence PRs already merged into the review branch:
 - #27 `PUB-7`: maintainer response matrix.
 - #28 `PUB-4`: RFC proof package.
 
+## Reviewer Path In 10 Minutes
+
+For a skeptical first pass, start from a fresh clone and run the branch-local
+evidence. The commands below do not require Helm, private chart packs, private
+runtime paths, or generated artifacts checked into Git:
+
+```sh
+git clone https://github.com/StevenRidder/OpenCPN.git opencpn-vulkan-proof
+cd opencpn-vulkan-proof
+git switch vulkan/render-core-poc
+
+cmake -S chart-render -B /tmp/opencpn-vulkan-proof-build
+cmake --build /tmp/opencpn-vulkan-proof-build
+cmake --build /tmp/opencpn-vulkan-proof-build --target opencpn-stakeholder-demo
+```
+
+Then read the proof package in this order:
+
+1. `chart-render/docs/RFC_RENDER_CORE_POC.md` - the architecture ask,
+   boundaries, evidence, limitations, and open questions.
+2. `chart-render/POC-ACCEPTANCE.md` - acceptance rubric and non-goals.
+3. `chart-render/docs/STAKEHOLDER_DEMO.md` - what the demo target proves and
+   what it does not claim.
+4. `chart-render/docs/MAINTAINER_RESPONSE_MATRIX.md` - known maintainer
+   concerns mapped to evidence and follow-up work.
+
 ## Reproduce The Local Evidence
 
 From a checkout of `vulkan/render-core-poc`:
