@@ -11,7 +11,7 @@ should remain internal lineage, and what the next PUB tasks must clean up.
 - OpenCPN proof branch: `vulkan/render-core-poc` at
   `deb351bbf0aeebb32f930a72dbd73c90d14faa9f`.
 - PUB-2 sanitized proof base:
-  `ba22ab8770315a1e53d5fbab7516cb55e69d487a`.
+  `0730391eb59376df86e7e2515ebcb2aa2f7704db`.
 - Helm integration branch: `main` at
   `f852bded8a0963fbccc9df6d47ef9befd3a9e69a`.
 - OpenCPN `master` baseline at audit time:
@@ -29,7 +29,7 @@ OpenCPN public review target:
 - Branch: `vulkan/render-core-poc`.
 - Public posture: upstream-shaped C++/CMake proof branch for architecture
   review, not a replacement ultimatum and not a Helm-only fork.
-- Public evidence PRs: OpenCPN PRs #1-27 against `vulkan/render-core-poc`,
+- Public evidence PRs: OpenCPN PRs #1-28 against `vulkan/render-core-poc`,
   especially:
   - #16 `SEAM-5`: neutral nautical render model.
   - #18 `SYM-5`: S-52 presentation compiler into the neutral model.
@@ -40,6 +40,7 @@ OpenCPN public review target:
   - #25 `PUB-1`: public release hygiene audit.
   - #26 `PUB-2`: sanitized public OpenCPN proof branch guide.
   - #27 `PUB-7`: maintainer response matrix.
+  - #28 `PUB-4`: RFC proof package.
 
 Helm public reference target:
 

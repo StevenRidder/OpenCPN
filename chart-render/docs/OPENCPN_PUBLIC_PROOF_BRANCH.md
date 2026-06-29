@@ -10,7 +10,7 @@ generated demo artifacts.
 ## Review Target
 
 - Branch under review: `vulkan/render-core-poc`.
-- Sanitized proof base: `ba22ab8770315a1e53d5fbab7516cb55e69d487a`.
+- Sanitized proof base: `0730391eb59376df86e7e2515ebcb2aa2f7704db`.
 - Public posture: upstream-shaped C++/CMake renderer seam for architecture
   review.
 - Non-posture: not a replacement ultimatum, not a Helm-only fork, not a
@@ -25,6 +25,8 @@ model, adapter scheduler policy, and backend handoff stay visibly separated.
 - `README.md`: branch map and evidence summary.
 - `docs/RFC_RENDER_CORE_POC.md`: RFC package entry point for architecture
   review.
+- `docs/OPENCPN_COMMUNITY_RFC_POST_DRAFT.md`: draft community post asking for
+  architecture review and seam feedback.
 - `POC-ACCEPTANCE.md`: acceptance rubric, non-goals, and stakeholder evidence.
 - `docs/STAKEHOLDER_DEMO.md`: reproducible stakeholder demo command and talk
   track.
@@ -50,6 +52,7 @@ Representative public evidence PRs already merged into the review branch:
 - #25 `PUB-1`: public release hygiene audit.
 - #26 `PUB-2`: sanitized public OpenCPN proof branch guide.
 - #27 `PUB-7`: maintainer response matrix.
+- #28 `PUB-4`: RFC proof package.
 
 ## Reproduce The Local Evidence
 

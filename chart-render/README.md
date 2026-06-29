@@ -49,6 +49,8 @@ The current shape mirrors the Vulkan board seam work:
   stakeholder evidence.
 - `docs/RFC_RENDER_CORE_POC.md` is the public RFC package entry point for
   architecture review of the shared OpenCPN/Helm render-core proof.
+- `docs/OPENCPN_COMMUNITY_RFC_POST_DRAFT.md` drafts the public community post
+  asking for architecture review and maintainer seam feedback.
 - `docs/STAKEHOLDER_DEMO.md` defines the QA-3 dual-adapter stakeholder demo
   runbook and talk track.
 - `docs/PUBLIC_RELEASE_HYGIENE.md` records the PUB-1 publication hygiene audit,
