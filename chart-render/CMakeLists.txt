@@ -116,6 +116,13 @@ target_link_libraries(opencpn-vsg-gpu-cache-smoke
   PRIVATE opencpn-chart-render-skeleton
 )
 
+add_executable(opencpn-vsg-backend-production-fixture-smoke
+  tests/vsg_backend_production_fixture_smoke.cpp
+)
+target_link_libraries(opencpn-vsg-backend-production-fixture-smoke
+  PRIVATE opencpn-chart-render-skeleton
+)
+
 add_executable(opencpn-gpu-artifact-cache-contract-smoke
   tests/gpu_artifact_cache_contract_smoke.cpp
 )
@@ -198,6 +205,7 @@ add_custom_target(opencpn-stakeholder-demo
     opencpn-draw-backend-contract-smoke
     opencpn-helm-webgpu-artifact-consumer-smoke
     opencpn-vsg-gpu-cache-smoke
+    opencpn-vsg-backend-production-fixture-smoke
   WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
   COMMENT "Run the QA-3 dual-adapter stakeholder demo evidence script"
 )
