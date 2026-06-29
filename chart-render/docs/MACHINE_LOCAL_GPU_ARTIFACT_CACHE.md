@@ -77,6 +77,12 @@ pipeline came from, it stores handles such as `semantic_tier`,
 Those handles are for inspection and cache invalidation only; they are not
 permission for backend code to reinterpret chart meaning.
 
+DEBUG-1 consumes the same handles in
+`SourceToRenderInspectionReport`. That report links neutral primitives to cache
+artifacts, backend draw items, and pixel/object query ids so wrong-location and
+wrong-symbol debugging can cross the cache boundary without giving the cache or
+backend ownership of chart semantics.
+
 ## Tier and Provenance Handles
 
 `GpuArtifactTierHandle` keeps Tier 1 official chart artifacts distinct from

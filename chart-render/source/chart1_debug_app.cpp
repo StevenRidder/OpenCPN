@@ -3,6 +3,7 @@
 
 #include "chart1_debug_app.hpp"
 
+#include "gpu_artifact_cache_contract.hpp"
 #include "s52_presentation_compiler.hpp"
 #include "vsg/vsg_backend.hpp"
 
@@ -390,6 +391,25 @@ DebugReport BuildDebugReport(RenderView view, DisplayState display,
   vsg::VsgBackend backend;
   report.backend_result = backend.RenderModel(report.model, target);
 
+  GpuArtifactCacheOptions cache_options;
+  cache_options.backend_target = "vsg";
+  cache_options.device_profile = "chart-1-debug-device";
+  cache_options.material_profile = "neutral-material-v1";
+  cache_options.cache_namespace = "opencpn-chart1-debug";
+  const GpuArtifactCacheManifest cache_manifest =
+      BuildGpuArtifactCacheManifest(report.model, cache_options);
+
+  SourceToRenderInspectionOptions inspection_options;
+  inspection_options.report_id = "chart-1-source-to-render";
+  inspection_options.source_product_id = report.source_product.product_id;
+  inspection_options.converter_id = "chart1-debug-source-fixture";
+  inspection_options.portable_package_id =
+      report.source_product.product_id + ":portable";
+  inspection_options.backend_name = backend.Name();
+  inspection_options.target = target;
+  report.source_to_render = BuildSourceToRenderInspectionReport(
+      report.model, cache_manifest, inspection_options);
+
   std::vector<Diagnostic> model_diagnostics;
   ValidateNauticalRenderModel(report.model, &model_diagnostics);
   report.diagnostics.insert(report.diagnostics.end(), model_diagnostics.begin(),
@@ -397,6 +417,9 @@ DebugReport BuildDebugReport(RenderView view, DisplayState display,
   report.diagnostics.insert(report.diagnostics.end(),
                             report.backend_result.diagnostics.begin(),
                             report.backend_result.diagnostics.end());
+  report.diagnostics.insert(report.diagnostics.end(),
+                            report.source_to_render.diagnostics.begin(),
+                            report.source_to_render.diagnostics.end());
 
   const AcceptanceCatalog catalog = BuildAcceptanceCatalog();
   AddLayerInspections(report.model, &report);
@@ -405,6 +428,7 @@ DebugReport BuildDebugReport(RenderView view, DisplayState display,
 
   report.ok = report.conformance.ok && source_ok && !report.layers.empty() &&
               report.objects.size() == catalog.cases.size() &&
+              report.source_to_render.ok &&
               !HasError(report.diagnostics);
   return report;
 }
