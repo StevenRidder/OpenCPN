@@ -76,6 +76,8 @@ QA-facing evidence:
 - `ADAPT-4`: overscan, prefetch, cache-invalidation, and zoom-blend scheduler
   policy.
 - `ADAPT-5`: deferred Metal backend compatibility checkpoint and gap list.
+- `BACKEND-1`: draw-only backend contract for VSG, Helm WebGPU, WebGL/MapLibre
+  fallback, and server-raster targets.
 - `CACHE-1`: machine-local GPU artifact cache contract with memory budget,
   invalidation, material/pipeline, and tier/provenance handles.
 - `QA-2`: repeatable golden-image regression runner.
@@ -125,3 +127,10 @@ The local command for CACHE-1 is the CMake-built
 machine-local cache emits rebuildable backend/device artifact records from the
 neutral model, preserves tier/provenance handles, records invalidation domains
 and memory budgets, and rejects backend-owned source or presentation semantics.
+
+The local command for BACKEND-1 is the CMake-built
+`opencpn-draw-backend-contract-smoke` target. It validates that VSG and Helm
+WebGPU targets consume the same neutral model/GPU artifact handoff, preserve
+Tier 1 official chart artifacts separately from Tier 2/3 overlay/UI assets,
+and reject backend-owned chart semantics, policy leaks, and invalid primitive
+handoffs.

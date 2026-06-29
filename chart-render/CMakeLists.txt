@@ -4,6 +4,7 @@ cmake_minimum_required(VERSION 3.16)
 project(opencpn_chart_render_skeleton LANGUAGES CXX)
 
 add_library(opencpn-chart-render-skeleton STATIC
+  source/draw_backend_contract.cpp
   source/opencpn_feature_flag_adapter.cpp
   source/viewport_tile_scheduler.cpp
   source/source_to_render_inspection.cpp
@@ -119,6 +120,13 @@ target_link_libraries(opencpn-source-to-render-inspection-smoke
   PRIVATE opencpn-chart-render-skeleton
 )
 
+add_executable(opencpn-draw-backend-contract-smoke
+  tests/draw_backend_contract_smoke.cpp
+)
+target_link_libraries(opencpn-draw-backend-contract-smoke
+  PRIVATE opencpn-chart-render-skeleton
+)
+
 add_executable(opencpn-s52-presentation-compiler-smoke
   tests/s52_presentation_compiler_smoke.cpp
 )
@@ -161,6 +169,7 @@ add_custom_target(opencpn-stakeholder-demo
     opencpn-golden-regression-smoke
     opencpn-gpu-artifact-cache-contract-smoke
     opencpn-source-to-render-inspection-smoke
+    opencpn-draw-backend-contract-smoke
     opencpn-vsg-gpu-cache-smoke
   WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
   COMMENT "Run the QA-3 dual-adapter stakeholder demo evidence script"
