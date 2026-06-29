@@ -20,6 +20,7 @@ add_library(opencpn-chart-render-skeleton STATIC
   source/conversion_trace.cpp
   source/chart_interchange.cpp
   source/chart_source.cpp
+  source/portable_nautical_package.cpp
   source/s52_presentation_compiler.cpp
   s52/s52_command_builder.cpp
   vsg/vsg_backend.cpp
@@ -114,6 +115,13 @@ add_executable(opencpn-s52-presentation-compiler-smoke
   tests/s52_presentation_compiler_smoke.cpp
 )
 target_link_libraries(opencpn-s52-presentation-compiler-smoke
+  PRIVATE opencpn-chart-render-skeleton
+)
+
+add_executable(opencpn-portable-package-roundtrip-smoke
+  tests/portable_package_roundtrip_smoke.cpp
+)
+target_link_libraries(opencpn-portable-package-roundtrip-smoke
   PRIVATE opencpn-chart-render-skeleton
 )
 
