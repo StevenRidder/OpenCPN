@@ -32,3 +32,6 @@ MBTiles or PMTiles package
 package for source/debug use, build a debug artifact, and derive cache keys that
 point at normalized scene data and GPU resources instead of the original
 container.
+
+The replaceable converter API in `docs/CHART_CONVERTER_MODULE_API.md` keeps
+MBTiles and PMTiles on the import/export/debug side of the package boundary.

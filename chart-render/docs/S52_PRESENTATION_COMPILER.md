@@ -3,6 +3,9 @@
 `SYM-5` moves chart presentation decisions into a dedicated C++ compiler that
 emits the backend-neutral nautical render model defined by `SEAM-5`.
 
+For the production boundary plan that follows the portable nautical package,
+see `docs/PRESENTATION_COMPILER_BOUNDARY.md`.
+
 ## Boundary
 
 Input:
