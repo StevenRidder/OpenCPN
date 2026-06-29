@@ -54,6 +54,9 @@ The current shape mirrors the Vulkan board seam work:
 - `docs/OPENCPN_PUBLIC_PROOF_BRANCH.md` defines the PUB-2 sanitized public
   review target, evidence commands, and exclusions for the OpenCPN proof
   branch.
+- `docs/MAINTAINER_RESPONSE_MATRIX.md` maps maintainer concerns to public RFC
+  response posture, current evidence, limitations, and follow-up acceptance
+  criteria.
 - `scripts/stakeholder_demo.sh` runs the branch-local QA-3 evidence path and
   writes a stakeholder summary from the built smoke binaries.
 - `s52/` is the placeholder for S-57/SENC plus S-52/S-101 presentation
