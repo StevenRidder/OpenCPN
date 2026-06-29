@@ -13,7 +13,8 @@ The current shape mirrors the Vulkan board seam work:
   S-52 conversion.
 - `include/render_scene.hpp` defines the backend-neutral render command stream.
 - `include/nautical_render_model.hpp` defines the backend-neutral nautical
-  render model consumed by VSG/OpenGL/Metal/WebGPU/Helm backends.
+  render model consumed by the VSG proof backend, Helm WebGPU/browser
+  artifacts, and future OpenGL/Metal compatibility work.
 - `include/conversion_trace.hpp` defines source-to-command traceability for
   wrong-location debugging.
 - `include/render_backend.hpp` defines the renderer backend interface and
@@ -50,6 +51,9 @@ The current shape mirrors the Vulkan board seam work:
   runbook and talk track.
 - `docs/PUBLIC_RELEASE_HYGIENE.md` records the PUB-1 publication hygiene audit,
   public branch/PR matrix, and sanitization gates before public sharing.
+- `docs/OPENCPN_PUBLIC_PROOF_BRANCH.md` defines the PUB-2 sanitized public
+  review target, evidence commands, and exclusions for the OpenCPN proof
+  branch.
 - `scripts/stakeholder_demo.sh` runs the branch-local QA-3 evidence path and
   writes a stakeholder summary from the built smoke binaries.
 - `s52/` is the placeholder for S-57/SENC plus S-52/S-101 presentation

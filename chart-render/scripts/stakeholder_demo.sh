@@ -114,7 +114,7 @@ run_step \
   "02-neutral-model" \
   "Neutral nautical render model is the shared semantic center" \
   "opencpn-neutral-model-smoke" \
-  "VSG, OpenCPN, Helm, Metal, and WebGPU targets consume neutral primitives."
+  "OpenCPN, VSG, Helm WebGPU/browser artifacts, and future backend compatibility work consume neutral primitives."
 
 run_step \
   "03-opencpn-adapter" \
