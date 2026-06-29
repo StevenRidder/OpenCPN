@@ -10,7 +10,7 @@ generated demo artifacts.
 ## Review Target
 
 - Branch under review: `vulkan/render-core-poc`.
-- Sanitized proof base: `85c4bebcfcd46a080d8ab2356b669f6b33fc9a79`.
+- Sanitized proof base: `6c450d27e129f90519f8bd18e28c3a93eed83e8d`.
 - Public posture: upstream-shaped C++/CMake renderer seam for architecture
   review.
 - Non-posture: not a replacement ultimatum, not a Helm-only fork, not a
@@ -29,6 +29,8 @@ model, adapter scheduler policy, and backend handoff stay visibly separated.
 - `docs/PUBLIC_RELEASE_HYGIENE.md`: PUB-1 hygiene audit and publication gates.
 - `docs/HELM_WEB_RENDER_TARGET.md`: Helm consumer contract with WebGPU-first
   client direction, WebGL/MapLibre fallback, and server-raster fallback.
+- `docs/MAINTAINER_RESPONSE_MATRIX.md`: maintainer concerns mapped to public
+  response posture, current evidence, limits, and follow-up acceptance.
 - `include/`, `source/`, `s52/`, and `vsg/`: reviewable C++ core surfaces.
 - `tests/fixtures/`: JSON/chart-render fixtures required by the branch-local
   smoke targets.
@@ -44,6 +46,7 @@ Representative public evidence PRs already merged into the review branch:
 - #23 `ADAPT-6`: Helm WebGPU-first render target contract.
 - #24 `QA-3`: stakeholder demo target.
 - #25 `PUB-1`: public release hygiene audit.
+- #26 `PUB-2`: sanitized public OpenCPN proof branch guide.
 
 ## Reproduce The Local Evidence
 
@@ -99,7 +102,7 @@ SENC caches, S-63 permits, oeSENC data, or private voyage/runtime data.
 
 ## RFC Handoff
 
-PUB-4 should build the OpenCPN side of the RFC from this note, the acceptance
-rubric, the stakeholder demo, and the hygiene checklist. The community ask
-should be architecture review of the seam and evidence, not approval of a
-wholesale renderer replacement.
+The RFC should build the OpenCPN side from this note, the acceptance rubric, the
+maintainer response matrix, the stakeholder demo, and the hygiene checklist.
+The community ask should be architecture review of the seam and evidence, not
+approval of a wholesale renderer replacement.
