@@ -23,6 +23,7 @@ add_library(opencpn-chart-render-skeleton STATIC
   source/chart_interchange.cpp
   source/chart_source.cpp
   source/portable_nautical_package.cpp
+  source/s57_portable_package_converter.cpp
   source/s52_presentation_compiler.cpp
   s52/s52_command_builder.cpp
   vsg/vsg_backend.cpp
@@ -141,6 +142,13 @@ target_link_libraries(opencpn-portable-package-roundtrip-smoke
   PRIVATE opencpn-chart-render-skeleton
 )
 
+add_executable(opencpn-s57-portable-package-converter-smoke
+  tests/s57_portable_package_converter_smoke.cpp
+)
+target_link_libraries(opencpn-s57-portable-package-converter-smoke
+  PRIVATE opencpn-chart-render-skeleton
+)
+
 add_executable(opencpn-feature-flag-adapter-smoke
   tests/opencpn_feature_flag_adapter_smoke.cpp
 )
@@ -168,6 +176,7 @@ add_custom_target(opencpn-stakeholder-demo
     opencpn-chart1-debug-app-smoke
     opencpn-golden-regression-smoke
     opencpn-gpu-artifact-cache-contract-smoke
+    opencpn-s57-portable-package-converter-smoke
     opencpn-source-to-render-inspection-smoke
     opencpn-draw-backend-contract-smoke
     opencpn-vsg-gpu-cache-smoke

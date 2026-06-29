@@ -253,6 +253,23 @@ and maintainer trust.
 The first implementation may use canonical JSON fixtures. The API must not
 depend on JSON as the permanent storage form.
 
+## CONVERT-2 Vertical Slice
+
+The first concrete slice is the C++ fixture converter in
+`include/s57_portable_package_converter.hpp` and
+`source/s57_portable_package_converter.cpp`. It builds one bounded synthetic
+S-57-style cell into the portable nautical package contract. The fixture
+preserves dataset identity, edition/update chain, source feature ids, object
+classes, attributes, normalized WGS84 geometry, coverage polygon, source and
+generated geometry hashes, package checksums, and provenance records. It also
+emits a traceable diagnostic for one unsupported object class so the converter
+boundary proves explicit fixture limits instead of silently dropping content.
+
+This is not full S-57 coverage and not a source-file parser. A production
+converter can replace the fixture input side as long as it emits the same
+portable package records and validation evidence before presentation
+compilation.
+
 ## Module Ownership
 
 | Layer | Owns | Must not own |
