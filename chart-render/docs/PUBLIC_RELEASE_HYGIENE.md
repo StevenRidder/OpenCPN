@@ -11,7 +11,7 @@ should remain internal lineage, and what the next PUB tasks must clean up.
 - OpenCPN proof branch: `vulkan/render-core-poc` at
   `deb351bbf0aeebb32f930a72dbd73c90d14faa9f`.
 - PUB-2 sanitized proof base:
-  `6c450d27e129f90519f8bd18e28c3a93eed83e8d`.
+  `ba22ab8770315a1e53d5fbab7516cb55e69d487a`.
 - Helm integration branch: `main` at
   `f852bded8a0963fbccc9df6d47ef9befd3a9e69a`.
 - OpenCPN `master` baseline at audit time:
@@ -29,7 +29,7 @@ OpenCPN public review target:
 - Branch: `vulkan/render-core-poc`.
 - Public posture: upstream-shaped C++/CMake proof branch for architecture
   review, not a replacement ultimatum and not a Helm-only fork.
-- Public evidence PRs: OpenCPN PRs #1-26 against `vulkan/render-core-poc`,
+- Public evidence PRs: OpenCPN PRs #1-27 against `vulkan/render-core-poc`,
   especially:
   - #16 `SEAM-5`: neutral nautical render model.
   - #18 `SYM-5`: S-52 presentation compiler into the neutral model.
@@ -39,6 +39,7 @@ OpenCPN public review target:
   - #24 `QA-3`: stakeholder demo target.
   - #25 `PUB-1`: public release hygiene audit.
   - #26 `PUB-2`: sanitized public OpenCPN proof branch guide.
+  - #27 `PUB-7`: maintainer response matrix.
 
 Helm public reference target:
 
@@ -156,6 +157,7 @@ PUB-4/PUB-5 must package and communicate the proof:
 - Build the RFC from curated OpenCPN proof docs plus curated Helm/WebGPU docs.
 - Use the maintainer response matrix to answer architecture, module-boundary,
   reviewability, performance, and AI-maintainability concerns before posting.
+- Use `docs/RFC_RENDER_CORE_POC.md` as the package entry point.
 - Ask maintainers for architecture review and seam feedback.
 - List limitations honestly: no ECDIS certification, no full S-52 parity, no
   production WebGPU renderer, no production Metal backend, and no standalone
