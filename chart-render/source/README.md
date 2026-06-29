@@ -7,6 +7,7 @@ before S-52 symbolization and before any VSG backend work:
 source charts
   -> chart-source module
   -> normalized chart objects, raster sheets, debug artifacts
+  -> portable nautical package
   -> S-52/S-101 presentation compiler
   -> render command stream
   -> neutral nautical render model

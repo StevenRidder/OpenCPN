@@ -15,6 +15,9 @@ The current shape mirrors the Vulkan board seam work:
 - `include/nautical_render_model.hpp` defines the backend-neutral nautical
   render model consumed by the VSG proof backend, Helm WebGPU/browser
   artifacts, and future OpenGL/Metal compatibility work.
+- `docs/PORTABLE_NAUTICAL_PACKAGE.md` defines the production package layer that
+  sits between replaceable chart-source converters and the presentation
+  compiler. It is durable chart truth, not a GPU cache or backend format.
 - `include/conversion_trace.hpp` defines source-to-command traceability for
   wrong-location debugging.
 - `include/render_backend.hpp` defines the renderer backend interface and
