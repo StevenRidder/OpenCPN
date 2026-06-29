@@ -78,9 +78,9 @@ composition.
 
 | Module | Owns | Evidence |
 |---|---|---|
-| Chart-source boundary | Source parsing/normalization into `ChartSourceProduct`, plus provenance and conversion trace handles. | `source/README.md`, `source/INTERCHANGE.md`, `include/chart_source.hpp` |
+| Chart-source/converter boundary | Source parsing/normalization into the portable nautical package, plus provenance, update metadata, diagnostics, and conversion trace handles. | `docs/CHART_CONVERTER_MODULE_API.md`, `source/README.md`, `source/INTERCHANGE.md`, `include/chart_source.hpp` |
 | Portable nautical package | Durable source-neutral chart truth between replaceable converters and presentation compilation; not a GPU cache or backend format. | `docs/PORTABLE_NAUTICAL_PACKAGE.md` |
-| S-52/S-101 presentation compiler | Display category, SCAMIN, palette, symbol, text, sounding, and safety-depth decisions before backend handoff. | `docs/S52_PRESENTATION_COMPILER.md`, `include/s52_presentation_compiler.hpp` |
+| S-52/S-101 presentation compiler | Display category, SCAMIN, palette, symbol, text, sounding, and safety-depth decisions before backend handoff. | `docs/PRESENTATION_COMPILER_BOUNDARY.md`, `docs/S52_PRESENTATION_COMPILER.md`, `include/s52_presentation_compiler.hpp` |
 | Neutral nautical render model | Backend-neutral layers, primitives, resource table, LOD hints, coverage metadata, cache keys, diagnostics, and source traces. | `include/nautical_render_model.hpp`, `opencpn-neutral-model-smoke` |
 | Adapter scheduler policy | Visible tiles, overscan, prefetch, adjacent zoom blending, and cache invalidation epochs before renderer backend handoff. | `include/viewport_tile_scheduler.hpp`, `opencpn-viewport-tile-scheduler-smoke` |
 | VSG proof backend | Native draw/cache proof fed by neutral primitives; no chart-source or S-52 ownership. | `vsg/GPU_CACHE.md`, `opencpn-vsg-gpu-cache-smoke` |
@@ -98,9 +98,13 @@ concerns as acceptance criteria. The short version:
 - Support scripts and JSON fixtures are evidence helpers, not renderer runtime.
 - Chart-source conversion, presentation, model, scheduler, backend, adapters,
   and fixtures are separable modules.
+- Replaceable chart converters produce the portable nautical package; renderer
+  backends do not parse source chart formats or own conversion quirks.
 - The portable nautical package is the production path toward a GPU-friendly
   chart format while still separating durable chart truth from machine-local GPU
   artifacts.
+- The presentation compiler is the semantic owner for S-52/S-101 display
+  category, SCAMIN, palette, ordering, safety, text, and sounding decisions.
 - VSG/Vulkan is draw/cache-only proof backend, not chart-semantics owner.
 - Helm is a consumer/product target, not the source of OpenCPN renderer truth.
 - Public messaging must not claim AI can replace maintainers or expert review.
@@ -204,6 +208,10 @@ commit them.
 - `docs/PUBLIC_RELEASE_HYGIENE.md` - release hygiene audit and gates.
 - `docs/MAINTAINER_RESPONSE_MATRIX.md` - concern/response matrix.
 - `docs/PORTABLE_NAUTICAL_PACKAGE.md` - production chart package architecture.
+- `docs/CHART_CONVERTER_MODULE_API.md` - replaceable source-chart converter
+  module API.
+- `docs/PRESENTATION_COMPILER_BOUNDARY.md` - production S-52/S-101 compiler
+  boundary.
 - `docs/STAKEHOLDER_DEMO.md` - stakeholder demo runbook.
 - `docs/HELM_WEB_RENDER_TARGET.md` - Helm WebGPU-first target contract.
 - Helm `docs/VULKAN-HELM-WEBGPU-PROOF.md` - Helm-side public proof note.

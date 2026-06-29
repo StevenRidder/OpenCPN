@@ -14,6 +14,9 @@ source charts
   -> backend
 ```
 
+The production converter module API is defined in
+`docs/CHART_CONVERTER_MODULE_API.md`.
+
 The boundary is deliberately source-pluggable. S-57 cells, SENC caches, raster
 charts, MBTiles or PMTiles interchange packages, debug fixtures, and future
 S-101 datasets should all enter through `IChartSource` and produce the same

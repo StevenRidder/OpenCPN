@@ -234,7 +234,9 @@ rules intentionally deferred to later slices.
 
 ## Converter Responsibilities
 
-Each converter module must:
+The replaceable converter API is defined in
+`docs/CHART_CONVERTER_MODULE_API.md`. At the package boundary, each converter
+module must:
 
 - produce a package that validates without renderer code;
 - preserve source feature ids and source geometry hashes wherever available;
@@ -252,7 +254,9 @@ they produce this package contract.
 
 ## Presentation Compiler Responsibilities
 
-The S-52/S-101 presentation compiler consumes:
+The production compiler boundary is defined in
+`docs/PRESENTATION_COMPILER_BOUNDARY.md`. The S-52/S-101 presentation compiler
+consumes:
 
 - portable package features/geometries/rasters/coverage;
 - display state;

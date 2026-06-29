@@ -18,6 +18,12 @@ The current shape mirrors the Vulkan board seam work:
 - `docs/PORTABLE_NAUTICAL_PACKAGE.md` defines the production package layer that
   sits between replaceable chart-source converters and the presentation
   compiler. It is durable chart truth, not a GPU cache or backend format.
+- `docs/CHART_CONVERTER_MODULE_API.md` defines the replaceable converter module
+  boundary for S-57/S-101, raster/KAP, CM93, OSM/community, future sonar/depth,
+  and MBTiles/PMTiles import/export/debug paths.
+- `docs/PRESENTATION_COMPILER_BOUNDARY.md` defines the production S-52/S-101
+  compiler boundary from portable package plus display state to neutral
+  nautical render primitives.
 - `include/conversion_trace.hpp` defines source-to-command traceability for
   wrong-location debugging.
 - `include/render_backend.hpp` defines the renderer backend interface and
