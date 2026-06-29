@@ -22,6 +22,7 @@ The intended runtime path is:
 MBTiles or PMTiles package
   -> chart-source normalization
   -> ChartSourceProduct
+  -> portable nautical package
   -> S-52 command stream
   -> machine-local normalized scene and GPU resource caches
   -> renderer backend
