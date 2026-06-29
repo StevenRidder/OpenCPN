@@ -40,7 +40,9 @@ show the exact smoke binary output.
    projection, command, cache key, backend primitive, and final asset ids.
 6. Golden regression evidence exercises Chart 1 and depth fixtures with honest
    pending-baseline reporting.
-7. VSG remains draw/cache-only and consumes neutral primitives without owning
+7. Performance budget evidence defines the first timing, memory, disk-cache, and
+   boat-class power gates before real PERF-2 device measurements.
+8. VSG remains draw/cache-only and consumes neutral primitives without owning
    chart-source, S-52, quilting, cache-key, or scheduler semantics.
 
 ## OpenCPN Interactive Evidence

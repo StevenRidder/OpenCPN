@@ -84,6 +84,7 @@ composition.
 | Neutral nautical render model | Backend-neutral layers, primitives, resource table, LOD hints, coverage metadata, cache keys, diagnostics, and source traces. | `include/nautical_render_model.hpp`, `opencpn-neutral-model-smoke` |
 | Adapter scheduler policy | Visible tiles, overscan, prefetch, adjacent zoom blending, and cache invalidation epochs before renderer backend handoff. | `include/viewport_tile_scheduler.hpp`, `opencpn-viewport-tile-scheduler-smoke` |
 | Machine-local GPU artifact cache | Rebuildable backend/device artifacts, memory budgets, invalidation domains, and tier/provenance handles derived from the neutral model. | `docs/MACHINE_LOCAL_GPU_ARTIFACT_CACHE.md`, `opencpn-gpu-artifact-cache-contract-smoke` |
+| Performance and power budget | First production slice timing, memory, disk-cache, and boat-class power gates for desktop and low-power profiles. | `docs/PERFORMANCE_POWER_BUDGET.md`, `opencpn-performance-budget-contract-smoke` |
 | VSG proof backend | Native draw/cache proof fed by neutral primitives; no chart-source or S-52 ownership. | `vsg/GPU_CACHE.md`, `opencpn-vsg-gpu-cache-smoke` |
 | OpenCPN adapter | Feature-flagged route from validated neutral model into the shared renderer while preserving legacy fallback and host ownership. | `include/opencpn_feature_flag_adapter.hpp`, `opencpn-feature-flag-adapter-smoke` |
 | Helm adapter/target contract | Consumer-side offscreen/server artifact path, WebGPU-first client direction, WebGL/MapLibre and server-raster fallbacks. | `docs/HELM_WEB_RENDER_TARGET.md`, Helm `docs/VULKAN-HELM-WEBGPU-PROOF.md` |
@@ -173,8 +174,8 @@ commit them.
   coverage.
 - Golden image baselines still include pending slots; pending evidence is
   reported honestly rather than treated as parity.
-- Performance evidence is smoke/counter-level only. It is not a production
-  benchmark.
+- Performance evidence is currently budget/fixture-level only. It is not a
+  production benchmark until PERF-2 attaches device measurements.
 - The OpenCPN interactive adapter is still a POC feature-flag path with legacy
   fallback.
 - Helm HTTP route evidence is separate from this OpenCPN branch and must run on

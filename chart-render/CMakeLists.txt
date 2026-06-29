@@ -5,6 +5,7 @@ project(opencpn_chart_render_skeleton LANGUAGES CXX)
 
 add_library(opencpn-chart-render-skeleton STATIC
   source/draw_backend_contract.cpp
+  source/performance_budget_contract.cpp
   source/opencpn_feature_flag_adapter.cpp
   source/viewport_tile_scheduler.cpp
   source/source_to_render_inspection.cpp
@@ -76,6 +77,13 @@ add_executable(opencpn-depth-performance-smoke
   tests/depth_performance_smoke.cpp
 )
 target_link_libraries(opencpn-depth-performance-smoke
+  PRIVATE opencpn-chart-render-skeleton
+)
+
+add_executable(opencpn-performance-budget-contract-smoke
+  tests/performance_budget_contract_smoke.cpp
+)
+target_link_libraries(opencpn-performance-budget-contract-smoke
   PRIVATE opencpn-chart-render-skeleton
 )
 
@@ -175,6 +183,7 @@ add_custom_target(opencpn-stakeholder-demo
     opencpn-viewport-tile-scheduler-smoke
     opencpn-chart1-debug-app-smoke
     opencpn-golden-regression-smoke
+    opencpn-performance-budget-contract-smoke
     opencpn-gpu-artifact-cache-contract-smoke
     opencpn-s57-portable-package-converter-smoke
     opencpn-source-to-render-inspection-smoke
