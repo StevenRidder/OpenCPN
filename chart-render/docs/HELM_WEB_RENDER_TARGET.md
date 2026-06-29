@@ -43,6 +43,13 @@ emit these artifact families from the same model:
 Raw ENC, SENC, S-101, or interchange container data is never the browser render
 contract.
 
+`docs/HELM_WEBGPU_ARTIFACT_CONSUMER.md` and the C++ surface in
+`include/helm_webgpu_artifact_consumer.hpp` define the first validated consumer
+slice for this handoff. That slice binds the compiled primitive packet,
+inspection packet, server-raster fallback, optional offline pack metadata, and
+Helm `TOOLS-9`/`TOOLS-10` registry assets into one WebGPU-first browser
+contract.
+
 ## Feature Detection
 
 Helm clients choose the highest available target at runtime:
@@ -130,6 +137,9 @@ Before a full WebGPU chart renderer is accepted, the POC needs evidence for:
 
 - WebGPU is the Helm client direction, not a side note.
 - The server remains the semantic authority until browser parity is proven.
+- The WebGPU consumer contract must distinguish Tier 1 official chart artifacts
+  from Tier 2/3 Helm overlay/UI registry assets, with query/provenance hooks for
+  both paths.
 - WebGL/MapLibre are useful composition and fallback surfaces, not S-52
   reimplementations.
 - Server-rendered raster remains the safety and verification fallback.
