@@ -146,6 +146,12 @@ run_step \
   "opencpn-vsg-gpu-cache-smoke" \
   "GPU assets are derived from neutral primitives without chart-source or scheduler semantics."
 
+run_step \
+  "08-production-golden-corpus" \
+  "Production first-slice golden corpus fails on semantic and pixel drift" \
+  "opencpn-production-golden-corpus-smoke" \
+  "Redistributable fixture, portable package hash, neutral primitive hashes, GPU artifact metadata, golden image, inspection trace, and known limitations are gated together."
+
 cat >> "$summary_file" <<'SUMMARY'
 
 ## Helm Private-Port Follow-Up
