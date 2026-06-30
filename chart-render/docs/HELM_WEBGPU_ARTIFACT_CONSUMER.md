@@ -2,6 +2,11 @@
 
 Status: HELMWEBGPU-1 production architecture and C++ contract
 
+HELMWEBGPU-3 extends the same contract to environmental field packets for
+weather, wave, current, and warning overlays. These packets are Helm overlay
+artifacts: they can be composed by the browser, but the browser does not
+interpret S-100 portrayal rules, chart display policy, or source authority.
+
 This document defines the first Helm browser production slice that consumes the
 same portable-package, presentation, GPU-cache, draw-backend, and inspection
 contracts as the OpenCPN/VSG proof path:
@@ -65,6 +70,10 @@ The C++ surface in `include/helm_webgpu_artifact_consumer.hpp` provides:
 - `HelmWebgpuInspectionHook`: browser object/pixel query handles tied back to
   source chart/object, presentation rule, primitive id, artifact id, and final
   web asset id;
+- `HelmWebgpuEnvironmentalFieldPacket`: time-varying environmental field
+  packet metadata for scalar textures, u/v vector textures, particle vector
+  fields, no-data masks, legends, LOD parent fallback, cache keys, provenance,
+  inspection trace handles, and server-raster fallback routes;
 - `HelmWebgpuConsumerContract`: the normalized browser artifact consumer
   contract tying model, cache, backend, inspection, fallbacks, and visual tiers
   together;
@@ -80,11 +89,45 @@ A valid first slice includes:
 - inspection packet for object/pixel/debug queries;
 - server-raster fallback tile for unsupported clients and verification runs;
 - optional offline pack metadata derived from the same model/cache epochs;
+- environmental field packets and legends for Helm-owned weather/current/wave
+  overlays;
 - at least one Helm-owned Tier 2 or Tier 3 registry asset so the consumer proves
   the taxonomy split instead of treating all visuals as chart truth.
 
 The compiled primitive packet and inspection packet may be serialized later by
 HELMWEBGPU-2. HELMWEBGPU-1 only defines the contract and validation surface.
+
+## Environmental Fields
+
+Environmental fields are carried as Tier 2 Helm overlay packets. The producer
+may be advisory, official, or pre-operational, but the browser-facing packet
+always preserves that source identity instead of flattening it into generic
+shader state.
+
+A valid field packet carries:
+
+- product family and product id, such as advisory Open-Meteo, advisory
+  Open-Marine, S-412, S-413, or S-414;
+- source authority, source epoch, coverage id, provenance handle, and
+  inspection trace id;
+- scalar texture components or paired `u`/`v` vector texture components;
+- no-data mask id, sample encoding, unit, neutral cache key, and provenance
+  refs per component;
+- reference time, validity start/end, interpolation mode, and LOD parent packet
+  id per time slice;
+- legend asset id and a visible server-raster fallback route.
+
+The HELMWEBGPU-3 C++ fixture builds examples for:
+
+- Open-Meteo advisory 10 m wind as `u`/`v` vector textures;
+- Open-Marine advisory significant wave height as a scalar texture;
+- S-412 weather warning areas as an official S-100-family scalar overlay;
+- S-413 met-ocean conditions as an official S-100-family vector overlay;
+- S-414 weather observations as an official S-100-family scalar overlay.
+
+These examples are contract examples, not renderer code. They do not assert
+that all producers expose all products in all regions, and they do not define
+S-100 portrayal semantics in browser shaders.
 
 ## Fallback Rules
 
@@ -121,5 +164,6 @@ layer.
 - No TypeScript, JavaScript, or browser runtime production code in this slice.
 - No VSG dependency in Helm web code.
 - No WebGL/MapLibre S-52 style reimplementation.
+- No browser-side S-100 met-ocean portrayal rule implementation.
 - No raw chart-source parsing in the browser.
 - No live Helm `:8080` change.
