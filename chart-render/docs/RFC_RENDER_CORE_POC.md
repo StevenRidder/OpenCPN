@@ -85,6 +85,7 @@ composition.
 | Adapter scheduler policy | Visible tiles, overscan, prefetch, adjacent zoom blending, and cache invalidation epochs before renderer backend handoff. | `include/viewport_tile_scheduler.hpp`, `opencpn-viewport-tile-scheduler-smoke` |
 | Machine-local GPU artifact cache | Rebuildable backend/device artifacts, memory budgets, invalidation domains, and tier/provenance handles derived from the neutral model, including the first VSG-targeted S-57 package fixture. | `docs/MACHINE_LOCAL_GPU_ARTIFACT_CACHE.md`, `opencpn-gpu-artifact-cache-contract-smoke` |
 | Performance and power budget | First production slice timing, memory, disk-cache, and boat-class power gates for desktop and low-power profiles. | `docs/PERFORMANCE_POWER_BUDGET.md`, `opencpn-performance-budget-contract-smoke` |
+| Compatibility matrix | C++/CMake baseline, supported platform/toolchain expectations, VSG/Vulkan driver assumptions, Helm WebGPU/browser expectations, deferred Metal posture, and required unavailable-target diagnostics. | `docs/OPENCPN_VSG_WEBGPU_COMPATIBILITY_MATRIX.md` |
 | VSG proof backend | Native draw/cache proof fed by neutral primitives; no chart-source or S-52 ownership. | `vsg/GPU_CACHE.md`, `opencpn-vsg-gpu-cache-smoke` |
 | OpenCPN adapter | Feature-flagged route from validated neutral model into the shared renderer while preserving legacy fallback and host ownership. | `include/opencpn_feature_flag_adapter.hpp`, `opencpn-feature-flag-adapter-smoke` |
 | Helm adapter/target contract | Consumer-side offscreen/server artifact path, WebGPU-first client direction, WebGL/MapLibre and server-raster fallbacks. | `docs/HELM_WEB_RENDER_TARGET.md`, Helm `docs/VULKAN-HELM-WEBGPU-PROOF.md` |
@@ -186,6 +187,9 @@ absence of Helm Tier 2/3 overlay or UI icon policy in official-chart artifacts.
   reported honestly rather than treated as parity.
 - Performance evidence is currently budget/fixture-level only. It is not a
   production benchmark until PERF-2 attaches device measurements.
+- Compatibility evidence is matrix-level only until each platform/toolchain,
+  VSG/Vulkan driver stack, browser target, and unavailable-target diagnostic is
+  recorded with the claiming build.
 - The OpenCPN interactive adapter is still a POC feature-flag path with legacy
   fallback.
 - Helm HTTP route evidence is separate from this OpenCPN branch and must run on

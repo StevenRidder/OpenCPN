@@ -33,6 +33,9 @@ model, adapter scheduler policy, and backend handoff stay visibly separated.
 - `docs/PUBLIC_RELEASE_HYGIENE.md`: PUB-1 hygiene audit and publication gates.
 - `docs/HELM_WEB_RENDER_TARGET.md`: Helm consumer contract with WebGPU-first
   client direction, WebGL/MapLibre fallback, and server-raster fallback.
+- `docs/OPENCPN_VSG_WEBGPU_COMPATIBILITY_MATRIX.md`: platform/toolchain,
+  VSG/Vulkan, WebGPU/browser, server-raster, and deferred-Metal compatibility
+  gate before public hardening claims.
 - `docs/MAINTAINER_RESPONSE_MATRIX.md`: maintainer concerns mapped to public
   response posture, current evidence, limits, and follow-up acceptance.
 - `include/`, `source/`, `s52/`, and `vsg/`: reviewable C++ core surfaces.
@@ -113,15 +116,17 @@ SENC caches, S-63 permits, oeSENC data, or private voyage/runtime data.
 - VSG scope: native proof backend only. VSG consumes neutral primitives and GPU
   cache manifests; it does not own chart-source parsing, S-52/S-101 rules,
   quilting, scheduler policy, cache epochs, or safety semantics.
+- Compatibility scope: platform and device support is evidence-based. A target
+  is supported only when the C++/CMake build, VSG/Vulkan runtime assumptions,
+  WebGPU/browser expectations, offscreen behavior, and unavailable-target
+  diagnostics are recorded together.
 - Support-script scope: scripts may build and summarize evidence, but renderer
   runtime implementation remains C++/CMake/OpenCPN-native.
 
 ## Explicit Exclusions
 
-- ADAPT-5 / Metal compatibility: PR #22 is still open and dirty at PUB-2 time.
-  Do not present Metal compatibility notes as landed evidence until that PR is
-  rebased and merged, or until the RFC explicitly excludes Metal compatibility
-  from the proof package.
+- Metal compatibility: Metal remains a deferred backend compatibility note, not
+  an implemented renderer or product priority.
 - Full WebGPU renderer implementation: WebGPU is Helm's preferred client target,
   but this branch defines the server artifact contract and gap list only.
 - Full S-52 parity, ECDIS certification, production safety approval, and

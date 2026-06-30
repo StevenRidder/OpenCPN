@@ -34,6 +34,12 @@ All targets share the same semantic input boundary. A faster target can improve
 interaction, compositing, upload strategy, and readback. It cannot change chart
 truth.
 
+Target support claims are governed by
+`docs/OPENCPN_VSG_WEBGPU_COMPATIBILITY_MATRIX.md`. A backend family is not
+production-supported by this POC until its compiler/toolchain, device or
+browser feature profile, offscreen/readback behavior, and unavailable-target
+diagnostics are recorded.
+
 ## Input Contract
 
 A draw backend may consume:
@@ -133,6 +139,11 @@ Fallback is allowed only when it is visible and semantic-preserving:
 Fallbacks must not silently change display category, SCAMIN, safety contour,
 palette, chart-source, quilting, or scheduler decisions. They must carry enough
 diagnostics to explain which backend rendered the frame and why.
+
+For unavailable targets, diagnostics must name the target family, failed
+capability, device/profile or browser feature when known, selected
+semantic-preserving fallback, and source/model/artifact handles if backend
+handoff was reached.
 
 ## Non-Goals
 
