@@ -94,8 +94,11 @@ A valid first slice includes:
 - at least one Helm-owned Tier 2 or Tier 3 registry asset so the consumer proves
   the taxonomy split instead of treating all visuals as chart truth.
 
-The compiled primitive packet and inspection packet may be serialized later by
-HELMWEBGPU-2. HELMWEBGPU-1 only defines the contract and validation surface.
+HELMWEBGPU-2 adds the first minimal browser fixture over this contract. It does
+not implement a WebGPU renderer; it proves that feature detection can select
+WebGPU, WebGL/MapLibre, or server raster while composing Tier 1 official chart
+artifacts with Tier 2/3 Helm overlay/UI assets and preserving inspection
+handles.
 
 ## Environmental Fields
 
