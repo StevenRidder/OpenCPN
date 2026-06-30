@@ -26,6 +26,7 @@ The review package starts here:
 - chart-render/docs/RFC_RENDER_CORE_POC.md
 - chart-render/docs/OPENCPN_PUBLIC_PROOF_BRANCH.md
 - chart-render/docs/MAINTAINER_RESPONSE_MATRIX.md
+- chart-render/docs/PRODUCTION_HARDENING_MAP.md
 - chart-render/docs/STAKEHOLDER_DEMO.md
 
 The current proof branch head for this package is:
@@ -142,6 +143,11 @@ hardening rather than broadening:
 - revisit repository extraction only after both OpenCPN and Helm consume the
   same command stream with accepted evidence.
 
+The proposed hardening map and decision log are in
+chart-render/docs/PRODUCTION_HARDENING_MAP.md. That map is meant to be revised
+from maintainer feedback before the first tiny feature-flagged production-slice
+PR.
+
 If the module boundaries are wrong, I would rather learn that now while the POC
 is still small.
 
@@ -154,6 +160,8 @@ OpenCPN work.
 
 - Replace branch SHA if a newer proof package lands before posting.
 - Link to the GitHub branch and PR/RFC package URL that reviewers should read.
+- Include the production hardening map if asking what should happen after RFC
+  feedback.
 - Do not include generated `/tmp` summaries or local worktree paths.
 - Do not include private chart data, private screenshots, S-63 permits, oeSENC
   output, or runtime vessel data.

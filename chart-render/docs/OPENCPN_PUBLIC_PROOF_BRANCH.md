@@ -31,6 +31,8 @@ model, adapter scheduler policy, and backend handoff stay visibly separated.
 - `docs/STAKEHOLDER_DEMO.md`: reproducible stakeholder demo command and talk
   track.
 - `docs/PUBLIC_RELEASE_HYGIENE.md`: PUB-1 hygiene audit and publication gates.
+- `docs/PRODUCTION_HARDENING_MAP.md`: post-RFC hardening map and decision log
+  for the first tiny feature-flagged production slice.
 - `docs/HELM_WEB_RENDER_TARGET.md`: Helm consumer contract with WebGPU-first
   client direction, WebGL/MapLibre fallback, and server-raster fallback.
 - `docs/OPENCPN_VSG_WEBGPU_COMPATIBILITY_MATRIX.md`: platform/toolchain,
@@ -82,6 +84,9 @@ Then read the proof package in this order:
    what it does not claim.
 4. `chart-render/docs/MAINTAINER_RESPONSE_MATRIX.md` - known maintainer
    concerns mapped to evidence and follow-up work.
+5. `chart-render/docs/PRODUCTION_HARDENING_MAP.md` - accepted seams, rejected
+   approaches, feature-flag rules, fixture growth, compatibility decisions,
+   performance gates, Helm WebGPU boundaries, and deferred work.
 
 ## Reproduce The Local Evidence
 
@@ -141,6 +146,6 @@ SENC caches, S-63 permits, oeSENC data, or private voyage/runtime data.
 
 The RFC package starts at `docs/RFC_RENDER_CORE_POC.md` and builds the OpenCPN
 side from this note, the acceptance rubric, the maintainer response matrix, the
-stakeholder demo, and the hygiene checklist. The community ask should be
-architecture review of the seam and evidence, not approval of a wholesale
-renderer replacement.
+stakeholder demo, the compatibility matrix, the production hardening map, and
+the hygiene checklist. The community ask should be architecture review of the
+seam and evidence, not approval of a wholesale renderer replacement.

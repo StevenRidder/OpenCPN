@@ -121,8 +121,8 @@ cmake --build /tmp/helm-vulkan-perf1-build
 The smoke builds current fixture package/model/cache/backend/scheduler objects,
 evaluates desktop and boat-class fixture measurements against the contract, and
 checks negative cases for missing cache-hit budget, active-power overrun, and
-missing render-time measurement. Real timing and power evidence belongs in
-PERF-2.
+missing render-time measurement. PERF-2 adds measured first-slice timing and
+explicit power-telemetry availability status below.
 
 ## PERF-2 Production Fixture Evidence
 

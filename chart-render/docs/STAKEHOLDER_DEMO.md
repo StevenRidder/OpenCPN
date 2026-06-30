@@ -47,6 +47,8 @@ show the exact smoke binary output.
    metadata, memory estimates, and no Helm Tier 2/3 overlay policy leakage.
 9. VSG remains draw/cache-only and consumes neutral primitives without owning
    chart-source, S-52, quilting, cache-key, or scheduler semantics.
+10. The production hardening map turns this evidence into the next bounded
+    feature-flagged OpenCPN slice without broadening the renderer scope.
 
 ## OpenCPN Interactive Evidence
 
@@ -97,6 +99,9 @@ fixture or BYO chart data used.
   neither backend is implemented by this branch.
 - When asked about MBTiles or PMTiles, say they are import/export/debug fixture
   artifacts, not the renderer hot-path contract.
+- When asked what happens after the demo, point to
+  `docs/PRODUCTION_HARDENING_MAP.md`: harden accepted seams, grow fixtures,
+  keep fallbacks visible, and defer product-readiness claims.
 
 ## Pass Criteria
 
