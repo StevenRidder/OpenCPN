@@ -169,3 +169,10 @@ browser artifact consumer fixture from the HELMWEBGPU-1 contract, validates
 WebGPU/WebGL/server-raster feature detection, composes Tier 1 chart artifacts
 with Tier 2/3 Helm assets, and keeps safety-relevant inspection/query handles
 available for rendered and server-declared hidden/simplified chart states.
+
+HELMWEBGPU-4 evidence is the CMake-built
+`opencpn-helm-webgpu-playwright-fixture` target plus the Playwright spec at
+`tests/web/helm_webgpu_fixture.spec.js`. The C++ target exports deterministic
+fixture JSON and a static harness; Playwright loads it in Chromium and checks
+WebGPU, WebGL/MapLibre, and server-raster selection without adding browser
+chart-semantics code.
