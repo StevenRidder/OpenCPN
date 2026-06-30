@@ -22,6 +22,7 @@ struct SourceToRenderInspectionOptions {
   std::string portable_package_id;
   std::string backend_name = "unbound-backend";
   RenderTarget target;
+  const RenderResult* backend_result = nullptr;
 };
 
 struct InspectionTierHandle {
@@ -113,6 +114,11 @@ struct InspectionQueryHandle {
   std::string hit_test_index_id;
   std::string view_id;
   PixelSize target_pixel_size;
+  std::uint32_t sample_x = 0;
+  std::uint32_t sample_y = 0;
+  std::string sample_rgba8;
+  std::string rendered_pixel_hash;
+  bool sampled_rendered_pixel = false;
 };
 
 struct SourceToRenderInspectionRow {
@@ -125,6 +131,7 @@ struct SourceToRenderInspectionRow {
   InspectionBackendHandle backend;
   InspectionQueryHandle query;
   std::vector<InspectionArtifactHandle> artifacts;
+  std::vector<std::string> human_trace;
   std::vector<Diagnostic> diagnostics;
 };
 
@@ -164,5 +171,8 @@ const SourceToRenderInspectionRow* FindInspectionByPrimitiveId(
 std::vector<const SourceToRenderInspectionRow*> FindInspectionsBySourceObjectId(
     const SourceToRenderInspectionReport& report,
     const std::string& source_object_id);
+
+std::vector<std::string> BuildHumanReadableSourceToRenderTrace(
+    const SourceToRenderInspectionReport& report);
 
 }  // namespace ocpn::render
