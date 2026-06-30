@@ -45,6 +45,11 @@ The current shape mirrors the Vulkan board seam work:
   inspection packets, server-raster fallback records, and Helm overlay/UI
   registry assets without importing VSG/OpenCPN internals or owning
   S-52/S-101 semantics.
+- `include/helm_webgpu_browser_fixture.hpp` defines the HELMWEBGPU-2 minimal
+  browser consumer fixture. It proves feature detection, WebGPU/WebGL/server
+  raster fallback selection, Tier 1 chart artifact consumption, Tier 2/3
+  overlay/UI composition, and safety-relevant inspection handles without
+  browser-owned chart semantics.
 - `source/` documents and implements the chart-source boundary for S-57/SENC,
   raster, MBTiles/PMTiles interchange, debug fixtures, and future S-101 input.
 - `include/chart_interchange.hpp` classifies MBTiles/PMTiles as optional
@@ -78,6 +83,9 @@ The current shape mirrors the Vulkan board seam work:
 - `docs/HELM_WEBGPU_ARTIFACT_CONSUMER.md` records the first Helm browser
   consumer slice over the same package, presentation, cache, backend, and
   inspection contracts.
+- `docs/HELM_WEBGPU_BROWSER_FIXTURE.md` records the HELMWEBGPU-2 fixture that
+  composes official chart packets with Helm registry assets and validates
+  feature-detected fallback behavior.
 - `docs/OPENCPN_COMMUNITY_RFC_POST_DRAFT.md` drafts the public community post
   asking for architecture review and maintainer seam feedback.
 - `docs/STAKEHOLDER_DEMO.md` defines the QA-3 dual-adapter stakeholder demo
@@ -154,3 +162,10 @@ smoke. It proves Helm's WebGPU-first client target consumes the shared neutral
 model, GPU artifact cache, draw-only backend, and source-to-render inspection
 contracts while preserving Tier 1 official chart truth separately from Helm
 Tier 2 overlays and Tier 3 UI registry assets.
+
+HELMWEBGPU-2 evidence is the CMake-built
+`opencpn-helm-webgpu-browser-fixture-smoke` target. It builds a minimal Helm
+browser artifact consumer fixture from the HELMWEBGPU-1 contract, validates
+WebGPU/WebGL/server-raster feature detection, composes Tier 1 chart artifacts
+with Tier 2/3 Helm assets, and keeps safety-relevant inspection/query handles
+available for rendered and server-declared hidden/simplified chart states.

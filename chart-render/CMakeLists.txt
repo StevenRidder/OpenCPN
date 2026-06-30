@@ -6,6 +6,7 @@ project(opencpn_chart_render_skeleton LANGUAGES CXX)
 add_library(opencpn-chart-render-skeleton STATIC
   source/draw_backend_contract.cpp
   source/helm_webgpu_artifact_consumer.cpp
+  source/helm_webgpu_browser_fixture.cpp
   source/performance_budget_contract.cpp
   source/opencpn_feature_flag_adapter.cpp
   source/viewport_tile_scheduler.cpp
@@ -174,6 +175,13 @@ target_link_libraries(opencpn-helm-webgpu-artifact-consumer-smoke
   PRIVATE opencpn-chart-render-skeleton
 )
 
+add_executable(opencpn-helm-webgpu-browser-fixture-smoke
+  tests/helm_webgpu_browser_fixture_smoke.cpp
+)
+target_link_libraries(opencpn-helm-webgpu-browser-fixture-smoke
+  PRIVATE opencpn-chart-render-skeleton
+)
+
 add_executable(opencpn-s52-presentation-compiler-smoke
   tests/s52_presentation_compiler_smoke.cpp
 )
@@ -230,6 +238,7 @@ add_custom_target(opencpn-stakeholder-demo
     opencpn-production-performance-fixture-smoke
     opencpn-draw-backend-contract-smoke
     opencpn-helm-webgpu-artifact-consumer-smoke
+    opencpn-helm-webgpu-browser-fixture-smoke
     opencpn-vsg-gpu-cache-smoke
     opencpn-vsg-backend-production-fixture-smoke
   WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}

@@ -54,6 +54,13 @@ inspection packet, server-raster fallback, optional offline pack metadata, and
 Helm `TOOLS-9`/`TOOLS-10` registry assets into one WebGPU-first browser
 contract.
 
+`docs/HELM_WEBGPU_BROWSER_FIXTURE.md` and the C++ surface in
+`include/helm_webgpu_browser_fixture.hpp` define the first browser-side fixture
+over that contract. It validates target selection, fallback routing, official
+chart packet consumption, Helm overlay/UI composition, and safety-relevant
+inspection handles without implementing browser shaders or S-52/S-101/S-100
+portrayal policy in the browser.
+
 HELMWEBGPU-3 adds the environmental field portion of the same consumer
 contract. The browser can draw advisory Open-Meteo/Open-Marine model bundles
 and official S-100-family met-ocean products such as S-412, S-413, and S-414
