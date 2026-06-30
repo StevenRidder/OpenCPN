@@ -182,6 +182,30 @@ target_link_libraries(opencpn-helm-webgpu-browser-fixture-smoke
   PRIVATE opencpn-chart-render-skeleton
 )
 
+add_executable(opencpn-helm-webgpu-browser-fixture-export
+  tests/helm_webgpu_browser_fixture_export.cpp
+)
+target_link_libraries(opencpn-helm-webgpu-browser-fixture-export
+  PRIVATE opencpn-chart-render-skeleton
+)
+
+set(HELM_WEBGPU_PLAYWRIGHT_DIR
+  ${CMAKE_CURRENT_BINARY_DIR}/helm-webgpu-playwright
+)
+add_custom_target(opencpn-helm-webgpu-playwright-fixture
+  COMMAND ${CMAKE_COMMAND} -E make_directory
+    ${HELM_WEBGPU_PLAYWRIGHT_DIR}
+  COMMAND ${CMAKE_COMMAND} -E copy_if_different
+    ${CMAKE_CURRENT_SOURCE_DIR}/tests/web/helm_webgpu_fixture_harness.html
+    ${HELM_WEBGPU_PLAYWRIGHT_DIR}/helm-webgpu-fixture.html
+  COMMAND opencpn-helm-webgpu-browser-fixture-export
+    ${HELM_WEBGPU_PLAYWRIGHT_DIR}/helm-webgpu-fixture.json
+  DEPENDS
+    opencpn-helm-webgpu-browser-fixture-export
+    ${CMAKE_CURRENT_SOURCE_DIR}/tests/web/helm_webgpu_fixture_harness.html
+  COMMENT "Generate the Helm WebGPU browser fixture consumed by Playwright"
+)
+
 add_executable(opencpn-s52-presentation-compiler-smoke
   tests/s52_presentation_compiler_smoke.cpp
 )

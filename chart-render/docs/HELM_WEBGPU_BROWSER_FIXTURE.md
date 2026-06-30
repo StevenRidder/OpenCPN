@@ -63,6 +63,22 @@ fixture proof that the browser can warn, query, or explain a safety-relevant
 state while still treating visibility, SCAMIN, display category, safety-contour,
 and symbol decisions as server-side presentation output.
 
+## Playwright Harness
+
+HELMWEBGPU-4 adds a browser-checkable harness over the same fixture:
+
+```bash
+cmake --build /tmp/opencpn-vulkan-proof-build --target opencpn-helm-webgpu-playwright-fixture
+HELM_WEBGPU_FIXTURE_WEB_DIR=/tmp/opencpn-vulkan-proof-build/helm-webgpu-playwright \
+  npm --prefix chart-render/tests/web run test:helm-webgpu
+```
+
+The C++ exporter writes `helm-webgpu-fixture.json`; the static HTML harness
+loads that JSON in a real browser, performs feature-profile selection, and
+publishes `window.helmFixtureResult` for Playwright assertions. The test covers
+WebGPU selection, WebGL/MapLibre fallback, server-raster fallback, Tier 1
+official chart authority, Tier 2/3 Helm ownership, and safety traces.
+
 ## Non-Goals
 
 - No TypeScript, JavaScript, or browser production runtime.

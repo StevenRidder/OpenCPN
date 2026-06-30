@@ -1,0 +1,11 @@
+{
+  "name": "opencpn-helm-webgpu-web-tests",
+  "private": true,
+  "version": "0.0.0",
+  "scripts": {
+    "test:helm-webgpu": "playwright test helm_webgpu_fixture.spec.js --browser=chromium --reporter=list"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.61.1"
+  }
+}

@@ -1,0 +1,261 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Helm WebGPU Fixture Harness</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+      :root {
+        color-scheme: light dark;
+        font-family: system-ui, sans-serif;
+      }
+      body {
+        margin: 24px;
+        max-width: 980px;
+      }
+      table {
+        border-collapse: collapse;
+        width: 100%;
+      }
+      th,
+      td {
+        border: 1px solid #999;
+        padding: 6px 8px;
+        text-align: left;
+      }
+      [data-fixture-ok="ok"] {
+        color: #177245;
+        font-weight: 700;
+      }
+      [data-fixture-ok="error"] {
+        color: #b00020;
+        font-weight: 700;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Helm WebGPU Fixture Harness</h1>
+    <p>Status: <span data-fixture-ok="pending" id="status">pending</span></p>
+    <p>Selected target: <span id="selected-target"></span></p>
+    <p>Fallback route: <span id="fallback-route"></span></p>
+    <table aria-label="artifact summary">
+      <thead>
+        <tr>
+          <th>Tier</th>
+          <th>Owner</th>
+          <th>Role</th>
+          <th>Decision Scope</th>
+        </tr>
+      </thead>
+      <tbody id="artifact-rows"></tbody>
+    </table>
+    <script>
+      function queryProfile() {
+        return new URLSearchParams(location.search).get('profile') || 'auto';
+      }
+
+      function browserFeatureProbe(profile) {
+        const actual = {
+          navigatorGpuPresent: Boolean(navigator.gpu),
+          webglPresent: false,
+          serverRasterAvailable: true
+        };
+        const canvas = document.createElement('canvas');
+        actual.webglPresent = Boolean(
+          canvas.getContext('webgl2') || canvas.getContext('webgl')
+        );
+
+        if (profile === 'webgpu') {
+          return {
+            profile,
+            webgpuAvailable: true,
+            webglMapLibreAvailable: true,
+            serverRasterAvailable: true,
+            actual
+          };
+        }
+        if (profile === 'webgl') {
+          return {
+            profile,
+            webgpuAvailable: false,
+            webglMapLibreAvailable: true,
+            serverRasterAvailable: true,
+            actual
+          };
+        }
+        if (profile === 'server-raster') {
+          return {
+            profile,
+            webgpuAvailable: false,
+            webglMapLibreAvailable: false,
+            serverRasterAvailable: true,
+            actual
+          };
+        }
+        return {
+          profile,
+          webgpuAvailable: actual.navigatorGpuPresent,
+          webglMapLibreAvailable: actual.webglPresent,
+          serverRasterAvailable: actual.serverRasterAvailable,
+          actual
+        };
+      }
+
+      function fallbackTo(data, target) {
+        return data.fallbacks.find((route) =>
+          route.from === 'webgpu' &&
+          route.to === target &&
+          route.semanticPreserving &&
+          route.visibleDiagnostic &&
+          route.usesServerAuthority
+        );
+      }
+
+      function selectTarget(data, features) {
+        if (features.webgpuAvailable) {
+          return {
+            selectedTarget: 'webgpu',
+            fallbackRouteId: '',
+            fallbackReason: '',
+            webgpuPathActive: true
+          };
+        }
+        if (features.webglMapLibreAvailable) {
+          const fallback = fallbackTo(data, 'webgl_maplibre');
+          if (fallback) {
+            return {
+              selectedTarget: 'webgl_maplibre',
+              fallbackRouteId: fallback.routeId,
+              fallbackReason: fallback.reason,
+              webgpuPathActive: false
+            };
+          }
+        }
+        const fallback = fallbackTo(data, 'server_raster');
+        if (!fallback) throw new Error('missing server-raster fallback');
+        return {
+          selectedTarget: 'server_raster',
+          fallbackRouteId: fallback.routeId,
+          fallbackReason: fallback.reason,
+          webgpuPathActive: false
+        };
+      }
+
+      function validate(data, decision) {
+        const tier1 = data.artifacts.filter((artifact) =>
+          artifact.semanticTier.startsWith('tier1')
+        );
+        const tier2 = data.artifacts.filter((artifact) =>
+          artifact.semanticTier.startsWith('tier2')
+        );
+        const tier3 = data.artifacts.filter((artifact) =>
+          artifact.semanticTier.startsWith('tier3')
+        );
+        const failures = [];
+
+        if (!tier1.length || !tier2.length || !tier3.length) {
+          failures.push('missing visual tier coverage');
+        }
+        for (const artifact of tier1) {
+          if (artifact.semanticOwner !== 'presentation_compiler') {
+            failures.push('tier1 owner changed');
+          }
+          if (artifact.browserMayDecideChartSemantics) {
+            failures.push('browser may decide chart semantics');
+          }
+          if (artifact.browserDecisionScope !==
+              'compose_server_chart_artifact_only') {
+            failures.push('tier1 decision scope changed');
+          }
+          if (!artifact.queryIds.length && !artifact.provenanceRefs.length) {
+            failures.push('tier1 missing query/provenance handles');
+          }
+        }
+        for (const artifact of tier2.concat(tier3)) {
+          if (!artifact.semanticOwner.includes('helm')) {
+            failures.push('helm tier owner changed');
+          }
+          if (artifact.semanticOwner === 'presentation_compiler') {
+            failures.push('helm tier masquerades as chart truth');
+          }
+        }
+        if (!data.safetyTraces.some((trace) =>
+          trace.serverDeclaredHiddenOrSimplified &&
+          trace.objectQueryId &&
+          trace.pixelQueryId &&
+          !trace.browserMayDecideSafetySemantics
+        )) {
+          failures.push('missing hidden/simplified safety trace');
+        }
+        if (decision.selectedTarget !== 'webgpu' &&
+            !decision.fallbackRouteId) {
+          failures.push('fallback target lacks visible route');
+        }
+
+        return {
+          ok: failures.length === 0,
+          failures,
+          tier1,
+          tier2,
+          tier3
+        };
+      }
+
+      function renderArtifacts(artifacts) {
+        const rows = document.getElementById('artifact-rows');
+        rows.textContent = '';
+        for (const artifact of artifacts) {
+          const row = document.createElement('tr');
+          for (const text of [
+            artifact.semanticTier,
+            artifact.semanticOwner,
+            artifact.compositionRole,
+            artifact.browserDecisionScope
+          ]) {
+            const cell = document.createElement('td');
+            cell.textContent = text;
+            row.appendChild(cell);
+          }
+          rows.appendChild(row);
+        }
+      }
+
+      async function main() {
+        const data = await fetch('helm-webgpu-fixture.json').then((response) => {
+          if (!response.ok) throw new Error(`fixture fetch ${response.status}`);
+          return response.json();
+        });
+        const features = browserFeatureProbe(queryProfile());
+        const decision = selectTarget(data, features);
+        const validation = validate(data, decision);
+        const result = {
+          fixtureId: data.fixtureId,
+          contractId: data.contractId,
+          features,
+          decision,
+          validation,
+          expected: data.expected,
+          artifactCount: data.artifactCount,
+          safetyTraceCount: data.safetyTraceCount,
+          safetyTraces: data.safetyTraces
+        };
+        window.helmFixtureResult = result;
+        document.getElementById('selected-target').textContent =
+          decision.selectedTarget;
+        document.getElementById('fallback-route').textContent =
+          decision.fallbackRouteId || 'none';
+        renderArtifacts(data.artifacts);
+        const status = document.getElementById('status');
+        status.textContent = validation.ok ? 'ok' : validation.failures.join(', ');
+        status.dataset.fixtureOk = validation.ok ? 'ok' : 'error';
+      }
+
+      main().catch((error) => {
+        window.helmFixtureResult = { error: String(error) };
+        const status = document.getElementById('status');
+        status.textContent = String(error);
+        status.dataset.fixtureOk = 'error';
+      });
+    </script>
+  </body>
+</html>
