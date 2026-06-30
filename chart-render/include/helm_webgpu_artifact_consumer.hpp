@@ -25,8 +25,25 @@ enum class HelmWebgpuArtifactFamily {
   kInspectionPacket,
   kRasterFallbackTile,
   kOfflinePack,
+  kEnvironmentalFieldPacket,
+  kEnvironmentalLegend,
   kHelmOverlayRegistryAsset,
   kHelmUiRegistryAsset
+};
+
+enum class HelmWebgpuEnvironmentalFieldKind {
+  kScalarTexture,
+  kVectorUvTexture,
+  kParticleVectorField,
+  kLegend
+};
+
+enum class HelmWebgpuEnvironmentalProductFamily {
+  kAdvisoryOpenMeteo,
+  kAdvisoryOpenMarine,
+  kS100S412,
+  kS100S413,
+  kS100S414
 };
 
 struct HelmWebgpuRegistryAsset {
@@ -39,6 +56,49 @@ struct HelmWebgpuRegistryAsset {
   bool inspectable = true;
 };
 
+struct HelmWebgpuEnvironmentalTextureComponent {
+  std::string component_role;
+  std::string texture_id;
+  std::string unit;
+  std::string sample_encoding = "float32";
+  std::string no_data_mask_id;
+  std::string cache_key;
+  std::vector<std::string> provenance_refs;
+  bool values_are_normalized = true;
+};
+
+struct HelmWebgpuEnvironmentalTimeSlice {
+  std::string reference_time;
+  std::string valid_time_start;
+  std::string valid_time_end;
+  std::string interpolation_mode = "source-declared-linear";
+  std::string lod_parent_packet_id;
+  std::vector<HelmWebgpuEnvironmentalTextureComponent> components;
+};
+
+struct HelmWebgpuEnvironmentalFieldPacket {
+  std::string packet_id;
+  HelmWebgpuEnvironmentalFieldKind field_kind =
+      HelmWebgpuEnvironmentalFieldKind::kScalarTexture;
+  HelmWebgpuEnvironmentalProductFamily product_family =
+      HelmWebgpuEnvironmentalProductFamily::kAdvisoryOpenMeteo;
+  std::string product_id;
+  std::string variable_name;
+  std::string semantic_tier = "tier2_helm_overlay";
+  std::string semantic_owner = "helm_environment_registry";
+  std::string source_authority;
+  std::string source_epoch;
+  std::string coverage_id;
+  std::string cache_namespace = "helm-environment-fields";
+  std::string provenance_handle;
+  std::string inspection_trace_id;
+  std::string legend_asset_id;
+  std::string fallback_raster_route_id = "webgpu-to-server_raster";
+  std::string fallback_reason;
+  std::vector<std::string> advisory_constraints;
+  std::vector<HelmWebgpuEnvironmentalTimeSlice> time_slices;
+};
+
 struct HelmWebgpuConsumerOptions {
   std::string contract_id;
   std::string client_id = "helm-browser-client";
@@ -48,6 +108,7 @@ struct HelmWebgpuConsumerOptions {
   bool include_raster_fallback = true;
   bool include_offline_pack = true;
   std::vector<HelmWebgpuRegistryAsset> registry_assets;
+  std::vector<HelmWebgpuEnvironmentalFieldPacket> environmental_fields;
 };
 
 struct HelmWebgpuArtifactSlice {
@@ -122,6 +183,7 @@ struct HelmWebgpuConsumerContract {
   std::string draw_backend_contract_id;
   std::string inspection_report_id;
   std::vector<HelmWebgpuArtifactSlice> artifacts;
+  std::vector<HelmWebgpuEnvironmentalFieldPacket> environmental_fields;
   std::vector<HelmWebgpuFallbackRoute> fallbacks;
   std::vector<HelmWebgpuInspectionHook> inspection_hooks;
   std::vector<Diagnostic> diagnostics;
@@ -129,6 +191,11 @@ struct HelmWebgpuConsumerContract {
 
 const char* ToString(HelmWebgpuClientTarget target);
 const char* ToString(HelmWebgpuArtifactFamily family);
+const char* ToString(HelmWebgpuEnvironmentalFieldKind kind);
+const char* ToString(HelmWebgpuEnvironmentalProductFamily family);
+
+std::vector<HelmWebgpuEnvironmentalFieldPacket>
+BuildHelmWebgpuEnvironmentalFieldExamples(std::string source_epoch);
 
 HelmWebgpuConsumerContract BuildHelmWebgpuConsumerContract(
     const NauticalRenderModel& model,

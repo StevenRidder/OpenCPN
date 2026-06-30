@@ -74,6 +74,42 @@ bool HasFallback(const ocpn::render::HelmWebgpuConsumerContract& contract,
   return false;
 }
 
+bool HasEnvironmentalKind(
+    const ocpn::render::HelmWebgpuConsumerContract& contract,
+    ocpn::render::HelmWebgpuEnvironmentalFieldKind kind) {
+  for (const ocpn::render::HelmWebgpuEnvironmentalFieldPacket& field :
+       contract.environmental_fields) {
+    if (field.field_kind == kind) return true;
+  }
+  return false;
+}
+
+bool HasEnvironmentalFamily(
+    const ocpn::render::HelmWebgpuConsumerContract& contract,
+    ocpn::render::HelmWebgpuEnvironmentalProductFamily family) {
+  for (const ocpn::render::HelmWebgpuEnvironmentalFieldPacket& field :
+       contract.environmental_fields) {
+    if (field.product_family == family) return true;
+  }
+  return false;
+}
+
+bool HasComponentRole(
+    const ocpn::render::HelmWebgpuEnvironmentalFieldPacket& field,
+    const std::string& role) {
+  for (const ocpn::render::HelmWebgpuEnvironmentalTimeSlice& slice :
+       field.time_slices) {
+    for (const ocpn::render::HelmWebgpuEnvironmentalTextureComponent&
+             component : slice.components) {
+      if (component.component_role == role && !component.no_data_mask_id.empty() &&
+          !component.cache_key.empty() && !component.provenance_refs.empty()) {
+        return true;
+      }
+    }
+  }
+  return false;
+}
+
 }  // namespace
 
 int main() {
@@ -155,6 +191,9 @@ int main() {
       RegistryAsset("helm-ui:route-handles",
                     "helm-tools-10:ui-registry:route-handles",
                     "tier3_ui_asset", "helm_ui_registry", "route-ui")};
+  options.environmental_fields =
+      ocpn::render::BuildHelmWebgpuEnvironmentalFieldExamples(
+          model.source_epoch);
   const ocpn::render::HelmWebgpuConsumerContract consumer =
       ocpn::render::BuildHelmWebgpuConsumerContract(
           model, artifacts, draw_contract, inspection, options);
@@ -173,6 +212,12 @@ int main() {
       !HasArtifactFamily(
           consumer,
           ocpn::render::HelmWebgpuArtifactFamily::kRasterFallbackTile) ||
+      !HasArtifactFamily(
+          consumer,
+          ocpn::render::HelmWebgpuArtifactFamily::kEnvironmentalFieldPacket) ||
+      !HasArtifactFamily(
+          consumer,
+          ocpn::render::HelmWebgpuArtifactFamily::kEnvironmentalLegend) ||
       !HasFallback(consumer,
                    ocpn::render::HelmWebgpuClientTarget::kWebGlMapLibre) ||
       !HasFallback(consumer,
@@ -180,6 +225,52 @@ int main() {
       consumer.inspection_hooks.empty()) {
     std::cerr << "consumer contract dropped primary target, packets, fallback, "
                  "or inspection hooks\n";
+    return 1;
+  }
+  if (!HasEnvironmentalKind(
+          consumer,
+          ocpn::render::HelmWebgpuEnvironmentalFieldKind::kScalarTexture) ||
+      !HasEnvironmentalKind(
+          consumer,
+          ocpn::render::HelmWebgpuEnvironmentalFieldKind::kVectorUvTexture) ||
+      !HasEnvironmentalFamily(
+          consumer,
+          ocpn::render::HelmWebgpuEnvironmentalProductFamily::
+              kAdvisoryOpenMeteo) ||
+      !HasEnvironmentalFamily(
+          consumer,
+          ocpn::render::HelmWebgpuEnvironmentalProductFamily::
+              kAdvisoryOpenMarine) ||
+      !HasEnvironmentalFamily(
+          consumer,
+          ocpn::render::HelmWebgpuEnvironmentalProductFamily::kS100S412) ||
+      !HasEnvironmentalFamily(
+          consumer,
+          ocpn::render::HelmWebgpuEnvironmentalProductFamily::kS100S413) ||
+      !HasEnvironmentalFamily(
+          consumer,
+          ocpn::render::HelmWebgpuEnvironmentalProductFamily::kS100S414)) {
+    std::cerr << "consumer contract dropped environmental field examples\n";
+    return 1;
+  }
+  bool saw_scalar = false;
+  bool saw_vector = false;
+  for (const ocpn::render::HelmWebgpuEnvironmentalFieldPacket& field :
+       consumer.environmental_fields) {
+    saw_scalar = saw_scalar || HasComponentRole(field, "scalar");
+    saw_vector =
+        saw_vector || (HasComponentRole(field, "u") && HasComponentRole(field, "v"));
+    if (field.fallback_raster_route_id.empty() ||
+        field.inspection_trace_id.empty() || field.provenance_handle.empty() ||
+        field.time_slices.empty() ||
+        field.time_slices.front().lod_parent_packet_id.empty()) {
+      std::cerr << "environmental field dropped fallback/provenance/time/LOD "
+                   "handles\n";
+      return 1;
+    }
+  }
+  if (!saw_scalar || !saw_vector) {
+    std::cerr << "environmental fields lack scalar and u/v component coverage\n";
     return 1;
   }
 
@@ -226,6 +317,36 @@ int main() {
   if (ocpn::render::ValidateHelmWebgpuConsumerContract(invalid, &diagnostics) ||
       !HasDiagnostic(diagnostics, "helm_webgpu_fallback")) {
     std::cerr << "accepted hidden or semantic-changing fallback\n";
+    return 1;
+  }
+
+  invalid = consumer;
+  invalid.environmental_fields.front().semantic_tier = "tier1_official_chart";
+  diagnostics.clear();
+  if (ocpn::render::ValidateHelmWebgpuConsumerContract(invalid, &diagnostics) ||
+      !HasDiagnostic(diagnostics, "helm_webgpu_env_tier")) {
+    std::cerr << "accepted environmental field as Tier 1 chart truth\n";
+    return 1;
+  }
+
+  invalid = consumer;
+  invalid.environmental_fields.front().time_slices.front().components.pop_back();
+  diagnostics.clear();
+  if (ocpn::render::ValidateHelmWebgpuConsumerContract(invalid, &diagnostics) ||
+      !HasDiagnostic(diagnostics, "helm_webgpu_env_vector_components")) {
+    std::cerr << "accepted vector environmental field without u/v components\n";
+    return 1;
+  }
+
+  invalid = consumer;
+  invalid.environmental_fields.front()
+      .time_slices.front()
+      .components.front()
+      .no_data_mask_id.clear();
+  diagnostics.clear();
+  if (ocpn::render::ValidateHelmWebgpuConsumerContract(invalid, &diagnostics) ||
+      !HasDiagnostic(diagnostics, "helm_webgpu_env_texture_component")) {
+    std::cerr << "accepted environmental texture without no-data mask\n";
     return 1;
   }
 

@@ -39,6 +39,10 @@ emit these artifact families from the same model:
   primitive packets once parity evidence exists, with chart edition, render
   date, renderer SHA, schema version, display state, zoom range, and coverage
   metadata.
+- Environmental field packet: time-varying scalar and u/v texture components
+  for weather, wave, current, and warning overlays, with no-data masks, time
+  interpolation, LOD parent fallback, legends, cache/provenance handles,
+  inspection traces, and server-raster fallback routes.
 
 Raw ENC, SENC, S-101, or interchange container data is never the browser render
 contract.
@@ -49,6 +53,13 @@ slice for this handoff. That slice binds the compiled primitive packet,
 inspection packet, server-raster fallback, optional offline pack metadata, and
 Helm `TOOLS-9`/`TOOLS-10` registry assets into one WebGPU-first browser
 contract.
+
+HELMWEBGPU-3 adds the environmental field portion of the same consumer
+contract. The browser can draw advisory Open-Meteo/Open-Marine model bundles
+and official S-100-family met-ocean products such as S-412, S-413, and S-414
+only as source-declared Helm overlay packets. Source adapters and the server
+own product identity, validity, normalized values, provenance, inspection, and
+fallback rasters; the browser owns composition and animation.
 
 ## Feature Detection
 
@@ -143,6 +154,10 @@ Before a full WebGPU chart renderer is accepted, the POC needs evidence for:
 - WebGL/MapLibre are useful composition and fallback surfaces, not S-52
   reimplementations.
 - Server-rendered raster remains the safety and verification fallback.
+- Environmental fields must preserve scalar/vector texture components,
+  no-data masks, time interpolation, LOD parent fallback, legends, provenance,
+  and inspection handles without embedding S-100 portrayal semantics in
+  browser shaders.
 - Golden-image and Chart 1 inspection evidence must stay valid across targets.
 - Public chart routes may stay raster-compatible while new packet endpoints
   evolve behind feature detection.
@@ -153,5 +168,6 @@ Before a full WebGPU chart renderer is accepted, the POC needs evidence for:
 - No Helm UI or `web/style.json` changes.
 - No VSG dependency in Helm.
 - No MapLibre S-52 style reimplementation.
+- No browser-side S-100 weather/current/wave portrayal rule implementation.
 - No raw chart-source parsing in browser code.
 - No change to the live Helm `:8080` runtime.
