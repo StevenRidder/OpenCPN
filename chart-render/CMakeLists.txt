@@ -161,6 +161,13 @@ target_link_libraries(opencpn-production-performance-fixture-smoke
   PRIVATE opencpn-chart-render-skeleton
 )
 
+add_executable(opencpn-upstream-production-slice-smoke
+  tests/upstream_production_slice_smoke.cpp
+)
+target_link_libraries(opencpn-upstream-production-slice-smoke
+  PRIVATE opencpn-chart-render-skeleton
+)
+
 add_executable(opencpn-draw-backend-contract-smoke
   tests/draw_backend_contract_smoke.cpp
 )
@@ -260,6 +267,7 @@ add_custom_target(opencpn-stakeholder-demo
     opencpn-source-to-render-production-fixture-smoke
     opencpn-production-golden-corpus-smoke
     opencpn-production-performance-fixture-smoke
+    opencpn-upstream-production-slice-smoke
     opencpn-draw-backend-contract-smoke
     opencpn-helm-webgpu-artifact-consumer-smoke
     opencpn-helm-webgpu-browser-fixture-smoke

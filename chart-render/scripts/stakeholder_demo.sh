@@ -158,6 +158,12 @@ run_step \
   "opencpn-production-performance-fixture-smoke" \
   "Converter/package load, presentation compile, GPU artifact compile/cache hit, VSG render, viewport scheduling, memory, disk, and repeat stability are measured or explicitly marked unavailable."
 
+run_step \
+  "10-upstream-production-slice" \
+  "Tiny upstream production slice keeps legacy fallback and carries evidence" \
+  "opencpn-upstream-production-slice-smoke" \
+  "One bounded S-57 fixture is feature-flagged, golden-gated, inspection-traced, backend-rendered, and performance-measured without adding plugin/UI/navigation scope."
+
 cat >> "$summary_file" <<'SUMMARY'
 
 ## Helm Private-Port Follow-Up

@@ -35,6 +35,8 @@ model, adapter scheduler policy, and backend handoff stay visibly separated.
   for the first tiny feature-flagged production slice.
 - `docs/UPSTREAM_MODULE_INTERFACE_AUDIT.md`: `ocpn_plugin.h`-based audit of the
   renderer/module seam before the upstream production slice.
+- `docs/UPSTREAM_PRODUCTION_SLICE.md`: bounded feature-flagged OpenCPN
+  production slice for maintainer review.
 - `docs/HELM_WEB_RENDER_TARGET.md`: Helm consumer contract with WebGPU-first
   client direction, WebGL/MapLibre fallback, and server-raster fallback.
 - `docs/OPENCPN_VSG_WEBGPU_COMPATIBILITY_MATRIX.md`: platform/toolchain,
@@ -92,6 +94,8 @@ Then read the proof package in this order:
 6. `chart-render/docs/UPSTREAM_MODULE_INTERFACE_AUDIT.md` - why the upstream
    slice follows `ocpn_plugin.h` lessons without becoming a plugin-framework
    rewrite.
+7. `chart-render/docs/UPSTREAM_PRODUCTION_SLICE.md` - the exact bounded
+   feature-flagged slice proposed for upstream review.
 
 ## Reproduce The Local Evidence
 

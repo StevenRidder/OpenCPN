@@ -36,6 +36,7 @@ Before that PR, the project needs one place that states:
 | Performance | Stage timings, memory, disk, cache-hit timing, and power telemetry status. | `PERFORMANCE_POWER_BUDGET.md`, PERF-2 smoke | Do not claim viability without measured evidence and explicit power status. |
 | Compatibility | Platform/toolchain, VSG/Vulkan, WebGPU, server-raster, Metal posture. | `OPENCPN_VSG_WEBGPU_COMPATIBILITY_MATRIX.md` | Support claims require recorded environment and unavailable-target diagnostics. |
 | Upstream module interface | `ocpn_plugin.h` lessons applied as a narrow C++ adapter audit. | `UPSTREAM_MODULE_INTERFACE_AUDIT.md` | Keep `UPSTREAM-1` to feature flag, lifecycle, viewport/display, validated model, backend capability, diagnostics, and fallback. |
+| Upstream production slice | One bounded feature-flagged C++ path for maintainer review. | `UPSTREAM_PRODUCTION_SLICE.md`, `opencpn-upstream-production-slice-smoke` | Legacy renderer remains default; the shared path must carry golden, inspection, backend, and performance evidence. |
 
 ## Rejected Approaches
 
@@ -168,7 +169,7 @@ Rejected:
 | Treat Metal as deferred compatibility. | Accepted | Metal compatibility note and compatibility matrix | No Metal renderer or Helm Metal priority claim. |
 | Defer standalone repo extraction. | Accepted | public proof and release hygiene docs | Branch-first until shared evidence is accepted by both OpenCPN and Helm paths. |
 | Audit the upstream module seam against `ocpn_plugin.h`. | Accepted | `UPSTREAM_MODULE_INTERFACE_AUDIT.md` | The first upstream PR must not copy plugin ABI, UI, route, AIS, messaging, or config scope into the renderer slice. |
-| Prepare `UPSTREAM-1` as a tiny feature-flagged PR. | Pending implementation | this map plus existing gates | The next upstream PR must be small, reviewable, and explicit about non-goals. |
+| Prepare `UPSTREAM-1` as a tiny feature-flagged PR. | Implemented for review | `UPSTREAM_PRODUCTION_SLICE.md`, upstream production slice smoke | The upstream-facing slice is small, reviewable, and explicit about non-goals. |
 
 ## Deferred Work
 

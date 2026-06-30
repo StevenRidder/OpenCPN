@@ -100,6 +100,10 @@ The current shape mirrors the Vulkan board seam work:
   slice. It maps viewport, chart metadata, presentation, overlays, lifecycle,
   capabilities, nav/AIS, routes, messaging, and config to explicit accepted or
   deferred boundaries.
+- `docs/UPSTREAM_PRODUCTION_SLICE.md` defines the first tiny feature-flagged
+  OpenCPN production slice for upstream review: one bounded S-57 fixture through
+  converter, portable package, presentation compiler, GPU cache/backend, golden
+  regression, inspection trace, and performance evidence.
 - `docs/MAINTAINER_RESPONSE_MATRIX.md` maps maintainer concerns to public RFC
   response posture, current evidence, limitations, and follow-up acceptance
   criteria.
@@ -186,3 +190,10 @@ UPSTREAM-2 evidence is `docs/UPSTREAM_MODULE_INTERFACE_AUDIT.md`. It checks the
 new renderer seams against OpenCPN's `ocpn_plugin.h` surface, then names the
 small interface subset that belongs in the first feature-flagged upstream slice
 and the plugin/module surfaces that remain explicit non-goals.
+
+UPSTREAM-1 evidence is the CMake-built
+`opencpn-upstream-production-slice-smoke` target and
+`docs/UPSTREAM_PRODUCTION_SLICE.md`. The smoke target verifies the feature flag
+keeps legacy canvas fallback by default, then runs the bounded production
+fixture through golden corpus, source-to-render inspection, VSG draw/cache
+handoff, and performance evidence without adding plugin/UI/navigation scope.
