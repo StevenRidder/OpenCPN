@@ -86,6 +86,7 @@ composition.
 | Machine-local GPU artifact cache | Rebuildable backend/device artifacts, memory budgets, invalidation domains, and tier/provenance handles derived from the neutral model, including the first VSG-targeted S-57 package fixture. | `docs/MACHINE_LOCAL_GPU_ARTIFACT_CACHE.md`, `opencpn-gpu-artifact-cache-contract-smoke` |
 | Performance and power budget | First production slice timing, memory, disk-cache, and boat-class power gates for desktop and low-power profiles. | `docs/PERFORMANCE_POWER_BUDGET.md`, `opencpn-performance-budget-contract-smoke` |
 | Compatibility matrix | C++/CMake baseline, supported platform/toolchain expectations, VSG/Vulkan driver assumptions, Helm WebGPU/browser expectations, deferred Metal posture, and required unavailable-target diagnostics. | `docs/OPENCPN_VSG_WEBGPU_COMPATIBILITY_MATRIX.md` |
+| Production hardening map | Accepted seams, rejected approaches, feature-flag rules, fixture growth, performance/compatibility gates, Helm WebGPU boundaries, and deferred work before upstream PR work. | `docs/PRODUCTION_HARDENING_MAP.md` |
 | VSG proof backend | Native draw/cache proof fed by neutral primitives; no chart-source or S-52 ownership. | `vsg/GPU_CACHE.md`, `opencpn-vsg-gpu-cache-smoke` |
 | OpenCPN adapter | Feature-flagged route from validated neutral model into the shared renderer while preserving legacy fallback and host ownership. | `include/opencpn_feature_flag_adapter.hpp`, `opencpn-feature-flag-adapter-smoke` |
 | Helm adapter/target contract | Consumer-side offscreen/server artifact path, WebGPU-first client direction, WebGL/MapLibre and server-raster fallbacks. | `docs/HELM_WEB_RENDER_TARGET.md`, Helm `docs/VULKAN-HELM-WEBGPU-PROOF.md` |
@@ -225,6 +226,8 @@ absence of Helm Tier 2/3 overlay or UI icon policy in official-chart artifacts.
 - `docs/OPENCPN_PUBLIC_PROOF_BRANCH.md` - sanitized public proof branch guide.
 - `docs/PUBLIC_RELEASE_HYGIENE.md` - release hygiene audit and gates.
 - `docs/MAINTAINER_RESPONSE_MATRIX.md` - concern/response matrix.
+- `docs/PRODUCTION_HARDENING_MAP.md` - post-RFC hardening map and decision
+  log for the first upstream production slice.
 - `docs/PORTABLE_NAUTICAL_PACKAGE.md` - production chart package architecture.
 - `docs/CHART_CONVERTER_MODULE_API.md` - replaceable source-chart converter
   module API.

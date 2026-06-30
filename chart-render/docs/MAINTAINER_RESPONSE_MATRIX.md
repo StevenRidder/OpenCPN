@@ -15,6 +15,8 @@ community post.
 - Treat maintainer feedback as design input for the next slice.
 - Avoid any claim that automation, generated code, or AI can replace expert
   chart-renderer review.
+- Use `docs/PRODUCTION_HARDENING_MAP.md` as the post-RFC plan once reviewers
+  agree which seams, fixtures, and gates should harden next.
 
 ## Response Matrix
 
@@ -62,3 +64,4 @@ obsolete.
 - State no full S-52 parity, no ECDIS certification, no primary-navigation
   readiness, no production WebGPU renderer, and no production Metal backend.
 - Invite maintainers to challenge the module boundaries and fixture choices.
+- Link the production hardening map as a draft plan, not as a fixed roadmap.
