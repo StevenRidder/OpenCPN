@@ -152,6 +152,12 @@ run_step \
   "opencpn-production-golden-corpus-smoke" \
   "Redistributable fixture, portable package hash, neutral primitive hashes, GPU artifact metadata, golden image, inspection trace, and known limitations are gated together."
 
+run_step \
+  "09-production-performance-fixture" \
+  "Production first-slice performance evidence measures the C++ render path" \
+  "opencpn-production-performance-fixture-smoke" \
+  "Converter/package load, presentation compile, GPU artifact compile/cache hit, VSG render, viewport scheduling, memory, disk, and repeat stability are measured or explicitly marked unavailable."
+
 cat >> "$summary_file" <<'SUMMARY'
 
 ## Helm Private-Port Follow-Up

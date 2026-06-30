@@ -1,6 +1,6 @@
 # Performance And Power Budget
 
-Status: PERF-1 production architecture and C++ contract
+Status: PERF-2 production fixture evidence added to PERF-1 budget contract
 
 PERF-1 defines the first measurable budget for the production renderer slice.
 The contract is intentionally small: it names the metrics that must be measured,
@@ -8,8 +8,10 @@ the profile-specific thresholds, and the owners for each stage. PERF-2 should
 attach real measurements to this contract; PERF-1 does not claim production
 timings from fixture smokes.
 
-The C++ surface lives in `include/performance_budget_contract.hpp` and
-`source/performance_budget_contract.cpp`.
+The budget C++ surface lives in `include/performance_budget_contract.hpp` and
+`source/performance_budget_contract.cpp`. PERF-2 adds measured production
+fixture evidence in `include/production_performance_fixture.hpp` and
+`source/production_performance_fixture.cpp`.
 
 ## Pipeline Scope
 
@@ -112,3 +114,29 @@ evaluates desktop and boat-class fixture measurements against the contract, and
 checks negative cases for missing cache-hit budget, active-power overrun, and
 missing render-time measurement. Real timing and power evidence belongs in
 PERF-2.
+
+## PERF-2 Production Fixture Evidence
+
+PERF-2 measures the merged production vertical slice rather than synthetic
+scaled samples. The fixture runs the redistributable S-57 package
+`s57:US5CONVERT2`, S-52 presentation compile, GPU artifact manifest compile,
+repeat artifact-cache lookup, VSG backend render, viewport scheduling, derived
+memory and disk footprints, and repeat-stability checks.
+
+```bash
+cmake -S chart-render -B /tmp/helm-vulkan-perf2-build
+cmake --build /tmp/helm-vulkan-perf2-build --target opencpn-production-performance-fixture-smoke
+/tmp/helm-vulkan-perf2-build/opencpn-production-performance-fixture-smoke
+```
+
+The PERF-2 smoke rejects:
+
+- package, GPU cache, or render repeat instability;
+- missing hard-gate evidence such as cache-hit timing;
+- non-power metrics that exceed the desktop reference budget;
+- evidence that no longer matches the QA-5 golden production slice.
+
+Power telemetry is not fabricated. On hosts without watt telemetry, active and
+idle power samples are recorded as `unavailable` with a warning diagnostic:
+passing this smoke is C++ render-path timing evidence, not a production power
+viability claim.

@@ -28,6 +28,7 @@ add_library(opencpn-chart-render-skeleton STATIC
   source/s57_portable_package_converter.cpp
   source/s52_presentation_compiler.cpp
   source/production_golden_corpus.cpp
+  source/production_performance_fixture.cpp
   s52/s52_command_builder.cpp
   vsg/vsg_backend.cpp
   vsg/vsg_gpu_cache.cpp
@@ -152,6 +153,13 @@ target_link_libraries(opencpn-production-golden-corpus-smoke
   PRIVATE opencpn-chart-render-skeleton
 )
 
+add_executable(opencpn-production-performance-fixture-smoke
+  tests/production_performance_fixture_smoke.cpp
+)
+target_link_libraries(opencpn-production-performance-fixture-smoke
+  PRIVATE opencpn-chart-render-skeleton
+)
+
 add_executable(opencpn-draw-backend-contract-smoke
   tests/draw_backend_contract_smoke.cpp
 )
@@ -219,6 +227,7 @@ add_custom_target(opencpn-stakeholder-demo
     opencpn-source-to-render-inspection-smoke
     opencpn-source-to-render-production-fixture-smoke
     opencpn-production-golden-corpus-smoke
+    opencpn-production-performance-fixture-smoke
     opencpn-draw-backend-contract-smoke
     opencpn-helm-webgpu-artifact-consumer-smoke
     opencpn-vsg-gpu-cache-smoke
