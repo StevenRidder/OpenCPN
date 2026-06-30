@@ -33,6 +33,8 @@ model, adapter scheduler policy, and backend handoff stay visibly separated.
 - `docs/PUBLIC_RELEASE_HYGIENE.md`: PUB-1 hygiene audit and publication gates.
 - `docs/PRODUCTION_HARDENING_MAP.md`: post-RFC hardening map and decision log
   for the first tiny feature-flagged production slice.
+- `docs/UPSTREAM_MODULE_INTERFACE_AUDIT.md`: `ocpn_plugin.h`-based audit of the
+  renderer/module seam before the upstream production slice.
 - `docs/HELM_WEB_RENDER_TARGET.md`: Helm consumer contract with WebGPU-first
   client direction, WebGL/MapLibre fallback, and server-raster fallback.
 - `docs/OPENCPN_VSG_WEBGPU_COMPATIBILITY_MATRIX.md`: platform/toolchain,
@@ -87,6 +89,9 @@ Then read the proof package in this order:
 5. `chart-render/docs/PRODUCTION_HARDENING_MAP.md` - accepted seams, rejected
    approaches, feature-flag rules, fixture growth, compatibility decisions,
    performance gates, Helm WebGPU boundaries, and deferred work.
+6. `chart-render/docs/UPSTREAM_MODULE_INTERFACE_AUDIT.md` - why the upstream
+   slice follows `ocpn_plugin.h` lessons without becoming a plugin-framework
+   rewrite.
 
 ## Reproduce The Local Evidence
 

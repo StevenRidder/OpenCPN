@@ -95,6 +95,11 @@ The current shape mirrors the Vulkan board seam work:
 - `docs/OPENCPN_PUBLIC_PROOF_BRANCH.md` defines the PUB-2 sanitized public
   review target, evidence commands, and exclusions for the OpenCPN proof
   branch.
+- `docs/UPSTREAM_MODULE_INTERFACE_AUDIT.md` audits the renderer/module seams
+  against OpenCPN's `ocpn_plugin.h` before the first upstream-facing production
+  slice. It maps viewport, chart metadata, presentation, overlays, lifecycle,
+  capabilities, nav/AIS, routes, messaging, and config to explicit accepted or
+  deferred boundaries.
 - `docs/MAINTAINER_RESPONSE_MATRIX.md` maps maintainer concerns to public RFC
   response posture, current evidence, limitations, and follow-up acceptance
   criteria.
@@ -176,3 +181,8 @@ HELMWEBGPU-4 evidence is the CMake-built
 fixture JSON and a static harness; Playwright loads it in Chromium and checks
 WebGPU, WebGL/MapLibre, and server-raster selection without adding browser
 chart-semantics code.
+
+UPSTREAM-2 evidence is `docs/UPSTREAM_MODULE_INTERFACE_AUDIT.md`. It checks the
+new renderer seams against OpenCPN's `ocpn_plugin.h` surface, then names the
+small interface subset that belongs in the first feature-flagged upstream slice
+and the plugin/module surfaces that remain explicit non-goals.

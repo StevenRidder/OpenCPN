@@ -35,6 +35,7 @@ Before that PR, the project needs one place that states:
 | Golden QA | Semantic, artifact, trace, limitation, and pixel gates for fixtures. | `PRODUCTION_GOLDEN_CORPUS.md`, QA-5 smoke | Fail on semantic drift before treating pixels as enough. |
 | Performance | Stage timings, memory, disk, cache-hit timing, and power telemetry status. | `PERFORMANCE_POWER_BUDGET.md`, PERF-2 smoke | Do not claim viability without measured evidence and explicit power status. |
 | Compatibility | Platform/toolchain, VSG/Vulkan, WebGPU, server-raster, Metal posture. | `OPENCPN_VSG_WEBGPU_COMPATIBILITY_MATRIX.md` | Support claims require recorded environment and unavailable-target diagnostics. |
+| Upstream module interface | `ocpn_plugin.h` lessons applied as a narrow C++ adapter audit. | `UPSTREAM_MODULE_INTERFACE_AUDIT.md` | Keep `UPSTREAM-1` to feature flag, lifecycle, viewport/display, validated model, backend capability, diagnostics, and fallback. |
 
 ## Rejected Approaches
 
@@ -166,6 +167,7 @@ Rejected:
 | Treat PERF-2 as fixture evidence, not product viability. | Accepted | production performance fixture smoke | Timing evidence exists; broad performance and power claims remain deferred. |
 | Treat Metal as deferred compatibility. | Accepted | Metal compatibility note and compatibility matrix | No Metal renderer or Helm Metal priority claim. |
 | Defer standalone repo extraction. | Accepted | public proof and release hygiene docs | Branch-first until shared evidence is accepted by both OpenCPN and Helm paths. |
+| Audit the upstream module seam against `ocpn_plugin.h`. | Accepted | `UPSTREAM_MODULE_INTERFACE_AUDIT.md` | The first upstream PR must not copy plugin ABI, UI, route, AIS, messaging, or config scope into the renderer slice. |
 | Prepare `UPSTREAM-1` as a tiny feature-flagged PR. | Pending implementation | this map plus existing gates | The next upstream PR must be small, reviewable, and explicit about non-goals. |
 
 ## Deferred Work
@@ -187,6 +189,7 @@ Rejected:
 - this hardening map is merged;
 - QA-5 and PERF-2 evidence are present on `vulkan/render-core-poc`;
 - compatibility rules are linked from the public proof package;
+- the `ocpn_plugin.h` module-interface audit is merged;
 - the upstream PR scope is limited to one bounded feature-flagged production
   slice;
 - public text names non-goals and deferred work before presenting evidence;
