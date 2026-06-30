@@ -97,3 +97,9 @@ Create these only when the project chooses to start a Metal prototype:
 Until then, Metal remains a deferred backend target. The implementation path is
 compatible, but the POC should continue proving the shared C++ neutral model,
 S-52 compiler, VSG backend, OpenCPN adapter, and golden/debug evidence first.
+
+The public compatibility gate is
+`docs/OPENCPN_VSG_WEBGPU_COMPATIBILITY_MATRIX.md`. That matrix treats Metal as
+`metal_deferred`: a future native backend may fit the boundary, but the current
+proof branch must not claim an implemented Metal renderer or use Metal as a
+Helm product priority.

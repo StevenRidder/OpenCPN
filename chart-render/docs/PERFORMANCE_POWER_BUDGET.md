@@ -37,6 +37,10 @@ The contract references the existing boundaries:
 Backends still do not parse source charts, own presentation semantics, or decide
 quilting/scheduler policy.
 
+Compatibility claims remain separate from performance claims. The platform,
+toolchain, VSG/Vulkan, WebGPU/browser, server-raster, and deferred-Metal
+support rules live in `docs/OPENCPN_VSG_WEBGPU_COMPATIBILITY_MATRIX.md`.
+
 ## Device Profiles
 
 | Profile | Target | Frame Budget | Prefetch Policy | Power Policy |
@@ -81,6 +85,11 @@ Every profile must have hard-gate targets for:
 These are first-slice gates, not final product limits. They are deliberately
 strict enough to prevent hidden regressions and broad enough to work before the
 real VSG/WebGPU production paths are tuned.
+
+Meeting these budgets on one device does not imply support for another
+platform, driver, browser, or GPU class. Each compatibility target needs its
+own recorded environment and unavailable-target diagnostics when a path cannot
+run.
 
 ## Validation
 
