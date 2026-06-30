@@ -137,6 +137,13 @@ target_link_libraries(opencpn-source-to-render-inspection-smoke
   PRIVATE opencpn-chart-render-skeleton
 )
 
+add_executable(opencpn-source-to-render-production-fixture-smoke
+  tests/source_to_render_production_fixture_smoke.cpp
+)
+target_link_libraries(opencpn-source-to-render-production-fixture-smoke
+  PRIVATE opencpn-chart-render-skeleton
+)
+
 add_executable(opencpn-draw-backend-contract-smoke
   tests/draw_backend_contract_smoke.cpp
 )
@@ -202,6 +209,7 @@ add_custom_target(opencpn-stakeholder-demo
     opencpn-gpu-artifact-cache-contract-smoke
     opencpn-s57-portable-package-converter-smoke
     opencpn-source-to-render-inspection-smoke
+    opencpn-source-to-render-production-fixture-smoke
     opencpn-draw-backend-contract-smoke
     opencpn-helm-webgpu-artifact-consumer-smoke
     opencpn-vsg-gpu-cache-smoke

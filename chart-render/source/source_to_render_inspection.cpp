@@ -5,6 +5,9 @@
 
 #include <algorithm>
 #include <cctype>
+#include <cmath>
+#include <iomanip>
+#include <limits>
 #include <map>
 #include <set>
 #include <sstream>
@@ -67,6 +70,58 @@ std::string CacheKeyText(const GpuArtifactCacheKey& key) {
 
 std::string CacheKeyText(const NauticalCacheKey& key) {
   return key.scene_key + "|" + key.primitive_key + "|" + key.resource_key;
+}
+
+std::uint64_t Fnva64Bytes(std::uint64_t hash, const std::uint8_t* bytes,
+                          std::size_t count) {
+  for (std::size_t i = 0; i < count; ++i) {
+    hash ^= bytes[i];
+    hash *= 1099511628211ULL;
+  }
+  return hash;
+}
+
+std::uint64_t Fnva64Uint32(std::uint64_t hash, std::uint32_t value) {
+  for (int shift = 0; shift < 32; shift += 8) {
+    const std::uint8_t byte =
+        static_cast<std::uint8_t>((value >> shift) & 0xffU);
+    hash = Fnva64Bytes(hash, &byte, 1U);
+  }
+  return hash;
+}
+
+std::string HexHash(std::uint64_t hash) {
+  std::ostringstream out;
+  out << std::hex << std::setfill('0') << std::setw(16) << hash;
+  return out.str();
+}
+
+std::string PixelHash(const PixelBuffer& pixels) {
+  std::uint64_t hash = 1469598103934665603ULL;
+  hash = Fnva64Uint32(hash, pixels.pixel_size.width);
+  hash = Fnva64Uint32(hash, pixels.pixel_size.height);
+  if (!pixels.rgba8.empty()) {
+    hash = Fnva64Bytes(hash, pixels.rgba8.data(), pixels.rgba8.size());
+  }
+  return HexHash(hash);
+}
+
+std::string RgbaText(const PixelBuffer& pixels, std::uint32_t x,
+                     std::uint32_t y) {
+  if (x >= pixels.pixel_size.width || y >= pixels.pixel_size.height ||
+      pixels.rgba8.empty()) {
+    return {};
+  }
+  const std::size_t offset =
+      (static_cast<std::size_t>(y) * pixels.pixel_size.width + x) * 4U;
+  if (offset + 3U >= pixels.rgba8.size()) return {};
+  std::ostringstream out;
+  out << std::hex << std::setfill('0') << std::setw(2)
+      << static_cast<unsigned>(pixels.rgba8[offset]) << std::setw(2)
+      << static_cast<unsigned>(pixels.rgba8[offset + 1U]) << std::setw(2)
+      << static_cast<unsigned>(pixels.rgba8[offset + 2U]) << std::setw(2)
+      << static_cast<unsigned>(pixels.rgba8[offset + 3U]);
+  return out.str();
 }
 
 std::map<std::string, ProvenanceRecord> ProvenanceById(
@@ -259,6 +314,94 @@ std::vector<InspectionArtifactHandle> SceneArtifactHandles(
   return handles;
 }
 
+int ClampToPixel(double value, std::uint32_t limit) {
+  if (limit == 0U) return 0;
+  const double clamped =
+      std::max(0.0, std::min(value, static_cast<double>(limit - 1U)));
+  return static_cast<int>(std::round(clamped));
+}
+
+Point2 FirstPoint(const NauticalPrimitive& primitive) {
+  if (primitive.type == NauticalPrimitiveType::kSymbolInstance ||
+      primitive.type == NauticalPrimitiveType::kTextLabel ||
+      primitive.type == NauticalPrimitiveType::kSounding) {
+    return primitive.position;
+  }
+  for (const Geometry& geometry : primitive.geometries) {
+    if (!geometry.points.empty()) return geometry.points.front();
+    if (!geometry.rings.empty() && !geometry.rings.front().empty()) {
+      return geometry.rings.front().front();
+    }
+  }
+  return primitive.position;
+}
+
+CoordinateSpace CoordinateSpaceForSample(
+    const NauticalPrimitive& primitive) {
+  for (const Geometry& geometry : primitive.geometries) {
+    if (!geometry.points.empty() ||
+        (!geometry.rings.empty() && !geometry.rings.front().empty())) {
+      return geometry.coordinate_space;
+    }
+  }
+  return primitive.handoff.coordinate_space;
+}
+
+bool ProjectToPixel(const Point2& point, CoordinateSpace coordinate_space,
+                    const RenderView& view, PixelSize size,
+                    std::uint32_t* x, std::uint32_t* y) {
+  if (size.width == 0U || size.height == 0U) return false;
+  if (coordinate_space == CoordinateSpace::kGeographic) {
+    const double lon_span = view.geographic_bbox.east - view.geographic_bbox.west;
+    const double lat_span = view.geographic_bbox.north - view.geographic_bbox.south;
+    if (std::abs(lon_span) <= std::numeric_limits<double>::epsilon() ||
+        std::abs(lat_span) <= std::numeric_limits<double>::epsilon()) {
+      return false;
+    }
+    *x = static_cast<std::uint32_t>(
+        ClampToPixel((point.x - view.geographic_bbox.west) / lon_span *
+                         static_cast<double>(size.width - 1U),
+                     size.width));
+    *y = static_cast<std::uint32_t>(
+        ClampToPixel((view.geographic_bbox.north - point.y) / lat_span *
+                         static_cast<double>(size.height - 1U),
+                     size.height));
+    return true;
+  }
+
+  const bool normalized =
+      point.x >= 0.0 && point.x <= 1.0 && point.y >= 0.0 && point.y <= 1.0;
+  *x = static_cast<std::uint32_t>(
+      ClampToPixel(normalized ? point.x * (size.width - 1U) : point.x,
+                   size.width));
+  *y = static_cast<std::uint32_t>(
+      ClampToPixel(normalized ? point.y * (size.height - 1U) : point.y,
+                   size.height));
+  return true;
+}
+
+void AddRenderedPixelSample(const NauticalRenderModel& model,
+                            const NauticalPrimitive& primitive,
+                            const SourceToRenderInspectionOptions& options,
+                            InspectionQueryHandle* query) {
+  const RenderResult* result = options.backend_result;
+  if (!result || !result->ok || result->pixels.rgba8.empty()) return;
+
+  std::uint32_t x = 0;
+  std::uint32_t y = 0;
+  if (!ProjectToPixel(FirstPoint(primitive),
+                      CoordinateSpaceForSample(primitive), model.render_view,
+                      result->pixels.pixel_size, &x, &y)) {
+    return;
+  }
+
+  query->sample_x = x;
+  query->sample_y = y;
+  query->sample_rgba8 = RgbaText(result->pixels, x, y);
+  query->rendered_pixel_hash = PixelHash(result->pixels);
+  query->sampled_rendered_pixel = !query->sample_rgba8.empty();
+}
+
 std::string StableDrawItemId(const SourceToRenderInspectionOptions& options,
                              const NauticalPrimitive& primitive) {
   return "draw:" + options.backend_name + ":" + options.target.target_id + ":" +
@@ -277,6 +420,38 @@ std::string StableGpuAssetId(const SourceToRenderInspectionRow& row) {
 std::string StableWebAssetId(const SourceToRenderInspectionRow& row) {
   return "web:" + row.backend.backend_name + ":" + row.backend.target_id +
          ":" + row.presentation.primitive_type + ":" + row.cache.primitive_key;
+}
+
+std::vector<std::string> TraceStepsFor(
+    const SourceToRenderInspectionRow& row) {
+  std::vector<std::string> steps;
+  steps.push_back("source " + row.source.source_chart_id + "/" +
+                  row.source.source_object_id + " class=" +
+                  row.source.source_object_class);
+  steps.push_back("converter " + row.converter.converter_id + " product=" +
+                  row.converter.source_product_id + " feature=" +
+                  row.converter.normalized_feature_id);
+  steps.push_back("package " + row.converter.portable_package_id +
+                  " output=" + row.converter.converter_output_id);
+  steps.push_back("presentation " +
+                  row.presentation.presentation_rule_id + " layer=" +
+                  row.presentation.layer_id + " primitive=" +
+                  row.presentation.primitive_id);
+  steps.push_back("cache " + row.cache.tile_cache_key);
+  steps.push_back("backend " + row.backend.backend_name + " resource=" +
+                  row.backend.backend_resource_id + " draw=" +
+                  row.backend.final_draw_item_id);
+  std::string pixel = "pixel " + row.query.pixel_query_id;
+  if (row.query.sampled_rendered_pixel) {
+    pixel += " sample=(" + std::to_string(row.query.sample_x) + "," +
+             std::to_string(row.query.sample_y) + ") rgba8=" +
+             row.query.sample_rgba8 + " image_hash=" +
+             row.query.rendered_pixel_hash;
+  }
+  steps.push_back(std::move(pixel));
+  steps.push_back("owner wrong_location=" + row.tier.wrong_location_owner +
+                  " wrong_symbol=" + row.tier.wrong_symbol_owner);
+  return steps;
 }
 
 void NormalizeOptions(const NauticalRenderModel& model,
@@ -377,9 +552,11 @@ SourceToRenderInspectionRow BuildRow(
                              primitive.primitive_id;
   row.query.hit_test_index_id =
       "hit-test:" + layer.layer_id + ":" + primitive.primitive_id;
+  AddRenderedPixelSample(model, primitive, options, &row.query);
 
   row.backend.final_gpu_asset_id = StableGpuAssetId(row);
   row.backend.final_web_asset_id = StableWebAssetId(row);
+  row.human_trace = TraceStepsFor(row);
   return row;
 }
 
@@ -604,6 +781,22 @@ bool ValidateSourceToRenderInspectionReport(
           row.source.provenance_refs));
       ok = false;
     }
+    if (row.query.sampled_rendered_pixel &&
+        (row.query.sample_rgba8.size() != 8U ||
+         row.query.rendered_pixel_hash.empty())) {
+      out.push_back(MakeDiagnostic(
+          DiagnosticSeverity::kError, "source_to_render_pixel_sample",
+          "Inspection row has incomplete rendered-pixel sample evidence.",
+          row.source.provenance_refs));
+      ok = false;
+    }
+    if (row.human_trace.empty()) {
+      out.push_back(MakeDiagnostic(
+          DiagnosticSeverity::kError, "source_to_render_human_trace",
+          "Inspection row is missing a human-readable source-to-pixel trace.",
+          row.source.provenance_refs));
+      ok = false;
+    }
     if (row.tier.semantic_tier.empty() ||
         row.tier.semantic_owner.empty() ||
         row.tier.wrong_location_owner.empty() ||
@@ -662,6 +855,22 @@ std::vector<const SourceToRenderInspectionRow*> FindInspectionsBySourceObjectId(
     }
   }
   return rows;
+}
+
+std::vector<std::string> BuildHumanReadableSourceToRenderTrace(
+    const SourceToRenderInspectionReport& report) {
+  std::vector<std::string> lines;
+  for (const SourceToRenderInspectionRow& row : report.rows) {
+    std::ostringstream header;
+    header << row.presentation.primitive_id << " ["
+           << row.tier.semantic_tier << "/" << row.tier.source_standard
+           << "]";
+    lines.push_back(header.str());
+    for (const std::string& step : row.human_trace) {
+      lines.push_back("  " + step);
+    }
+  }
+  return lines;
 }
 
 }  // namespace ocpn::render
